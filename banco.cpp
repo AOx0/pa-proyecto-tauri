@@ -1,4 +1,4 @@
-#include "library.h"
+#include "banco.h"
 
 #include <iostream>
 
@@ -53,6 +53,8 @@ Cuenta Banco::buscarCuenta() {
       cout << "Cuenta no encontrada\n";
     }
   } while (!cuenta.fue_exitosa);
+
+  return *cuenta.encontrada;
 }
 
 ResultadoB Banco::buscarCuentaRaw(const string& tarjeta)
