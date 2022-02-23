@@ -6,6 +6,8 @@
 
 using namespace std;
 
+string quitar(string &txt, char patron);
+
 // Con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/
 template<typename V>
 string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error) {
@@ -19,6 +21,8 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const str
     cin.clear();
     cin.sync();
     getline(cin, inp, '\n');
+
+    if (quitar(inp, ' ').empty()) continue;
 
     if (!func(inp, dep))
       cout << on_error << endl;
@@ -38,6 +42,8 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const str
     cin.clear();
     cin.sync();
     getline(cin, inp, '\n');
+
+    if (quitar(inp, ' ').empty()) continue;
 
     if (!func(inp, dep)) {
       cout << on_error;
@@ -63,6 +69,8 @@ T pedirValor(const string &msg, T min, T max) {
     cin.clear();
     cin.sync();
     getline(cin, inp, '\n');
+
+    if (quitar(inp, ' ').empty()) continue;
     istringstream in(inp);
 
     in >> i;
@@ -84,10 +92,14 @@ string pedirValor(const string &msg) {
   cin.sync();
   getline(cin, inp, '\n');
 
-
   return inp;
 }
 
 void clear();
+
+void continuar() {
+  pedirValor("Pulsa enter para continuar");
+  clear();
+}
 
 #endif //ADMIN_UTILS_H

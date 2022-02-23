@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+// https://stackoverflow.com/questions/997512/string-representation-of-time-t
+#include <ctime>
+
 void Cuenta::agregarDinero(double cantidad) {
   dinero += cantidad;
 }
@@ -12,28 +15,52 @@ double Cuenta::retirarDinero(double cantidad) {
 }
 
 void Cuenta::ver_cuenta() {
-  cout << "-------------------------------------" << endl;
-  cout << "**** **** **** ";
-  for (int i = 12; i < 16; ++i) {
-    cout << tarjeta[i];
-  }
+  cout << nombre << " " << apellido << endl;
+  cout << "Tarjeta: ";
 
-  printf("%18s\n", nip.c_str());
-  printf("%21s", "");
-  cout << "Super Linea" << endl;
-  printf("%21s", "");
-  cout << "55 69636734 " << endl;
+
+  cout << tarjeta.substr(0, 4) << " ";
+  cout << tarjeta.substr(4, 4) << " ";
+  cout << tarjeta.substr(8, 4) << " ";
+  cout << tarjeta.substr(12, 4) << "\n";
+  cout << "Nip: " << nip << endl;
+  // https://stackoverflow.com/questions/997512/string-representation-of-time-t
+  std::tm *ptm = std::localtime(&fecha_vencimiento);
+  char buffer[32];
+
+  std::strftime(buffer, 32, "%m/%Y", ptm);
+
+  cout << "Teléfono: ";
+  cout << tel.substr(0, 2) << " " << tel.substr(2, tel.length()) << endl;
+  cout << "FV: " << buffer << "\n";
   cout << "Valid True" << endl;
-  cout << fecha_vencimiento << "         " << nombre << endl;
-  cout << "-------------------------------------" << endl;
 }
 
-bool Cuenta::validar_contra(string contra) {
+bool Cuenta::validar_contra(const string &contra) {
   if (contra == key) {
     cout << "Contraseña valida" << endl;
     return true;
   }
   return false;
+}
+
+void Cuenta::verSaldo() {
+  std::cout << apellido << ", " << nombre << ": " << endl
+            << "    Saldo: " << dinero << endl
+            << "    Deuda: " << deuda << endl
+            << "----------------" << endl
+            << "Restante : " << dinero - deuda << endl;
+}
+
+void Cuenta::verCuentas() {
+  if (tarjetas_registradas.empty()) {
+    cout << "No hay cuentas registradas!" << endl;
+    cout << "Nota: Puedes registrar cuentas en Transferencias/Registrar cuentas\n";
+  } else {
+    for (int i = 0; i < tarjetas_registradas.size(); i++) {
+      cout << "    " << i << ". " << tarjetas_registradas[i] << "\n";
+    }
+  }
 }
 
 Cuenta Banco::buscarCuenta() {
@@ -68,7 +95,7 @@ ResultadoB Banco::buscarCuentaRaw(const string &tarjeta) {
 
 
 bool contraEs_s(string &contra, Cuenta cuenta) {
-  return cuenta.validar_contra(std::move(contra));
+  return cuenta.validar_contra(contra);
 }
 
 bool cuentaExiste_s(string &cuenta, Banco banco) {
@@ -81,34 +108,34 @@ vector<Cuenta> cuentas_iniciales() {
   return vector<Cuenta>(
       {
           Cuenta(
-              500, string("123"), string("Pepe"),
+              500, "123", "Pepe",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              string("1435"), string("3334567890123456"),
-              string("432423234"), 234
+              "1435", "1234567890123456",
+              "432423234", 234, "5574481902", "López", {}
           ),
           Cuenta(
-              500, string("123"), string("Pepe"),
+              500, "123", "Pepe",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              string("2345"), string("1234567890123466"),
-              string("4323234234"), 234
+              "1435", "3334567890123456",
+              "432423234", 234, "5574481902", "López", {}
           ),
           Cuenta(
-              500, string("123"), string("Pepe"),
+              500, "123", "Pepe",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              string("3343"), string("1234564490123456"),
-              string("43212314234"), 234
+              "1435", "3334567890123456",
+              "432423234", 234, "5574481902", "López", {}
           ),
           Cuenta(
-              500, string("123"), string("Pepe"),
+              500, "123", "Pepe",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              string("3343"), string("1232367890123456"),
-              string("2222"), 234
+              "1435", "3334567890123456",
+              "432423234", 234, "5574481902", "López", {}
           ),
           Cuenta(
-              500, string("123"), string("Pepe"),
+              500, "123", "Pepe",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              string("2422"), string("1234563890123456"),
-              string("3333"), 234
+              "1435", "3334567890123456",
+              "432423234", 234, "5574481902", "López", {}
           ),
       }
   );
