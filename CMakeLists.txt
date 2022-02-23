@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.21)
-project(proyecto)
 project(usuarios)
 project(admin)
+project(librerias)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(banco banco.cpp)
+add_library(librerias banco.cpp utils.cpp)
 
 add_executable(usuarios usuarios.cpp)
 add_executable(admin admin.cpp)
 
-target_link_libraries(admin banco)
-target_link_libraries(usuarios banco)
+target_link_libraries(admin librerias)
+target_link_libraries(usuarios librerias)

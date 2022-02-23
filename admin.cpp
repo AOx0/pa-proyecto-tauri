@@ -7,52 +7,16 @@
 
 
 int main() {
-  vector<Cuenta> cuentas = vector<Cuenta>(
-      {
-          Cuenta(
-              500, string("123"), string("Pepe"),
-              time(nullptr), vector<double>({50, 50, 50, 50}),
-              {3, 4, 4}, string("1234567890123456"),
-              string("4324234")
-          ),
-          Cuenta(
-              500, string("123"), string("Pepe"),
-              time(nullptr), vector<double>({50, 50, 50, 50}),
-              {3, 4, 4}, string("1234567890143456"),
-              string("4324234")
-          ),
-          Cuenta(
-              500, string("123"), string("Pepe"),
-              time(nullptr), vector<double>({50, 50, 50, 50}),
-              {3, 4, 4}, string("1234567890423456"),
-              string("4324234")
-          ),
-          Cuenta(
-              500, string("123"), string("Pepe"),
-              time(nullptr), vector<double>({50, 50, 50, 50}),
-              {3, 4, 4}, string("1234563890123456"),
-              string("4324234")
-          ),
-          Cuenta(
-              500, string("123"), string("Pepe"),
-              time(nullptr), vector<double>({50, 50, 50, 50}),
-              {3, 4, 4}, string("1234567844423456"),
-              string("4324234")
-          )
-      }
-  );
-
-  Banco banco = Banco(cuentas);
+  Banco banco = Banco(cuentas_iniciales());
   Cuenta cuenta = banco.buscarCuenta();
 
   int opcion;
-  cout<<"Ingrese una opción: \n"
-      << "    1- Ver cuenta\n";
+  cout << "Ingrese una opción: \n"
+       << "    1- Ver cuenta\n";
   cout << "Opción: ";
-  cin>>opcion;
+  cin >> opcion;
 
-  switch (opcion)
-  {
+  switch (opcion) {
     case 1:
       cuenta.ver_cuenta();
     case 2:

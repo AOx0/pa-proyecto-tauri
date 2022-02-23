@@ -1,84 +1,55 @@
-#include "banco.h"
 #include <iostream>
 
+#include "banco.h"
+#include "utils.h"
 
-int main() {
-    vector<Cuenta> cuentas = vector<Cuenta>(
-        {
-            Cuenta(
-                500, string("123"), string("Pepe"),
-                time(nullptr), vector<double>({50, 50, 50, 50}),
-                {3, 4, 4}, string("1234567890123456"),
-                string("4324234")
-            ),
-            Cuenta(
-                500, string("123"), string("Pepe"),
-                time(nullptr), vector<double>({50, 50, 50, 50}),
-                {3, 4, 4}, string("1234567890143456"),
-                string("4324234")
-            ),
-            Cuenta(
-                500, string("123"), string("Pepe"),
-                time(nullptr), vector<double>({50, 50, 50, 50}),
-                {3, 4, 4}, string("1234567890423456"),
-                string("4324234")
-            ),
-            Cuenta(
-                500, string("123"), string("Pepe"),
-                time(nullptr), vector<double>({50, 50, 50, 50}),
-                {3, 4, 4}, string("1234563890123456"),
-                string("4324234")
-            ),
-            Cuenta(
-                500, string("123"), string("Pepe"),
-                time(nullptr), vector<double>({50, 50, 50, 50}),
-                {3, 4, 4}, string("1234567844423456"),
-                string("4324234")
-            )
-        }
-    );
-  Banco banco = Banco(cuentas);
-  Cuenta * cuenta;
-  int opcion;
-  string tarjeta;
+#define SALIR 6
 
-  std::cout << "Ingresa la tarjeta: ";
-  cin >> tarjeta;
-  //public: ResultadoB Banco::buscarCuentaRaw(const basic_string<char, char_traits<char>, allocator<char>> &cuenta)
-  ResultadoB resultado = banco.buscarCuentaRaw(tarjeta);
-  if (resultado.fue_exitosa)
-  {
-    cuenta = resultado.encontrada;
-  } else {
-    std::cout << "Tarjeta inválida\n";
-    exit(0);
-  }
+int menuPrincipal() {
+  clear();
+  printf(
+      "    1. Estado\n"
+      "    2. Transferencias\n"
+      "    3. Retirar o depositar\n"
+      "    5. Préstamos\n"
+      "    6. Salir\n"
+  );
 
-  //
-  string contra;
-  cout << "Ingresa la contraseña: ";
-  cin >> contra;
+  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
-  if (!cuenta->validar_contra(contra)) {
-    cout << "Contraseña invalida!\n";
-    exit(0);
-  }
-
-#ifdef _WIN32
-  system("cls");
-#else
-  system("clear");
-#endif
-
-  cout<<"Ingrese una opción: ";
-  cin>>opcion;
-  switch (opcion) {
-    case 1:
+  switch (option) {
+    case 1: {
+    }
       break;
     case 2:
       break;
-    default:
-      std::cout << "Opción valida\n";
   }
 
+  return option;
 }
+
+void menuEstado() {
+
+}
+
+int main() {
+  Banco banco = Banco(cuentas_iniciales());
+
+  string tarjeta = pedirValor<Banco>(
+      banco, "Ingresa tu tarjeta: ",
+      &cuentaExiste_s, "Tarjeta inválida"
+  );
+  Cuenta cuenta = *banco.buscarCuentaRaw(tarjeta).encontrada;
+
+  string contra = pedirValor<Cuenta>(
+      cuenta, "Ingresa la contraseña: ",
+      &contraEs_s, "Contraseña inválida", 3
+  );
+
+  int op;
+  do {
+    op = menuPrincipal();
+  } while (op != SALIR);
+
+}
+
