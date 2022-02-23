@@ -5,7 +5,6 @@
 
 #define SALIR 5
 
-
 int menuPrincipal(Cuenta &cuenta, Banco &banco);
 
 int menuTransferencias(Cuenta &cuenta, Banco &banco);
@@ -41,7 +40,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       "    1. Ver estado\n" // Ya
       "(*) 2. Transferencias\n"
       "(*) 3. Retirar o depositar\n" // Ya
-      "(*) 4. Préstamos\n"
+      "(*) 4. Préstamos (Próximamente)\n"
       "    5. Salir\n"
       "\n(*) : Puede requerir su Super-key\n"
   );
@@ -61,7 +60,6 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
 
   return option;
 }
-
 
 int menuEstado(Cuenta &cuenta, Banco &banco) {
   clear();
@@ -121,8 +119,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
   bool cancelado = false;
   switch (option) {
-    case 1:
-    {
+    case 1: {
       string a_transferir;
       bool valido;
 
@@ -171,7 +168,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
       if (cantidad > cuenta.dinero) {
         cout << "Error: No hay suficientes fondos para realizar la transferencia\n";
-      } else{
+      } else {
         cuenta.transferir(target, cantidad);
         double restante = cuenta.dinero;
         cout << "Éxito. Se transfirieron $" << cantidad << " MXN\n";
@@ -285,7 +282,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
       cuenta.agregarDinero(cantidad);
       cout << "Ingresa el dinero en la bandeja.\n";
       continuar();
-      cout << "Éxito. Se depositaron: $" <<  cantidad << " MXN\n";
+      cout << "Éxito. Se depositaron: $" << cantidad << " MXN\n";
       break;
     case 3:
       cantidad = pedirValor("Ingresa la cantidad a retirar: ", 100, 50000, {','}, numbers, true);
@@ -296,13 +293,13 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
         string key = pedirValor<Cuenta>(
             cuenta, "Ingresa tu Super-Key: ",
             &esSuperKey_s, "Super-Key inválida", 3
-          );
+        );
         clear();
       }
 
       if (cantidad > cuenta.dinero) {
         cout << "Error: No hay suficientes fondos\n";
-      } else{
+      } else {
         double restante = cuenta.retirarDinero(cantidad);
         cout << "Éxito. Se retiraron $" << cantidad << " MXN\n";
         cout << "Saldo restante: $" << restante << ".00\n";

@@ -54,8 +54,8 @@ public:
     target.dinero += cantidad;
 
     if (1) {
-      cout << "    Tu dinero: " << dinero+cantidad << "->" << dinero << "\n";
-      cout << "    Su dinero: " << target.dinero-cantidad << "->" << target.dinero << "\n";
+      cout << "    Tu dinero: " << dinero + cantidad << "->" << dinero << "\n";
+      cout << "    Su dinero: " << target.dinero - cantidad << "->" << target.dinero << "\n";
     }
   }
 };

@@ -22,7 +22,7 @@ void Cuenta::ver_cuenta() {
   cout << tarjeta.substr(0, 4) << " ";
   cout << tarjeta.substr(4, 4) << " ";
   cout << tarjeta.substr(8, 4) << " ";
-  cout << tarjeta.substr(12, 4) ;
+  cout << tarjeta.substr(12, 4);
   cout << " (" << nip << ")" << endl;
   // https://stackoverflow.com/questions/997512/string-representation-of-time-t
   std::tm *ptm = std::localtime(&fecha_vencimiento);
@@ -54,12 +54,11 @@ void Cuenta::verCuentas() {
   } else {
     cout << "Cuentas registradas para transferencia:\n";
     for (int i = 0; i < tarjetas_registradas.size(); i++) {
-      cout << "    " << i+1 << ": "
-        << tarjetas_registradas[i].substr(0, 4) << " "
-        << tarjetas_registradas[i].substr(4, 4) << " "
-        << tarjetas_registradas[i].substr(8, 4) << " "
-        << tarjetas_registradas[i].substr(12, 4) << "\n"
-      ;
+      cout << "    " << i + 1 << ": "
+           << tarjetas_registradas[i].substr(0, 4) << " "
+           << tarjetas_registradas[i].substr(4, 4) << " "
+           << tarjetas_registradas[i].substr(8, 4) << " "
+           << tarjetas_registradas[i].substr(12, 4) << "\n";
     }
   }
 }
@@ -69,10 +68,10 @@ bool Cuenta::validar_super_contra(const string &contra) {
 }
 
 void Cuenta::eliminarCuenta_t(const string &t) {
-  for (int i=0; i<tarjetas_registradas.size(); i++) {
+  for (int i = 0; i < tarjetas_registradas.size(); i++) {
     if (tarjetas_registradas[i] == t) {
       // https://stackoverflow.com/questions/875103/how-do-i-erase-an-element-from-stdvector-by-index
-      tarjetas_registradas.erase(std::next(tarjetas_registradas.begin(), i-1));
+      tarjetas_registradas.erase(std::next(tarjetas_registradas.begin(), i - 1));
       return;
     }
   }

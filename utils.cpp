@@ -17,7 +17,7 @@ void clear() {
 
 bool contieneInvalid(const vector<char> &valid_chars, const string &inp) {
   bool invalid = false;
-  for (int j=0; j<inp.size(); j++) {
+  for (int j = 0; j < inp.size(); j++) {
     if (!count(valid_chars.begin(), valid_chars.end(), inp[j])) {
 
       if (!invalid) {
@@ -35,7 +35,7 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp) {
   if (invalid) {
     cout << "\n";
     cout << "El valor ingresado puede contener los caracteres: ";
-    for (char invalid_char : valid_chars) cout << invalid_char;
+    for (char invalid_char: valid_chars) cout << invalid_char;
     cout << endl;
   }
 

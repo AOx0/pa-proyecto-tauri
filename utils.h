@@ -15,7 +15,8 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp);
 
 // Con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/
 template<typename V>
-string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error, const vector<char>& validos = {}, bool quitar_espacios = false) {
+string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error,
+                  const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
   bool valid = false;
 
@@ -45,7 +46,8 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const str
 
 
 template<typename V>
-string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error, int intentos,  const vector<char>& validos = {}, bool quitar_espacios = false) {
+string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error, int intentos,
+                  const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
 
   do {
@@ -100,7 +102,7 @@ T pedirValor(const string &msg, T min, T max) {
 }
 
 template<typename T>
-T pedirValor(const string &msg, T min, T max, const vector<char>& quitar_chars) {
+T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars) {
   T i;
   string inp;
   bool valid = false;
@@ -113,7 +115,7 @@ T pedirValor(const string &msg, T min, T max, const vector<char>& quitar_chars) 
 
     if (quitar(inp, ' ').empty()) continue;
 
-    for (int i=0; i<quitar_chars.size(); i++) {
+    for (int i = 0; i < quitar_chars.size(); i++) {
       cout << "Eliminando " << quitar_chars[i] << endl;
       inp = quitar(inp, quitar_chars[i]);
     }
@@ -131,9 +133,9 @@ T pedirValor(const string &msg, T min, T max, const vector<char>& quitar_chars) 
 }
 
 
-
 template<typename T>
-T pedirValor(const string &msg, T min, T max, const vector<char>& quitar_chars, const vector<char>& valid_chars, bool quitar_espacios = false) {
+T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, const vector<char> &valid_chars,
+             bool quitar_espacios = false) {
   T i;
   string inp;
   bool valid = false;
@@ -148,7 +150,7 @@ T pedirValor(const string &msg, T min, T max, const vector<char>& quitar_chars, 
 
     if (quitar_espacios) inp = quitar(inp, ' ');
 
-    for (int h=0; h<quitar_chars.size(); h++) {
+    for (int h = 0; h < quitar_chars.size(); h++) {
       // cout << "Eliminando " << quitar_chars[h] << endl;
       inp = quitar(inp, quitar_chars[h]);
     }
