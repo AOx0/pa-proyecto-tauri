@@ -11,45 +11,40 @@ void Cuenta::agregarDinero(double cantidad) {
 
 double Cuenta::retirarDinero(double cantidad) {
   dinero -= cantidad;
-  return cantidad;
+  return dinero;
 }
 
 void Cuenta::ver_cuenta() {
-  cout << nombre << " " << apellido << endl;
-  cout << "Tarjeta: ";
+  cout << nombre << " " << apellido << ": " << endl;
+  cout << "    Tarjeta: ";
 
 
   cout << tarjeta.substr(0, 4) << " ";
   cout << tarjeta.substr(4, 4) << " ";
   cout << tarjeta.substr(8, 4) << " ";
-  cout << tarjeta.substr(12, 4) << "\n";
-  cout << "Nip: " << nip << endl;
+  cout << tarjeta.substr(12, 4) ;
+  cout << " (" << nip << ")" << endl;
   // https://stackoverflow.com/questions/997512/string-representation-of-time-t
   std::tm *ptm = std::localtime(&fecha_vencimiento);
   char buffer[32];
 
   std::strftime(buffer, 32, "%m/%Y", ptm);
 
-  cout << "Teléfono: ";
+  cout << "    Teléfono: ";
   cout << tel.substr(0, 2) << " " << tel.substr(2, tel.length()) << endl;
-  cout << "FV: " << buffer << "\n";
-  cout << "Valid True" << endl;
+  cout << "    FV: " << buffer << "\n";
+  cout << "    Valid True" << endl;
 }
 
 bool Cuenta::validar_contra(const string &contra) {
-  if (contra == key) {
-    cout << "Contraseña valida" << endl;
-    return true;
-  }
-  return false;
+  return contra == key;
 }
 
 void Cuenta::verSaldo() {
   std::cout << apellido << ", " << nombre << ": " << endl
             << "    Saldo: " << dinero << endl
             << "    Deuda: " << deuda << endl
-            << "----------------" << endl
-            << "Restante : " << dinero - deuda << endl;
+            << "    Total: " << dinero - deuda << endl;
 }
 
 void Cuenta::verCuentas() {
@@ -57,15 +52,52 @@ void Cuenta::verCuentas() {
     cout << "No hay cuentas registradas!" << endl;
     cout << "Nota: Puedes registrar cuentas en Transferencias/Registrar cuentas\n";
   } else {
+    cout << "Cuentas registradas para transferencia:\n";
     for (int i = 0; i < tarjetas_registradas.size(); i++) {
-      cout << "    " << i << ". " << tarjetas_registradas[i] << "\n";
+      cout << "    " << i+1 << ": "
+        << tarjetas_registradas[i].substr(0, 4) << " "
+        << tarjetas_registradas[i].substr(4, 4) << " "
+        << tarjetas_registradas[i].substr(8, 4) << " "
+        << tarjetas_registradas[i].substr(12, 4) << "\n"
+      ;
     }
   }
 }
 
+bool Cuenta::validar_super_contra(const string &contra) {
+  return super_key == contra;
+}
+
+void Cuenta::eliminarCuenta_t(const string &t) {
+  for (int i=0; i<tarjetas_registradas.size(); i++) {
+    if (tarjetas_registradas[i] == t) {
+      // https://stackoverflow.com/questions/875103/how-do-i-erase-an-element-from-stdvector-by-index
+      tarjetas_registradas.erase(std::next(tarjetas_registradas.begin(), i-1));
+      return;
+    }
+  }
+
+  cout << "La cuenta no existe en el registro\n";
+}
+
+void Cuenta::registrarCuenta_t(const string &t) {
+  if (t == "c") return;
+
+  if (cuentaYaRegistrada_t(t)) {
+    cout << "Error: La cuenta ya está registrada\n";
+  } else {
+    tarjetas_registradas.push_back(t);
+    cout << "Cuenta registrada con éxito!\n";
+  }
+}
+
+bool Cuenta::cuentaYaRegistrada_t(const string &t) {
+  return count(tarjetas_registradas.begin(), tarjetas_registradas.end(), t);
+}
+
 Cuenta Banco::buscarCuenta() {
   string cuenta_str;
-  ResultadoB cuenta;
+  ResB cuenta;
   do {
     cout << "Ingresa un número de tarjeta: ";
     cin >> cuenta_str;
@@ -81,8 +113,8 @@ Cuenta Banco::buscarCuenta() {
   return *cuenta.encontrada;
 }
 
-ResultadoB Banco::buscarCuentaRaw(const string &tarjeta) {
-  ResultadoB resultado = ResultadoB();
+ResB Banco::buscarCuentaRaw(const string &tarjeta) {
+  ResB resultado = ResB();
   for (Cuenta &cuenta: cuentas) {
     if (tarjeta == cuenta.tarjeta) {
       resultado.fue_exitosa = true;
@@ -99,7 +131,7 @@ bool contraEs_s(string &contra, Cuenta cuenta) {
 }
 
 bool cuentaExiste_s(string &cuenta, Banco banco) {
-  ResultadoB resultado = banco.buscarCuentaRaw(cuenta);
+  ResB resultado = banco.buscarCuentaRaw(cuenta);
 
   return resultado.fue_exitosa;
 }
@@ -139,4 +171,14 @@ vector<Cuenta> cuentas_iniciales() {
           ),
       }
   );
+}
+
+bool esSuperKey_s(string &key, Cuenta cuenta) {
+  return cuenta.validar_super_contra(key);
+}
+
+bool cuentaExisteOCancela_s(string &cuenta, Banco banco) {
+  ResB resultado = banco.buscarCuentaRaw(cuenta);
+
+  return resultado.fue_exitosa || cuenta == "cancelar" || cuenta == "c";
 }

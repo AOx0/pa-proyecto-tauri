@@ -8,7 +8,7 @@
 using namespace std;
 
 struct Cuenta {
-private:
+public:
   string key; /* 8 */
   string super_key; /* 4 */
   string nip; /* 3 */
@@ -20,7 +20,6 @@ private:
   vector<double> gasto_semanal;
   double dinero;
   double deuda;
-public:
   string tarjeta;
 
   Cuenta(double dinero, string nip, string nombre, time_t fecha_vencimiento, vector<double> gasto_semanal,
@@ -41,14 +40,32 @@ public:
   void ver_cuenta();
 
   bool validar_contra(const string &contra);
+
+  bool validar_super_contra(const string &contra);
+
+  bool cuentaYaRegistrada_t(const string &t);
+
+  void registrarCuenta_t(const string &t);
+
+  void eliminarCuenta_t(const string &t);
+
+  void transferir(Cuenta &target, double cantidad) {
+    dinero -= cantidad;
+    target.dinero += cantidad;
+
+    if (1) {
+      cout << "    Tu dinero: " << dinero+cantidad << "->" << dinero << "\n";
+      cout << "    Su dinero: " << target.dinero-cantidad << "->" << target.dinero << "\n";
+    }
+  }
 };
 
-struct ResultadoB {
+struct ResB {
 public:
   Cuenta *encontrada;
   bool fue_exitosa;
 
-  ResultadoB() : fue_exitosa(false), encontrada(nullptr) {};
+  ResB() : fue_exitosa(false), encontrada(nullptr) {};
 };
 
 struct Banco {
@@ -58,7 +75,7 @@ private:
 public:
   explicit Banco(vector<Cuenta> cuentas) : cuentas(move(cuentas)) {};
 
-  ResultadoB buscarCuentaRaw(const string &cuenta);
+  ResB buscarCuentaRaw(const string &cuenta);
 
   //vector<Cuenta> generarCuentas();
   Cuenta buscarCuenta();
@@ -69,6 +86,9 @@ bool contraEs_s(string &contra, Cuenta cuenta);
 
 bool cuentaExiste_s(string &cuenta, Banco banco);
 
+bool cuentaExisteOCancela_s(string &cuenta, Banco banco);
+
+bool esSuperKey_s(string &key, Cuenta cuenta);
 
 vector<Cuenta> cuentas_iniciales();
 
