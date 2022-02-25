@@ -18,7 +18,7 @@ int main() {
 
   switch (opcion) {
     case 1:
-      cuenta.ver_cuenta();
+      cuenta.verCuenta();
     case 2:
       break;
     default:

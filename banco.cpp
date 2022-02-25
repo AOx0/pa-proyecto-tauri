@@ -5,16 +5,22 @@
 // https://stackoverflow.com/questions/997512/string-representation-of-time-t
 #include <ctime>
 
+/// Suma al saldo de sí mismo la cantidad ingresada
+/// \param cantidad La cantidad a agregar
 void Cuenta::agregarDinero(double cantidad) {
   dinero += cantidad;
 }
 
+/// Disminuye la cantidad al saldo y devuelve el saldo restante
+/// \param cantidad La cantidad a restar
+/// \return El valor del saldo restante
 double Cuenta::retirarDinero(double cantidad) {
   dinero -= cantidad;
   return dinero;
 }
 
-void Cuenta::ver_cuenta() {
+/// Muestra la información del usuario
+void Cuenta::verCuenta() {
   cout << nombre << " " << apellido << ": " << endl;
   cout << "    Tarjeta: ";
 
@@ -36,10 +42,15 @@ void Cuenta::ver_cuenta() {
   cout << "    Valid True" << endl;
 }
 
-bool Cuenta::validar_contra(const string &contra) const {
+
+/// Método que verifica que una cadena sea igual a la contraseña registrada
+/// \param contra El string, intento de contraseña a verificar
+/// \return Devuelve true si es correcta
+bool Cuenta::validarContra(const string &contra) const {
   return contra == key;
 }
 
+/// Muestra el saldo del usuario
 void Cuenta::verSaldo() const {
   std::cout << apellido << ", " << nombre << ": " << endl
             << "    Saldo: " << dinero << endl
@@ -47,6 +58,7 @@ void Cuenta::verSaldo() const {
             << "    Total: " << dinero - deuda << endl;
 }
 
+/// Muestra las cuentas registradas para transferencias verificadas
 void Cuenta::verCuentas() {
   if (tarjetas_registradas.empty()) {
     cout << "No hay cuentas registradas!" << endl;
@@ -63,10 +75,16 @@ void Cuenta::verCuentas() {
   }
 }
 
-bool Cuenta::validar_super_contra(const string &contra) const {
+
+/// Método que verifica que una cadena sea igual a la super-contraseña registrada
+/// \param contra El string, intento de contraseña a verificar
+/// \return Devuelve true si es correcta
+bool Cuenta::validarSuperContra(const string &contra) const {
   return super_key == contra;
 }
 
+/// Elimina t del vector de tarjetas registradas
+/// \param t La tarjeta que se desea registrar
 void Cuenta::eliminarCuenta_t(const string &t) {
   for (int i = 0; i < tarjetas_registradas.size(); i++) {
     if (tarjetas_registradas[i] == t) {
@@ -79,6 +97,8 @@ void Cuenta::eliminarCuenta_t(const string &t) {
   cout << "La cuenta no existe en el registro\n";
 }
 
+/// Registra t como cuenta de transferencia verificada
+/// \param t La tarjeta que se desea registrar
 void Cuenta::registrarCuenta_t(const string &t) {
   if (t == "c") return;
 
@@ -90,6 +110,10 @@ void Cuenta::registrarCuenta_t(const string &t) {
   }
 }
 
+
+/// Verifica si una tarjeta dada, en forma de string, está ya registrada como cuenta de transferencia verificada
+/// \param t La tarjeta que se desea conocer si se encuentra ya registrada
+/// \return true si ya se encuentra registrada
 bool Cuenta::cuentaYaRegistrada_t(const string &t) {
   return count(tarjetas_registradas.begin(), tarjetas_registradas.end(), t);
 }
@@ -104,24 +128,9 @@ void Cuenta::transferir(Cuenta &target, double cantidad) {
   }
 }
 
-Cuenta Banco::buscarCuenta() {
-  string cuenta_str;
-  ResB cuenta;
-  do {
-    cout << "Ingresa un número de tarjeta: ";
-    cin >> cuenta_str;
-    cuenta = buscarCuentaRaw(cuenta_str);
-
-    if (cuenta.fue_exitosa) {
-      return *cuenta.encontrada;
-    } else {
-      cout << "Cuenta no encontrada\n";
-    }
-  } while (!cuenta.fue_exitosa);
-
-  return *cuenta.encontrada;
-}
-
+/// Método que busca dentro de las cuentas del banco la cuenta dada (tarjeta)
+/// \param cuenta El srting con el número de cuenta (tarjeta) a buscar
+/// \return Un resultado que contiene el estatus de la búsqueda y en caso de ser exitosa un apuntador a la instancia de Cuenta
 ResB Banco::buscarCuentaRaw(const string &tarjeta) {
   ResB resultado = ResB();
   for (Cuenta &cuenta: cuentas) {
@@ -136,7 +145,7 @@ ResB Banco::buscarCuentaRaw(const string &tarjeta) {
 
 
 bool contraEs_s(string &contra, Cuenta & cuenta) {
-  return cuenta.validar_contra(contra);
+  return cuenta.validarContra(contra);
 }
 
 bool cuentaExiste_s(string &cuenta, Banco & banco) {
@@ -183,7 +192,7 @@ vector<Cuenta> cuentas_iniciales() {
 }
 
 bool esSuperKey_s(string &key, Cuenta & cuenta) {
-  return cuenta.validar_super_contra(key);
+  return cuenta.validarSuperContra(key);
 }
 
 bool cuentaExisteOCancela_s(string &cuenta, Banco & banco) {

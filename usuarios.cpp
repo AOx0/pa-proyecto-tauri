@@ -79,7 +79,7 @@ int menuEstado(Cuenta &cuenta, Banco &banco) {
       cuenta.verSaldo();
       break;
     case 2:
-      cuenta.ver_cuenta();
+      cuenta.verCuenta();
       break;
     case 3:
       cuenta.verCuentas();
