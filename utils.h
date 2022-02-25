@@ -15,7 +15,7 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp);
 
 // Con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/
 template<typename V>
-string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error,
+string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
   bool valid = false;
@@ -46,7 +46,7 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const str
 
 
 template<typename V>
-string pedirValor(V dep, const string &msg, bool (*func)(string &, V), const string &on_error, int intentos,
+string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error, int intentos,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
 

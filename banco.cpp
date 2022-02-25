@@ -36,11 +36,11 @@ void Cuenta::ver_cuenta() {
   cout << "    Valid True" << endl;
 }
 
-bool Cuenta::validar_contra(const string &contra) {
+bool Cuenta::validar_contra(const string &contra) const {
   return contra == key;
 }
 
-void Cuenta::verSaldo() {
+void Cuenta::verSaldo() const {
   std::cout << apellido << ", " << nombre << ": " << endl
             << "    Saldo: " << dinero << endl
             << "    Deuda: " << deuda << endl
@@ -63,7 +63,7 @@ void Cuenta::verCuentas() {
   }
 }
 
-bool Cuenta::validar_super_contra(const string &contra) {
+bool Cuenta::validar_super_contra(const string &contra) const {
   return super_key == contra;
 }
 
@@ -92,6 +92,16 @@ void Cuenta::registrarCuenta_t(const string &t) {
 
 bool Cuenta::cuentaYaRegistrada_t(const string &t) {
   return count(tarjetas_registradas.begin(), tarjetas_registradas.end(), t);
+}
+
+void Cuenta::transferir(Cuenta &target, double cantidad) {
+  dinero -= cantidad;
+  target.dinero += cantidad;
+
+  if (1) {
+    cout << "    Tu dinero: " << dinero + cantidad << "->" << dinero << "\n";
+    cout << "    Su dinero: " << target.dinero - cantidad << "->" << target.dinero << "\n";
+  }
 }
 
 Cuenta Banco::buscarCuenta() {
@@ -125,11 +135,11 @@ ResB Banco::buscarCuentaRaw(const string &tarjeta) {
 }
 
 
-bool contraEs_s(string &contra, Cuenta cuenta) {
+bool contraEs_s(string &contra, Cuenta & cuenta) {
   return cuenta.validar_contra(contra);
 }
 
-bool cuentaExiste_s(string &cuenta, Banco banco) {
+bool cuentaExiste_s(string &cuenta, Banco & banco) {
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
   return resultado.fue_exitosa;
@@ -139,44 +149,44 @@ vector<Cuenta> cuentas_iniciales() {
   return vector<Cuenta>(
       {
           Cuenta(
-              500, "123", "Pepe",
+              550000, "323", "Victor",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1435", "1234567890123456",
-              "432423234", 234, "5574481902", "López", {}
+              "1435", "5281713025041549",
+              "83740285", 0, "5537930472", "López", {"5851295645900890"}
           ),
           Cuenta(
-              500, "123", "Pepe",
+              79800, "545", "David",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1435", "3334567890123456",
-              "432423234", 234, "5574481902", "López", {}
+              "2344", "5851295645900890",
+              "55682904", 15000, "5598527366", "Perez", {}
           ),
           Cuenta(
-              500, "123", "Pepe",
+              155000, "646", "Sara",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1435", "3334567890123456",
-              "432423234", 234, "5574481902", "López", {}
+              "5453", "5369580086986788",
+              "23480418", 3349, "5573638103", "Perez", {}
           ),
           Cuenta(
-              500, "123", "Pepe",
+              345000, "836", "Daniel",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1435", "3334567890123456",
-              "432423234", 234, "5574481902", "López", {}
+              "9372", "5274560873703343",
+              "12658309", 0, "5512739320", "Osorio", {}
           ),
           Cuenta(
-              500, "123", "Pepe",
+              342455, "948", "Guillermo",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1435", "3334567890123456",
-              "432423234", 234, "5574481902", "López", {}
+              "3789", "5075216458201382",
+              "87906512", 2329, "5574481902", "Ruiz", {}
           ),
       }
   );
 }
 
-bool esSuperKey_s(string &key, Cuenta cuenta) {
+bool esSuperKey_s(string &key, Cuenta & cuenta) {
   return cuenta.validar_super_contra(key);
 }
 
-bool cuentaExisteOCancela_s(string &cuenta, Banco banco) {
+bool cuentaExisteOCancela_s(string &cuenta, Banco & banco) {
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
   return resultado.fue_exitosa || cuenta == "cancelar" || cuenta == "c";

@@ -2,7 +2,6 @@
 #define PROYECTO_LIBRARY_H
 
 #include <iostream>
-#include <utility>
 #include <vector>
 
 using namespace std;
@@ -31,7 +30,7 @@ public:
 
   void agregarDinero(double cantidad);
 
-  void verSaldo();
+  void verSaldo() const;
 
   void verCuentas();
 
@@ -39,9 +38,9 @@ public:
 
   void ver_cuenta();
 
-  bool validar_contra(const string &contra);
+  bool validar_contra(const string &contra) const;
 
-  bool validar_super_contra(const string &contra);
+  bool validar_super_contra(const string &contra) const;
 
   bool cuentaYaRegistrada_t(const string &t);
 
@@ -49,15 +48,7 @@ public:
 
   void eliminarCuenta_t(const string &t);
 
-  void transferir(Cuenta &target, double cantidad) {
-    dinero -= cantidad;
-    target.dinero += cantidad;
-
-    if (1) {
-      cout << "    Tu dinero: " << dinero + cantidad << "->" << dinero << "\n";
-      cout << "    Su dinero: " << target.dinero - cantidad << "->" << target.dinero << "\n";
-    }
-  }
+  void transferir(Cuenta &target, double cantidad);
 };
 
 struct ResB {
@@ -82,13 +73,13 @@ public:
 };
 
 // Funciones con instancia por argumento
-bool contraEs_s(string &contra, Cuenta cuenta);
+bool contraEs_s(string &contra, Cuenta & cuenta);
 
-bool cuentaExiste_s(string &cuenta, Banco banco);
+bool cuentaExiste_s(string &cuenta, Banco & banco);
 
-bool cuentaExisteOCancela_s(string &cuenta, Banco banco);
+bool cuentaExisteOCancela_s(string &cuenta, Banco & banco);
 
-bool esSuperKey_s(string &key, Cuenta cuenta);
+bool esSuperKey_s(string &key, Cuenta & cuenta);
 
 vector<Cuenta> cuentas_iniciales();
 
