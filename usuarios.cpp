@@ -49,8 +49,8 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
         cuenta.retirarDinero(cantidad);
         cuenta.deuda -= cantidad;
         cout << "Éxito, resultado de la operación: \n"
-              << "Deuda: " << cuenta.deuda+cantidad << " -> " << cuenta.deuda << endl
-              << "Saldo: " << cuenta.dinero+cantidad << " -> " << cuenta.dinero << endl;
+             << "Deuda: " << cuenta.deuda + cantidad << " -> " << cuenta.deuda << endl
+             << "Saldo: " << cuenta.dinero + cantidad << " -> " << cuenta.dinero << endl;
       }
 
     }

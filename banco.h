@@ -98,13 +98,13 @@ public:
 
 // Funciones con el propósito de verificar.
 
-bool contraEs_s(string &contra, Cuenta & cuenta);
+bool contraEs_s(string &contra, Cuenta &cuenta);
 
-bool cuentaExiste_s(string &cuenta, Banco & banco);
+bool cuentaExiste_s(string &cuenta, Banco &banco);
 
-bool cuentaExisteOCancela_s(string &cuenta, Banco & banco);
+bool cuentaExisteOCancela_s(string &cuenta, Banco &banco);
 
-bool esSuperKey_s(string &key, Cuenta & cuenta);
+bool esSuperKey_s(string &key, Cuenta &cuenta);
 
 vector<Cuenta> cuentas_iniciales();
 
