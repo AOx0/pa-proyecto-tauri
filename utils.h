@@ -141,45 +141,6 @@ T pedirValor(const string &msg, T min, T max) {
   return i;
 }
 
-/// Función que pide un valor que será almacenado en una variable de tipo T, pensado exclusivamente para tipos numéricos.
-/// El número ingresado debe estar en el rango: min..=max
-/// \tparam T El tipo de dato NUMÉRICO donde se almacenará el input de usuario
-/// \param msg El mensaje mostrado al usuario para pedir el dato
-/// \param min El valor mínimo que debe ser ingresado
-/// \param max El valor máximo posible a ser ingresado
-/// \param quitar_chars Un vector de caracteres a ser ignorados del valor ingresado
-/// \return El valor ingresado ya validado
-template<typename T>
-T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars) {
-  T i;
-  string inp;
-  bool valid = false;
-
-  do {
-    cout << msg;
-    cin.clear();
-    cin.sync();
-    getline(cin, inp, '\n');
-
-    if (quitar(inp, ' ').empty()) continue;
-
-    for (int i = 0; i < quitar_chars.size(); i++) {
-      cout << "Eliminando " << quitar_chars[i] << endl;
-      inp = quitar(inp, quitar_chars[i]);
-    }
-
-    istringstream in(inp);
-
-    in >> i;
-    if (i < min || i > max)
-      cout << "Error: El valor debe estar en el rango " << min << "..=" << max << endl;
-    else valid = true;
-
-  } while (!valid);
-
-  return i;
-}
-
 
 /// Función que pide un valor que será almacenado en una variable de tipo T, pensado exclusivamente para tipos numéricos.
 /// El número ingresado debe estar en el rango: min..=max

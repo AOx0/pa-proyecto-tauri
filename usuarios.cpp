@@ -5,69 +5,20 @@
 
 #define SALIR 5
 
+// El menú principal. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrincipal(Cuenta &cuenta, Banco &banco);
 
+// El menú de transferencias. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuTransferencias(Cuenta &cuenta, Banco &banco);
 
+// El menú de estado. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuEstado(Cuenta &cuenta, Banco &banco);
 
+// El menú de depósitos/retiros. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuDepRet(Cuenta &cuenta, Banco &banco);
 
-int menuPrestamos(Cuenta &cuenta, Banco &banco) {
-  clear();
-  printf(
-      "Opciones: \n"
-      "    1. Pagar deuda\n"
-      "    2. Solicitar préstamo\n"
-      "    3. Ver saldo\n"
-      "    4. Regresar\n"
-  );
-
-  int option = pedirValor("Ingrese una opción: ", 1, 4);
-
-  clear();
-  switch (option) {
-    case 1: {
-      if (cuenta.deuda == 0) {
-        cout << "No cuentas con una deuda que pagar.\n";
-        break;
-      }
-
-      string key = pedirValor<Cuenta>(
-          cuenta, "Ingresa tu Super-Key: ",
-          &esSuperKey_s, "Super-Key inválida", 3
-      );
-      clear();
-
-      cout << "Deuda actual: $" << cuenta.deuda << endl;
-      double cantidad = pedirValor("Ingresa la cantidad a pagar: ", 1.0, cuenta.deuda, {','}, numbers, true);
-
-      if (cantidad > cuenta.dinero) {
-        cout << "Error: No cuentas con los fondos suficientes para pagar la deuda\n";
-      } else {
-        clear();
-        cuenta.retirarDinero(cantidad);
-        cuenta.deuda -= cantidad;
-        cout << "Éxito, resultado de la operación: \n"
-             << "Deuda: " << cuenta.deuda + cantidad << " -> " << cuenta.deuda << endl
-             << "Saldo: " << cuenta.dinero + cantidad << " -> " << cuenta.dinero << endl;
-      }
-
-    }
-      break;
-    case 2:
-      cuenta.verCuenta();
-      break;
-    case 3:
-      cuenta.verSaldo();
-      break;
-    default:
-      return option;
-  }
-
-  continuar_c();
-  return option;
-}
+// El menú de préstamos. Lo muestra y se encarga de pedir una opción y ejecutarla
+int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
 int main() {
   clear();
@@ -114,6 +65,8 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       break;
     case 4:
       while (menuPrestamos(cuenta, banco) != 4) {}
+      break;
+    default:
       break;
   }
 
@@ -364,6 +317,84 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
         cout << "Saldo restante: $" << restante << ".00\n";
         cout << "Recoge el dinero de la bandeja.\n";
       }
+      break;
+    default:
+      return option;
+  }
+
+  continuar_c();
+  return option;
+}
+
+int menuPrestamos(Cuenta &cuenta, Banco &banco) {
+  clear();
+  printf(
+      "Opciones: \n"
+      "    1. Pagar deuda\n"
+      "    2. Solicitar préstamo\n"
+      "    3. Ver saldo\n"
+      "    4. Regresar\n"
+  );
+
+  int option = pedirValor("Ingrese una opción: ", 1, 4);
+
+  clear();
+  switch (option) {
+    case 1: {
+      if (cuenta.deuda == 0) {
+        cout << "No cuentas con una deuda que pagar.\n";
+        break;
+      }
+
+      string key = pedirValor<Cuenta>(
+          cuenta, "Ingresa tu Super-Key: ",
+          &esSuperKey_s, "Super-Key inválida", 3
+      );
+      clear();
+
+      cout << "Deuda actual: $" << cuenta.deuda << endl;
+      double cantidad = pedirValor("Ingresa la cantidad a pagar: ", 1.0, cuenta.deuda, {','}, numbers, true);
+
+      if (cantidad > cuenta.dinero) {
+        cout << "Error: No cuentas con los fondos suficientes para pagar la deuda\n";
+      } else {
+        clear();
+        cuenta.retirarDinero(cantidad);
+        cuenta.deuda -= cantidad;
+        cout << "Éxito, resultado de la operación: \n"
+             << "Deuda: " << cuenta.deuda + cantidad << " -> " << cuenta.deuda << endl
+             << "Saldo: " << cuenta.dinero + cantidad << " -> " << cuenta.dinero << endl;
+      }
+
+    }
+      break;
+    case 20: {
+      string key = pedirValor<Cuenta>(
+          cuenta, "Ingresa tu Super-Key: ",
+          &esSuperKey_s, "Super-Key inválida", 3
+      );
+      clear();
+
+      cout << "Saldo actual: $" << cuenta.dinero << endl;
+      cout << "Deuda actual: $" << cuenta.deuda << endl;
+      double cantidad = pedirValor("Ingresa la cantidad que desea solicitar: ", 1.0, cuenta.dinero * 0.7, {','}, numbers, true);
+
+      if (cantidad/cuenta.dinero > 0.7) {
+        cout << "No se puede solicitar más del 70% de la cantidad disponible de saldo\n";
+      } else if (cuenta.deuda/cuenta.dinero > 0.15) {
+        cout << "No puedes solicitar préstamos si tienes ya una gran cantidad de deuda por pagar\n";
+      } else {
+        cuenta.deuda += cantidad;
+        cuenta.dinero += cantidad;
+
+        cout << "Préstamo solicitado con éxito. Resultado de la operación: \n"
+             << "Deuda: " << cuenta.deuda - cantidad << " -> " << cuenta.deuda << endl
+             << "Saldo: " << cuenta.dinero - cantidad << " -> " << cuenta.dinero << endl;
+      }
+    }
+      break;
+    case 3:
+      cuenta.verSaldo();
       break;
     default:
       return option;
