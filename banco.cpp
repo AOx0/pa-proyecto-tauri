@@ -154,6 +154,17 @@ bool cuentaExiste_s(string &cuenta, Banco & banco) {
   return resultado.fue_exitosa;
 }
 
+bool esSuperKey_s(string &key, Cuenta & cuenta) {
+  return cuenta.validarSuperContra(key);
+}
+
+bool cuentaExisteOCancela_s(string &cuenta, Banco & banco) {
+  ResB resultado = banco.buscarCuentaRaw(cuenta);
+
+  return resultado.fue_exitosa || cuenta == "cancelar" || cuenta == "c";
+}
+
+
 vector<Cuenta> cuentas_iniciales() {
   return vector<Cuenta>(
       {
@@ -189,14 +200,4 @@ vector<Cuenta> cuentas_iniciales() {
           ),
       }
   );
-}
-
-bool esSuperKey_s(string &key, Cuenta & cuenta) {
-  return cuenta.validarSuperContra(key);
-}
-
-bool cuentaExisteOCancela_s(string &cuenta, Banco & banco) {
-  ResB resultado = banco.buscarCuentaRaw(cuenta);
-
-  return resultado.fue_exitosa || cuenta == "cancelar" || cuenta == "c";
 }

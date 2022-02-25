@@ -13,6 +13,62 @@ int menuEstado(Cuenta &cuenta, Banco &banco);
 
 int menuDepRet(Cuenta &cuenta, Banco &banco);
 
+int menuPrestamos(Cuenta &cuenta, Banco &banco) {
+  clear();
+  printf(
+      "Opciones: \n"
+      "    1. Pagar deuda\n"
+      "    2. Solicitar préstamo\n"
+      "    3. Ver saldo\n"
+      "    4. Regresar\n"
+  );
+
+  int option = pedirValor("Ingrese una opción: ", 1, 4);
+
+  clear();
+  switch (option) {
+    case 1: {
+      if (cuenta.deuda == 0) {
+        cout << "No cuentas con una deuda que pagar.\n";
+        break;
+      }
+
+      string key = pedirValor<Cuenta>(
+          cuenta, "Ingresa tu Super-Key: ",
+          &esSuperKey_s, "Super-Key inválida", 3
+      );
+      clear();
+
+      cout << "Deuda actual: $" << cuenta.deuda << endl;
+      double cantidad = pedirValor("Ingresa la cantidad a pagar: ", 1.0, cuenta.deuda, {','}, numbers, true);
+
+      if (cantidad > cuenta.dinero) {
+        cout << "Error: No cuentas con los fondos suficientes para pagar la deuda\n";
+      } else {
+        clear();
+        cuenta.retirarDinero(cantidad);
+        cuenta.deuda -= cantidad;
+        cout << "Éxito, resultado de la operación: \n"
+              << "Deuda: " << cuenta.deuda+cantidad << " -> " << cuenta.deuda << endl
+              << "Saldo: " << cuenta.dinero+cantidad << " -> " << cuenta.dinero << endl;
+      }
+
+    }
+      break;
+    case 2:
+      cuenta.verCuenta();
+      break;
+    case 3:
+      cuenta.verSaldo();
+      break;
+    default:
+      return option;
+  }
+
+  continuar_c();
+  return option;
+}
+
 int main() {
   clear();
   Banco banco = Banco(cuentas_iniciales());
@@ -40,7 +96,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       "    1. Ver estado\n" // Ya
       "(*) 2. Transferencias\n"
       "(*) 3. Retirar o depositar\n" // Ya
-      "(*) 4. Préstamos (Próximamente)\n"
+      "(*) 4. Préstamos\n"
       "    5. Salir\n"
       "\n(*) : Puede requerir su Super-key\n"
   );
@@ -55,6 +111,9 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       break;
     case 3:
       while (menuDepRet(cuenta, banco) != 4) {}
+      break;
+    case 4:
+      while (menuPrestamos(cuenta, banco) != 4) {}
       break;
   }
 
