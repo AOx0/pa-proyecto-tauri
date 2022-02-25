@@ -9,11 +9,30 @@
 
 using namespace std;
 
+/// Función que elimina todos los caracteres que sean iguales a 'patron'
+/// \param txt El string a limpiar de un carácter
+/// \param patron El carácter que se desea eliminar
+/// \return Una nueva instancia de string que contiene 'txt' con el carácter 'patron' eliminado
 string quitar(string &txt, char patron);
 
+/// Función que indica si una cadena de caracteres contiene caracteres autorizados
+/// \param valid_chars El vector de caracteres que están permitidos en la entrada
+/// \param inp El string a validar
+/// \return True si contiene caracteres inválidos
 bool contieneInvalid(const vector<char> &valid_chars, const string &inp);
 
-// Con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/
+
+/// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
+/// Función que pide un valor, pensado para strings solamente. La función se ejecuta indefinidamente hasta que
+/// la función verificadora que se pasa como argumento devuelva true.
+/// \tparam V El tipo de dep
+/// \param dep La variable de la que depende que la función verificadora funcione. Pensado para instancias de Banco y Cuenta
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param func Un apuntador a una función que devuelva true/false
+/// \param on_error El mensaje a mostrar cuando ocurra algún error
+/// \param validos El arreglo de caracteres válidos que pueden estar contenidos en el msg
+/// \param quitar_espacios Si la función debería ignorar los espacios o no
+/// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
 template<typename V>
 string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
@@ -23,9 +42,10 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
   do {
     cout << msg;
 
-    // de acuerdo a https://programmerclick.com/article/626810031/
+    // De acuerdo a https://programmerclick.com/article/626810031/ hay que usar ambos a la vez
     cin.clear();
     cin.sync();
+
     getline(cin, inp, '\n');
 
     if (quitar(inp, ' ').empty()) continue;
@@ -45,6 +65,19 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
 }
 
 
+/// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
+/// Función que pide un valor, pensado para strings solamente. La función se ejecuta indefinidamente hasta que
+/// la función verificadora que se pasa como argumento devuelva true. Se pide un valor hasta intentos veces,
+/// terminando el programa si se agotan los intentos
+/// \tparam V El tipo de dep
+/// \param dep La variable de la que depende que la función verificadora funcione. Pensado para instancias de Banco y Cuenta
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param func Un apuntador a una función que devuelva true/false
+/// \param on_error El mensaje a mostrar cuando ocurra algún error
+/// \param intentos El número de intentos permitidos para ingresar un valor válido
+/// \param validos El arreglo de caracteres válidos que pueden estar contenidos en el msg
+/// \param quitar_espacios Si la función debería ignorar los espacios o no
+/// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
 template<typename V>
 string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error, int intentos,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
@@ -76,6 +109,13 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
   exit(0);
 }
 
+/// Función que pide un valor que será almacenado en una variable de tipo T, pensado exclusivamente para tipos numéricos.
+/// El número ingresado debe estar en el rango: min..=max
+/// \tparam T El tipo de dato NUMÉRICO donde se almacenará el input de usuario
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param min El valor mínimo que debe ser ingresado
+/// \param max El valor máximo posible a ser ingresado
+/// \return El valor ingresado ya validado
 template<typename T>
 T pedirValor(const string &msg, T min, T max) {
   T i;
@@ -101,6 +141,14 @@ T pedirValor(const string &msg, T min, T max) {
   return i;
 }
 
+/// Función que pide un valor que será almacenado en una variable de tipo T, pensado exclusivamente para tipos numéricos.
+/// El número ingresado debe estar en el rango: min..=max
+/// \tparam T El tipo de dato NUMÉRICO donde se almacenará el input de usuario
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param min El valor mínimo que debe ser ingresado
+/// \param max El valor máximo posible a ser ingresado
+/// \param quitar_chars Un vector de caracteres a ser ignorados del valor ingresado
+/// \return El valor ingresado ya validado
 template<typename T>
 T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars) {
   T i;
@@ -133,6 +181,16 @@ T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars) 
 }
 
 
+/// Función que pide un valor que será almacenado en una variable de tipo T, pensado exclusivamente para tipos numéricos.
+/// El número ingresado debe estar en el rango: min..=max
+/// \tparam T El tipo de dato NUMÉRICO donde se almacenará el input de usuario
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param min El valor mínimo que debe ser ingresado
+/// \param max El valor máximo posible a ser ingresado
+/// \param quitar_chars Un vector de caracteres a ser ignorados del valor ingresado
+/// \param valid_chars Un vector de caracteres que son únicamente válidos
+/// \param quitar_espacios Si la función debería ignorar los espacios o no
+/// \return El valor ingresado ya validado
 template<typename T>
 T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, const vector<char> &valid_chars,
              bool quitar_espacios = false) {
@@ -169,6 +227,10 @@ T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, 
   return i;
 }
 
+/// Pide un string. Usado para tener una forma sencilla de pedir valores usando getline()
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param quitar_espacios Si la función debería ignorar los espacios o no
+/// \return El valor ingresado
 string pedirValor(const string &msg, bool quitar_espacios = false) {
   string inp;
 
