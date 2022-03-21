@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/Newsletter-Subscription-Form.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script>
+        const invoke = window.__TAURI__.invoke;
+        const win = window.__TAURI__.window;
+
+        function reload() {
+            invoke('display_upper_msg', {msg: `${document.getElementById('email').value}`}).then((message) => {
+                document.getElementById('bd-h').innerHTML = `${message}`
+            })
+        }
+    </script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        #bd {
+            position: absolute;
+            border-radius: 10px;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        #title-bar {
+            height: 40px;
+            border-radius: 25px;
+            background: #ffffff;
+            user-select: none;
+            display: flex;
+
+            justify-content: flex-start;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            right: 0;
+            z-index: 0;
+        }
+
+
+        .close {
+            height: 14px;
+            width: 14px;
+            margin: 10px 0 10px 10px ;
+        }
+
+        #cls {
+            background: #fb5f57;
+            text-decoration: none;
+            color: #fb5f57;
+            height: 14px;
+            width: 14px;
+            border: none;
+            border-radius: 20px;
+        }
+        /*  47dc4e */
+        #min {
+            background: #ffbc3d;
+            text-decoration: none;
+            color: #ffbc3d;
+            height: 14px;
+            width: 14px;
+            border: none;
+            border-radius: 20px;
+        }
+
+        #max {
+            background: #47dc4e;
+            text-decoration: none;
+            color: #47dc4e;
+            height: 14px;
+            width: 14px;
+            border: none;
+            border-radius: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div data-tauri-drag-region id="title-bar" >
+        <div class="close" >
+            <button id="cls" onclick="
+                      invoke('close')
+                  ">
+            </button>
+        </div>
+        <div class="close" >
+            <button id="min" onclick="
+                    win.appWindow.minimize()
+                  ">
+            </button>
+        </div>
+
+        <div class="close" >
+            <button id="max" onclick="
+                    win.appWindow.maximize()
+                    ">
+            </button>
+        </div>
+
+    </div>
+    <p id="bd"></p>
+    <section id="bona" class="newsletter-subscribe">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Subscribe for our Newsletter</h2>
+                <p id='bd-h' class="text-center"></p>
+            </div>
+            <div class="d-flex justify-content-center flex-wrap">
+                <div class="mb-3"><input class="form-control" id="email" type="email" name="email" placeholder="Número"></div>
+                <div class="mb-3"><button class="btn btn-primary" type="submit" onclick="reload()">Subscribe </button></div>
+            </div>
+        </div>
+    </section>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
