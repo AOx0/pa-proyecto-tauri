@@ -7,13 +7,7 @@
 
 using namespace std;
 
-void clear() {
-#ifdef _WIN32
-  system("cls");
-#else
-  system("clear");
-#endif
-}
+void clear() {}
 
 /// Función que indica si una cadena de caracteres contiene caracteres autorizados
 /// \param valid_chars El vector de caracteres que están permitidos en la entrada

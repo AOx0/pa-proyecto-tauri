@@ -28,7 +28,7 @@ fn close() {
 lazy_static! {
   static ref PROC: Arc<Mutex<Popen>> = Arc::new(Mutex::new(
     Popen::create(
-    &["python3", "/Users/alejandro/CLionProjects/fast/main.py"],
+    &[std::env::current_exe().unwrap().as_path().parent().unwrap().join("usuarios")],
     PopenConfig {
       stdout: Redirection::Pipe,
       stdin: Redirection::Pipe,
@@ -46,6 +46,8 @@ fn display_upper_msg(msg: String) -> String {
   if i == ERR { return format!("Error: Ingresa un número válido") }
 
   p.stdin.as_ref().unwrap().write_all(format!("{i}\n").as_bytes()).unwrap();
+
+  println!("{:?}", lines);
 
   format!("{}", lines.next().unwrap().unwrap())
 }

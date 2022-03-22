@@ -40,7 +40,7 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
   bool valid = false;
 
   do {
-    cout << msg;
+    // cout << msg;
 
     // De acuerdo a https://programmerclick.com/article/626810031/ hay que usar ambos a la vez
     cin.clear();
@@ -84,7 +84,7 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
   string inp;
 
   do {
-    cout << msg;
+    // cout << msg;
     cin.clear();
     cin.sync();
     getline(cin, inp, '\n');
@@ -123,7 +123,7 @@ T pedirValor(const string &msg, T min, T max) {
   bool valid = false;
 
   do {
-    cout << msg;
+    // cout << msg;
     cin.clear();
     cin.sync();
     getline(cin, inp, '\n');
@@ -160,7 +160,7 @@ T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, 
   bool valid = false;
 
   do {
-    cout << msg;
+    // cout << msg;
     cin.clear();
     cin.sync();
     getline(cin, inp, '\n');
@@ -195,7 +195,7 @@ T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, 
 string pedirValor(const string &msg, bool quitar_espacios = false) {
   string inp;
 
-  cout << msg;
+  // cout << msg;
   cin.clear();
   cin.sync();
   getline(cin, inp, '\n');
