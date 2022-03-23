@@ -82,12 +82,12 @@ template<typename V>
 string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error, int intentos,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
+  ofstream file;
 
   do {
     // cout << msg;
-    cin.clear();
-    cin.sync();
-    getline(cin, inp, '\n');
+
+    cin >> inp;
 
     if (quitar(inp, ' ').empty()) continue;
 
@@ -95,6 +95,10 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
 
     if (!validos.empty())
       if (contieneInvalid(validos, inp)) continue;
+
+    file.open("log_ususarios.txt", std::ios::app);
+    file << "Verificando...\n";
+    file.close();
 
     if (!func(inp, dep)) {
       cout << on_error;
@@ -124,9 +128,7 @@ T pedirValor(const string &msg, T min, T max) {
 
   do {
     // cout << msg;
-    cin.clear();
-    cin.sync();
-    getline(cin, inp, '\n');
+    cin >> inp;
 
     if (quitar(inp, ' ').empty()) continue;
     istringstream in(inp);
@@ -161,9 +163,7 @@ T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, 
 
   do {
     // cout << msg;
-    cin.clear();
-    cin.sync();
-    getline(cin, inp, '\n');
+    cin >> inp;
 
     if (quitar(inp, ' ').empty()) continue;
 
@@ -196,9 +196,7 @@ string pedirValor(const string &msg, bool quitar_espacios = false) {
   string inp;
 
   // cout << msg;
-  cin.clear();
-  cin.sync();
-  getline(cin, inp, '\n');
+  cin >> inp;
 
   if (quitar_espacios) inp = quitar(inp, ' ');
 

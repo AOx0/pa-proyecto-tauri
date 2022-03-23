@@ -15,10 +15,17 @@ void clear() {}
 /// \return True si contiene caracteres inválidos
 bool contieneInvalid(const vector<char> &valid_chars, const string &inp) {
   bool invalid = false;
+  int k = 0;
+
   for (int j = 0; j < inp.size(); j++) {
     if (!count(valid_chars.begin(), valid_chars.end(), inp[j])) {
 
       if (!invalid) {
+        if (k == 0) {
+          cout << "<h2 class=\"text-center\">Login</h2>";
+          cout << "<p class=\"text-center\">";
+          k++;
+        }
         cout << "Error: encontrado: '" << inp[j] << "'";
       } else {
         cout << ", '" << inp[j] << "'";
@@ -29,13 +36,13 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp) {
     }
   }
 
-
   if (invalid) {
-    cout << "\n";
-    cout << "El valor ingresado puede contener los caracteres: ";
+    cout << ":nl:El valor ingresado puede contener los caracteres: ";
     for (char invalid_char: valid_chars) cout << invalid_char;
-    cout << endl;
+    cout << "</p>\n";
   }
+
+
 
 
   return invalid;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "banco.h"
 #include "utils.h"
@@ -26,13 +27,16 @@ int main() {
 
   string tarjeta = pedirValor<Banco>(
       banco, "Ingresa tu tarjeta: ",
-      &cuentaExiste_s, "Tarjeta inválida", numbers, true
+      &cuentaExiste_s, "<h2 class='text-center'>Login</h2><p class='text-center'>Tarjeta inválida</p>", numbers, true
   );
+
   Cuenta cuenta = *banco.buscarCuentaRaw(tarjeta).encontrada;
 
+  cout << "<h2 class='text-center'>Login</h2><p class='text-center'>Ahora ingresa la contraseña</p>\n";
+
   string contra = pedirValor<Cuenta>(
-      cuenta, "Ingresa la contraseña: ",
-      &contraEs_s, "Contraseña inválida", 3, numbers
+      cuenta, "Ingresa la contrasenna: ",
+      &contraEs_s, "<h2 class='text-center'>Login</h2><p class='text-center'>Contraseña inválida</p>", 3, numbers
   );
 
   while (menuPrincipal(cuenta, banco) != SALIR) {}
@@ -41,15 +45,18 @@ int main() {
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
   clear();
   printf(
-      "Súper Linea -- Super Banco\n"
-      "--------------------------\n"
-      "Submenús:\n"
-      "    1. Ver estado\n" // Ya
-      "(*) 2. Transferencias\n"
-      "(*) 3. Retirar o depositar\n" // Ya
-      "(*) 4. Préstamos\n"
-      "    5. Salir\n"
-      "\n(*) : Puede requerir su Super-key\n"
+      "<h2 class='text-center'>Súper Linea</h2>:nl:"
+      "<p class='text-center'>Submenús</p>"
+      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver estado</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Transferencias</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Retirar o depositar</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no4' class='btn btn-primary'>Préstamos</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
+      ":nl:(*) : Puede requerir su Super-key:nl:</p>\n"
   );
 
   int option = pedirValor("Ingrese un submenú: ", 1, SALIR);
@@ -75,13 +82,13 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
 
 int menuEstado(Cuenta &cuenta, Banco &banco) {
   clear();
-  printf(
+  /* printf(
       "Opciones: \n"
       "    1. Ver saldo\n"
       "    2. Ver datos personales\n"
       "    3. Ver cuentas registradas\n"
       "    4. Regresar\n"
-  );
+  ); */
 
   int option = pedirValor("Ingrese una opción: ", 1, 4);
 
@@ -106,7 +113,7 @@ int menuEstado(Cuenta &cuenta, Banco &banco) {
 
 int menuTransferencias(Cuenta &cuenta, Banco &banco) {
   clear();
-  printf(
+  /* printf(
       "Opciones: \n"
       "(*) 1. Transferir a tarjeta\n"
       "(*) 2. Registrar cuenta\n"
@@ -114,7 +121,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       "    4. Ver cuentas registradas\n"
       "    5. Ver saldo\n"
       "    6. Regresar\n"
-  );
+  ); */
 
   int option = pedirValor("Ingrese una opción: ", 1, 6);
 
@@ -273,13 +280,13 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
 int menuDepRet(Cuenta &cuenta, Banco &banco) {
   clear();
-  printf(
+  /* printf(
       "Opciones: \n"
       "    1. Ver saldo\n"
       "    2. Depositar\n"
       "(*) 3. Retirar\n"
       "    4. Regresar\n"
-  );
+  ); */
 
   int option = pedirValor("Ingrese una opción: ", 1, 4);
   double cantidad;
@@ -328,13 +335,13 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
 
 int menuPrestamos(Cuenta &cuenta, Banco &banco) {
   clear();
-  printf(
+  /* printf(
       "Opciones: \n"
       "    1. Pagar deuda\n"
       "    2. Solicitar préstamo\n"
       "    3. Ver saldo\n"
       "    4. Regresar\n"
-  );
+  ); */
 
   int option = pedirValor("Ingrese una opción: ", 1, 4);
 

@@ -13,9 +13,26 @@
         const win = window.__TAURI__.window;
 
         function reload() {
-            invoke('display_upper_msg', {msg: `${document.getElementById('email').value}`}).then((message) => {
-                document.getElementById('bd-h').innerHTML = `${message}`
+            invoke('display_upper_msg', {msg: `${document.getElementById('fie').value}`}).then((message) => {
+                document.getElementById('bd-h').innerHTML = `${message}`;
+
+                if (message.includes("Ahora ingresa la")) {
+                    document.getElementById("fie").value = "";
+                }
+
+                if (message.includes("Submenús")) {
+                    document.getElementById("ttxt").innerHTML = "";
+                }
             })
+        }
+
+        function close() {
+            invoke('close')
+        }
+
+        window.onload = function() {
+            document.getElementById("sub").addEventListener('click', reload);
+            document.getElementById("cls").addEventListener('click', close);
         }
     </script>
     <style>
@@ -105,9 +122,7 @@
 <body>
     <div data-tauri-drag-region id="title-bar" >
         <div class="close" >
-            <button id="cls" onclick="
-                      invoke('close')
-                  ">
+            <button id="cls">
             </button>
         </div>
         <div class="close" >
@@ -128,13 +143,14 @@
     <p id="bd"></p>
     <section id="bona" class="newsletter-subscribe">
         <div class="container">
-            <div class="intro">
-                <h2 class="text-center">Subscribe for our Newsletter</h2>
-                <p id='bd-h' class="text-center"></p>
+            <div class="intro" id='bd-h'>
+                <h2 class="text-center">Input</h2>
+                <p class="text-center"></p>
             </div>
-            <div class="d-flex justify-content-center flex-wrap">
-                <div class="mb-3"><input class="form-control" id="email" type="email" name="email" placeholder="Número"></div>
-                <div class="mb-3"><button class="btn btn-primary" type="submit" onclick="reload()">Subscribe </button></div>
+            <div class="d-flex justify-content-center flex-wrap" id="ttxt">
+                <div class="mb-3"><input class="form-control" id="fie" placeholder="Número"></div>
+                <p>&nbsp;&nbsp;&nbsp;</p>
+                <div class="mb-3"><button id="sub" class="btn btn-primary">Submit</button></div>
             </div>
         </div>
     </section>

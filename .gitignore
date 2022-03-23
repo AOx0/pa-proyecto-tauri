@@ -2,3 +2,17 @@ cmake-build-debug/
 .idea/
 target/
 cpp/CMakeFiles/
+
+.vscode/
+
+build/
+
+src-tauri/usuarios
+
+src-tauri/log_ususarios.txt
+
+log.txt
+
+log_ususarios.txt
+
+cpp/usuarios

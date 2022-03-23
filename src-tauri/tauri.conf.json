@@ -11,6 +11,7 @@
     "withGlobalTauri": true
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "bundle": {
       "active": true,
       "targets": "all",
