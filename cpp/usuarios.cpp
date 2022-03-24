@@ -46,7 +46,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
   clear();
   printf(
       "<h2 class='text-center'>Súper Linea</h2>:nl:"
-      "<p class='text-center'>Submenús</p>"
+      "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver estado</button></div>"
       "</br>"
       "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Transferencias</button></div>"
@@ -56,7 +56,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       "<div class='text-center' class='mb-3'><button id='no4' class='btn btn-primary'>Préstamos</button></div>"
       "</br>"
       "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
-      ":nl:(*) : Puede requerir su Super-key:nl:</p>\n"
+      "</p>\n"
   );
 
   int option = pedirValor("Ingrese un submenú: ", 1, SALIR);
@@ -82,13 +82,20 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
 
 int menuEstado(Cuenta &cuenta, Banco &banco) {
   clear();
-  /* printf(
-      "Opciones: \n"
-      "    1. Ver saldo\n"
-      "    2. Ver datos personales\n"
-      "    3. Ver cuentas registradas\n"
-      "    4. Regresar\n"
-  ); */
+  printf(
+      "<h2 class='text-center'>Súper Linea</h2>:nl:"
+      "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
+      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver saldo</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Ver datos personales</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Ver cuentas registradas</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no4' class='btn btn-primary'>Regresar</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
+      "</p>\n"
+  );
 
   int option = pedirValor("Ingrese una opción: ", 1, 4);
 
@@ -113,15 +120,22 @@ int menuEstado(Cuenta &cuenta, Banco &banco) {
 
 int menuTransferencias(Cuenta &cuenta, Banco &banco) {
   clear();
-  /* printf(
-      "Opciones: \n"
-      "(*) 1. Transferir a tarjeta\n"
-      "(*) 2. Registrar cuenta\n"
-      "(*) 3. Eliminar cuenta\n"
-      "    4. Ver cuentas registradas\n"
-      "    5. Ver saldo\n"
-      "    6. Regresar\n"
-  ); */
+  printf(
+      "<h2 class='text-center'>Súper Linea</h2>:nl:"
+      "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
+      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Transferir a tarjeta (*)</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Registrar cuenta (*)</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Eliminar cuenta (*)</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no4' class='btn btn-primary'>Ver cuentas registradas</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Regresar</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no6' class='btn btn-primary'>Salir</button></div>"
+      "</p>\n"
+  );
 
   int option = pedirValor("Ingrese una opción: ", 1, 6);
 
@@ -280,13 +294,20 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
 int menuDepRet(Cuenta &cuenta, Banco &banco) {
   clear();
-  /* printf(
-      "Opciones: \n"
-      "    1. Ver saldo\n"
-      "    2. Depositar\n"
-      "(*) 3. Retirar\n"
-      "    4. Regresar\n"
-  ); */
+  printf(
+      "<h2 class='text-center'>Súper Linea</h2>:nl:"
+      "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
+      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver saldo</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Depositar</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Retirar (*)</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no4' class='btn btn-primary'>Regresar</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
+      "</p>\n"
+  );
 
   int option = pedirValor("Ingrese una opción: ", 1, 4);
   double cantidad;
@@ -335,13 +356,20 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
 
 int menuPrestamos(Cuenta &cuenta, Banco &banco) {
   clear();
-  /* printf(
-      "Opciones: \n"
-      "    1. Pagar deuda\n"
-      "    2. Solicitar préstamo\n"
-      "    3. Ver saldo\n"
-      "    4. Regresar\n"
-  ); */
+  printf(
+      "<h2 class='text-center'>Súper Linea</h2>:nl:"
+      "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
+      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Pagar deuda</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Solicitar préstamo</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Ver saldo (*)</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no4' class='btn btn-primary'>Regresar</button></div>"
+      "</br>"
+      "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
+      "</p>\n"
+  );
 
   int option = pedirValor("Ingrese una opción: ", 1, 4);
 

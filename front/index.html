@@ -12,6 +12,13 @@
         const invoke = window.__TAURI__.invoke;
         const win = window.__TAURI__.window;
 
+        function opcion(evt)
+        {
+            invoke('display_upper_msg', {msg: `${evt.toString()}`}).then((message) => {
+                document.getElementById('bd-h').innerHTML = `${message}`;
+            })
+        }
+
         function reload() {
             invoke('display_upper_msg', {msg: `${document.getElementById('fie').value}`}).then((message) => {
                 document.getElementById('bd-h').innerHTML = `${message}`;
@@ -22,6 +29,13 @@
 
                 if (message.includes("Submenús")) {
                     document.getElementById("ttxt").innerHTML = "";
+
+                    if (message.includes("no1")) { document.getElementById("no1").addEventListener('click', function() { opcion(1) }); }
+                    if (message.includes("no2")) { document.getElementById("no2").addEventListener('click', function() { opcion(2) }); }
+                    if (message.includes("no3")) { document.getElementById("no3").addEventListener('click', function() { opcion(3) }); }
+                    if (message.includes("no4")) { document.getElementById("no4").addEventListener('click', function() { opcion(4) }); }
+                    if (message.includes("no5")) { document.getElementById("no5").addEventListener('click', function() { opcion(5) }); }
+                    if (message.includes("no6")) { document.getElementById("no6").addEventListener('click', function() { opcion(6) }); }
                 }
             })
         }

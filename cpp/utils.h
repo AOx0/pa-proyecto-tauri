@@ -135,7 +135,7 @@ T pedirValor(const string &msg, T min, T max) {
 
     in >> i;
     if (i < min || i > max)
-      cout << "Error: El valor debe estar en el rango " << min << "..=" << max << endl;
+      cout << "Error: El valor " << i << " debe estar en el rango " << min << "..=" << max << endl;
     else valid = true;
 
   } while (!valid);
@@ -205,13 +205,8 @@ string pedirValor(const string &msg, bool quitar_espacios = false) {
 
 void clear();
 
-void continuar() {
-  pedirValor("Pulsa enter para continuar");
-}
+void continuar() {}
 
-void continuar_c() {
-  pedirValor("Pulsa enter para continuar");
-  clear();
-}
+void continuar_c() {}
 
 #endif //ADMIN_UTILS_H
