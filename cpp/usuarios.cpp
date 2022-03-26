@@ -41,7 +41,11 @@ int main() {
     );
 
     while (menuPrincipal(cuenta, banco) != SALIR) {}
+
+    cout << "<h2 id='re' class='text-center'>Login</h2><p class='text-center'>Ingresa tu número de tarjeta</p>\n";
   }
+
+
 
 
 }
@@ -79,7 +83,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       while ((val =menuPrestamos(cuenta, banco)) != 4 && val != SALIR) {}
       break;
     default:
-      break;
+      return SALIR;
   }
 
   if (val == SALIR) {
@@ -105,7 +109,7 @@ int menuEstado(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, 4);
+  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
 
   clear();
@@ -149,7 +153,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, 6);
+  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
 
   if (option < 4 && option > 1) {
@@ -323,7 +327,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, 4);
+  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
 
   double cantidad;
@@ -388,7 +392,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, 4);
+  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
 
   clear();

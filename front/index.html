@@ -36,15 +36,18 @@
                 document.getElementById("fie").value = "";
             }
 
+            if (message.includes("Login") && message.includes("id='re'")) {
+                document.getElementById("ttxt").innerHTML = "<div class='mb-3'><input class='form-control' id='fie' placeholder=''></div><p>&nbsp;&nbsp;&nbsp;</p><div class='mb-3'><button id='sub' class='btn btn-primary'>Submit</button></div>";
+                document.getElementById("sub").addEventListener('click', reload);
+            }
+
             if (message.includes("no1")) {
                 document.getElementById("ttxt").innerHTML = "";
-
                 update_button_actions(message, document);
             }
         }
 
-        function opcion(evt)
-        {
+        function opcion(evt) {
             invoke('display_upper_msg', {msg: `${evt.toString()}`}).then((message) => {
                 update_body(message, document);
             })
@@ -175,10 +178,10 @@
         <div class="container">
             <div class="intro" id='bd-h'>
                 <h2 class="text-center">Input</h2>
-                <p class="text-center"></p>
+                <p class="text-center">Ingresa tu número de tarjeta</p>
             </div>
             <div class="d-flex justify-content-center flex-wrap" id="ttxt">
-                <div class="mb-3"><input class="form-control" id="fie" placeholder="Número"></div>
+                <div class="mb-3"><input class="form-control" id="fie" placeholder=""></div>
                 <p>&nbsp;&nbsp;&nbsp;</p>
                 <div class="mb-3"><button id="sub" class="btn btn-primary">Submit</button></div>
             </div>
