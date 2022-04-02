@@ -102,6 +102,8 @@ bool contraEs_s(string &contra, Cuenta &cuenta);
 
 bool cuentaExiste_s(string &cuenta, Banco &banco);
 
+bool cuentaExiste_o_exit_s(string &cuenta, Banco &banco);
+
 bool cuentaExisteOCancela_s(string &cuenta, Banco &banco);
 
 bool esSuperKey_s(string &key, Cuenta &cuenta);

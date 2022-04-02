@@ -52,6 +52,17 @@ bool Cuenta::validarContra(const string &contra) const {
 
 /// Muestra el saldo del usuario
 void Cuenta::verSaldo() const {
+  printf(
+      "<h2 class='text-center'>Estado de Cuenta</h2>"
+      "<p>%s, %s</p>"
+      "<p>Saldo: %lf</br>Deuda: %lf</br>Total: %lf</p>"
+      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+      "\n", apellido.c_str(), nombre.c_str(),
+      dinero,
+      deuda,
+      dinero - deuda
+  );
+
   std::cout << apellido << ", " << nombre << ": " << endl
             << "    Saldo: " << dinero << endl
             << "    Deuda: " << deuda << endl
@@ -152,6 +163,17 @@ bool cuentaExiste_s(string &cuenta, Banco &banco) {
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
   return resultado.fue_exitosa;
+}
+
+bool cuentaExiste_o_exit_s(string &cuenta, Banco &banco) {
+  bool es_exit = false;
+  ResB resultado = banco.buscarCuentaRaw(cuenta);
+
+  if (cuenta == "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434") {
+    es_exit = true;
+  }
+
+  return resultado.fue_exitosa || es_exit;
 }
 
 bool esSuperKey_s(string &key, Cuenta &cuenta) {

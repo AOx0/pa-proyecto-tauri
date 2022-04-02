@@ -6,8 +6,8 @@
 mod dep;
 
 use lazy_static::*;
+use smartstring::alias::String;
 use std::io::{BufRead, BufReader, Write};
-use std::process;
 use std::sync::{Arc, Mutex};
 use subprocess::*;
 
@@ -31,16 +31,24 @@ macro_rules! dbgf {
 }
 
 #[tauri::command]
-fn close() {
-  let mut p = PROC.lock().unwrap();
-  println!("Closing..");
-  if p.poll().is_some() {
-    // the process has finished
-  } else {
-    // it is still running, terminate it
-    p.terminate().unwrap();
+fn close(app: tauri::AppHandle) {
+  {
+    let mut p = PROC.lock().unwrap();
+    println!("Closing..");
+    if p.poll().is_some() {
+      // the process has finished
+    } else {
+      // it is still running, terminate it
+      p.terminate().unwrap();
+    }
   }
-  process::exit(0);
+
+  {
+    let _d2 = dep::PATH.deref();
+    let _d3 = PROC.deref();
+  }
+
+  app.exit(0);
 }
 
 lazy_static! {
@@ -63,7 +71,7 @@ lazy_static! {
 }
 
 #[tauri::command]
-fn display_upper_msg(msg: String) -> String {
+fn display_upper_msg(msg: &str) -> String {
   dep::colocar_dependencia();
   let p = PROC.lock().unwrap();
   let mut lines = BufReader::new(p.stdout.as_ref().unwrap()).lines();
@@ -77,7 +85,8 @@ fn display_upper_msg(msg: String) -> String {
   loop {
     dbgf!("Trying to get value...");
     if let Some(Ok(s)) = lines.next() {
-      return s.replace(":nl:", "</br>");
+      let s: String = s.into();
+      return smartstring::alias::String::from(s.replace(":nl:", "</br>"));
     }
   }
 }

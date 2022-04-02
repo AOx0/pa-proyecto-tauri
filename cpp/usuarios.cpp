@@ -21,37 +21,56 @@ int menuDepRet(Cuenta &cuenta, Banco &banco);
 // El menú de préstamos. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
+void signal_handler(int signal_num)
+{
+  cout << "The interrupt signal is (" << signal_num
+       << "). \n";
+
+  // It terminates the  program
+  exit(signal_num);
+}
+
 int main() {
-  clear();
-  Banco banco = Banco(cuentas_iniciales());
 
-  while (true) {
-    string tarjeta = pedirValor<Banco>(
-      banco, "Ingresa tu tarjeta: ",
-      &cuentaExiste_s, "<h2 class='text-center'>Login</h2><p class='text-center'>Tarjeta inválida</p>", numbers, true
-    );
 
-    Cuenta cuenta = *banco.buscarCuentaRaw(tarjeta).encontrada;
+  {
+    Banco banco = Banco(cuentas_iniciales());
 
-    cout << "<h2 class='text-center'>Login</h2><p class='text-center'>Ahora ingresa la contraseña</p>\n";
+    while (true) {
+      string tarjeta = pedirValor<Banco>(
+          banco, "Ingresa tu tarjeta: ",
+          &cuentaExiste_o_exit_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Tarjeta inválida</p>",
+          numbers, true
+      );
 
-    string contra = pedirValor<Cuenta>(
-        cuenta, "Ingresa la contrasenna: ",
-        &contraEs_s, "<h2 class='text-center'>Login</h2><p class='text-center'>Contraseña inválida</p>", 3, numbers
-    );
+      if (tarjeta ==
+          "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434") {
+        cout << "EXIT";
+        break;
+      }
 
-    while (menuPrincipal(cuenta, banco) != SALIR) {}
+      Cuenta cuenta = *banco.buscarCuentaRaw(tarjeta).encontrada;
 
-    cout << "<h2 id='re' class='text-center'>Login</h2><p class='text-center'>Ingresa tu número de tarjeta</p>\n";
+      cout << "<h2 class='text-center'>Log In</h2><p class='text-center'>Ahora ingresa la contraseña</p>\n";
+
+      string contra = pedirValor<Cuenta>(
+          cuenta, "Ingresa la contrasenna: ",
+          &contraEs_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>", 3, numbers
+      );
+
+      while (menuPrincipal(cuenta, banco) != SALIR) {}
+
+      printf(
+          "<h2 id='re' class='text-center'>Log In</h2>"
+          "<p class='text-center'>Ingresa tu número de tarjeta</p>"
+          "\n"
+      );
+    }
   }
-
-
-
-
 }
 
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
-  clear();
+
   printf(
       "<h2 class='text-center'>Súper Linea</h2>:nl:"
       "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
@@ -94,47 +113,51 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
 }
 
 int menuEstado(Cuenta &cuenta, Banco &banco) {
-  clear();
-  printf(
-      "<h2 class='text-center'>Menu Estado</h2>"
-      "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver saldo</button></div>"
-      "</br>"
-      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Ver datos personales</button></div>"
-      "</br>"
-      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Ver cuentas registradas</button></div>"
-      "</br>"
-      "<div class='text-center' class='mb-3'><button id='back' class='btn btn-primary'>Regresar</button></div>"
-      "</br>"
-      "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
-      "</p>\n"
-  );
+  int option;
+  string cont;
 
-  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
+  while (true) {
+    printf(
+        "<h2 class='text-center'>Menu Estado</h2>"
+        "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver saldo</button></div>"
+        "</br>"
+        "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Ver datos personales</button></div>"
+        "</br>"
+        "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Ver cuentas registradas</button></div>"
+        "</br>"
+        "<div class='text-center' class='mb-3'><button id='back' class='btn btn-primary'>Regresar</button></div>"
+        "</br>"
+        "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
+        "</p>\n"
+    );
 
+    option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
-  clear();
-  switch (option) {
-    case 1:
-      cuenta.verSaldo();
-      break;
-    case 2:
-      cuenta.verCuenta();
-      break;
-    case 3:
-      cuenta.verCuentas();
-      break;
-    case 4:
-      return option;
-    case 5:
-      return SALIR;
+    switch (option) {
+      case 1:
+        cuenta.verSaldo();
+        cin >> cont;
+        break;
+      case 2:
+        cuenta.verCuenta();
+        cin >> cont;
+        break;
+      case 3:
+        cuenta.verCuentas();
+        cin >> cont;
+        break;
+      case 4:
+        return option;
+      case 5:
+        return SALIR;
+    }
   }
 
-  continuar_c();
   return option;
 }
 
 int menuTransferencias(Cuenta &cuenta, Banco &banco) {
-  clear();
+
   printf(
       "<h2 class='text-center'>Menu Transferencias</h2>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Transferir a tarjeta (*)</button></div>"
@@ -162,10 +185,10 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
         cuenta, "Ingresa tu Super-Key: ",
         &esSuperKey_s, "Super-Key inválida", 3
     );
-    clear();
+
   }
 
-  clear();
+
 
   bool cancelado = false;
   switch (option) {
@@ -200,13 +223,13 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       double cantidad = pedirValor("Ingresa la cantidad a transferir: ", 100.0, 5000000.0, {','}, numbers, true);
 
       if (!count(cuenta.tarjetas_registradas.begin(), cuenta.tarjetas_registradas.end(), a_transferir)) {
-        clear();
+
         cout << "Se requiere Super-Key para cuentas no registradas.\n";
         string key = pedirValor<Cuenta>(
             cuenta, "Ingresa tu Super-Key: ",
             &esSuperKey_s, "Super-Key inválida", 3
         );
-        clear();
+
       }
 
       if (pedirValor("Ingresa cualquier cosa para continuar o ingresa 'c' para cancelar ", true) == "c") {
@@ -312,7 +335,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 }
 
 int menuDepRet(Cuenta &cuenta, Banco &banco) {
-  clear();
+
   printf(
       "<h2 class='text-center'>Menu Depositos & Retiros</h2>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver saldo</button></div>"
@@ -332,7 +355,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
 
   double cantidad;
 
-  clear();
+
   switch (option) {
     case 1:
       cuenta.verSaldo();
@@ -348,13 +371,13 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
       cantidad = pedirValor("Ingresa la cantidad a retirar: ", 100, 50000, {','}, numbers, true);
 
       if (cantidad > 2500) {
-        clear();
+
         cout << "Una cantidad mayor de 2500 (" << cantidad << ") requiere Super-Key.\n";
         string key = pedirValor<Cuenta>(
             cuenta, "Ingresa tu Super-Key: ",
             &esSuperKey_s, "Super-Key inválida", 3
         );
-        clear();
+
       }
 
       if (cantidad > cuenta.dinero) {
@@ -377,7 +400,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
 }
 
 int menuPrestamos(Cuenta &cuenta, Banco &banco) {
-  clear();
+
   printf(
       "<h2 class='text-center'>Menu Prestamos</h2>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Pagar deuda</button></div>"
@@ -395,7 +418,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
   int option = pedirValor("Ingrese una opción: ", 1, SALIR);
 
 
-  clear();
+
   switch (option) {
     case 1: {
       if (cuenta.deuda == 0) {
@@ -407,7 +430,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
           cuenta, "Ingresa tu Super-Key: ",
           &esSuperKey_s, "Super-Key inválida", 3
       );
-      clear();
+
 
       cout << "Deuda actual: $" << cuenta.deuda << endl;
       double cantidad = pedirValor("Ingresa la cantidad a pagar: ", 1.0, cuenta.deuda, {','}, numbers, true);
@@ -415,7 +438,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
       if (cantidad > cuenta.dinero) {
         cout << "Error: No cuentas con los fondos suficientes para pagar la deuda\n";
       } else {
-        clear();
+
         cuenta.retirarDinero(cantidad);
         cuenta.deuda -= cantidad;
         cout << "Éxito, resultado de la operación: \n"
@@ -430,7 +453,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
           cuenta, "Ingresa tu Super-Key: ",
           &esSuperKey_s, "Super-Key inválida", 3
       );
-      clear();
+
 
       cout << "Saldo actual: $" << cuenta.dinero << endl;
       cout << "Deuda actual: $" << cuenta.deuda << endl;
