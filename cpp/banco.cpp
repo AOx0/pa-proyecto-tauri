@@ -5,6 +5,9 @@
 // https://stackoverflow.com/questions/997512/string-representation-of-time-t
 #include <ctime>
 
+#define cansal "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
+
+
 /// Suma al saldo de sí mismo la cantidad ingresada
 /// \param cantidad La cantidad a agregar
 void Cuenta::agregarDinero(double cantidad) {
@@ -21,15 +24,19 @@ double Cuenta::retirarDinero(double cantidad) {
 
 /// Muestra la información del usuario
 void Cuenta::verCuenta() {
-  cout << nombre << " " << apellido << ": " << endl;
-  cout << "    Tarjeta: ";
-
+  printf(
+      "<h2 class='text-center'>Información de la Cuenta</h2>"
+      "<h4>%s, %s:</h4>"
+      "<p>Tarjeta: ",
+      apellido.c_str(), nombre.c_str()
+  );
 
   cout << tarjeta.substr(0, 4) << " ";
   cout << tarjeta.substr(4, 4) << " ";
   cout << tarjeta.substr(8, 4) << " ";
   cout << tarjeta.substr(12, 4);
-  cout << " (" << nip << ")" << endl;
+  cout << " (" << nip << ")";
+  cout << "</br>";
   // https://stackoverflow.com/questions/997512/string-representation-of-time-t
   std::tm *ptm = std::localtime(&fecha_vencimiento);
   char buffer[32];
@@ -37,9 +44,11 @@ void Cuenta::verCuenta() {
   std::strftime(buffer, 32, "%m/%Y", ptm);
 
   cout << "    Teléfono: ";
-  cout << tel.substr(0, 2) << " " << tel.substr(2, tel.length()) << endl;
-  cout << "    FV: " << buffer << "\n";
-  cout << "    Valid True" << endl;
+  cout << tel.substr(0, 2) << " " << tel.substr(2, tel.length());
+  cout << "</br>";
+  cout << "    FV: " << buffer << "</br>";
+  cout << "    Valid True" << "</p>";
+  cout << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>\n";
 }
 
 
@@ -53,36 +62,39 @@ bool Cuenta::validarContra(const string &contra) const {
 /// Muestra el saldo del usuario
 void Cuenta::verSaldo() const {
   printf(
-      "<h2 class='text-center'>Estado de Cuenta</h2>"
-      "<p>%s, %s</p>"
-      "<p>Saldo: %lf</br>Deuda: %lf</br>Total: %lf</p>"
+      "<h2 class='text-center'>Saldo de Cuenta</h2>"
+      "<h4>%s, %s:</h4>"
+      "<p>Saldo: %.2lf</br>Deuda: %.2lf</br>Total: %.2lf</p>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
-      "\n", apellido.c_str(), nombre.c_str(),
-      dinero,
-      deuda,
+      "\n",
+      apellido.c_str(), nombre.c_str(),
+      dinero, deuda,
       dinero - deuda
   );
-
-  std::cout << apellido << ", " << nombre << ": " << endl
-            << "    Saldo: " << dinero << endl
-            << "    Deuda: " << deuda << endl
-            << "    Total: " << dinero - deuda << endl;
 }
 
 /// Muestra las cuentas registradas para transferencias verificadas
 void Cuenta::verCuentas() {
   if (tarjetas_registradas.empty()) {
-    cout << "No hay cuentas registradas!" << endl;
-    cout << "Nota: Puedes registrar cuentas en Transferencias/Registrar cuentas\n";
+    printf(
+        "<h2 class='text-center'>Cuentas Registradas</h2>"
+        "<p class='text-center'>No hay cuentas registradas!</br>Puedes registrar cuentas en Transferencias/Registrar cuentas</p>"
+        "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+        "\n"
+    );
   } else {
-    cout << "Cuentas registradas para transferencia:\n";
+    printf(
+        "<h2 class='text-center'>Cuentas Registradas</h2>"
+        "<p>Cuentas registradas para transferencia:</p><p>"
+    );
     for (int i = 0; i < tarjetas_registradas.size(); i++) {
-      cout << "    " << i + 1 << ": "
+      cout << i + 1 << ": "
            << tarjetas_registradas[i].substr(0, 4) << " "
            << tarjetas_registradas[i].substr(4, 4) << " "
            << tarjetas_registradas[i].substr(8, 4) << " "
-           << tarjetas_registradas[i].substr(12, 4) << "\n";
+           << tarjetas_registradas[i].substr(12, 4) << "</br>";
     }
+    cout << "</p><div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>\n";
   }
 }
 
@@ -114,10 +126,20 @@ void Cuenta::registrarCuenta_t(const string &t) {
   if (t == "c") return;
 
   if (cuentaYaRegistrada_t(t)) {
-    cout << "Error: La cuenta ya está registrada\n";
+    printf(
+        "<h2 class='text-center'>Error al Registrar Cuenta</h2>"
+        "<p class='text-center'>Error: La cuenta ya está registrada</p>"
+        "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+        "\n"
+    );
   } else {
     tarjetas_registradas.push_back(t);
-    cout << "Cuenta registrada con éxito!\n";
+    printf(
+        "<h2 class='text-center'>Éxito al Registrar Cuenta</h2>"
+        "<p class='text-center'>Cuenta registrada con éxito!</p>"
+        "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+        "\n"
+    );
   }
 }
 
@@ -133,7 +155,7 @@ void Cuenta::transferir(Cuenta &target, double cantidad) {
   dinero -= cantidad;
   target.dinero += cantidad;
 
-  if (1) {
+  if (0) {
     cout << "    Tu dinero: " << dinero + cantidad << "->" << dinero << "\n";
     cout << "    Su dinero: " << target.dinero - cantidad << "->" << target.dinero << "\n";
   }
@@ -169,7 +191,7 @@ bool cuentaExiste_o_exit_s(string &cuenta, Banco &banco) {
   bool es_exit = false;
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
-  if (cuenta == "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434") {
+  if (cuenta == cansal) {
     es_exit = true;
   }
 
@@ -180,10 +202,14 @@ bool esSuperKey_s(string &key, Cuenta &cuenta) {
   return cuenta.validarSuperContra(key);
 }
 
+bool esSuperKeyOCancela_s(string &key, Cuenta &cuenta) {
+  return cuenta.validarSuperContra(key) || key == cansal;
+}
+
 bool cuentaExisteOCancela_s(string &cuenta, Banco &banco) {
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
-  return resultado.fue_exitosa || cuenta == "cancelar" || cuenta == "c";
+  return resultado.fue_exitosa || cuenta == cansal;
 }
 
 
@@ -199,7 +225,7 @@ vector<Cuenta> cuentas_iniciales() {
           Cuenta(
               550000, "323", "Victor",
               time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1234", "1234",
+              "1234", "123456789012345",
               "1234", 0, "5537930472", "López", {"5851295645900890"}
           ),
           Cuenta(

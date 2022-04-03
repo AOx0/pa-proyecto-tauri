@@ -13,7 +13,7 @@ void clear() {}
 /// \param valid_chars El vector de caracteres que están permitidos en la entrada
 /// \param inp El string a validar
 /// \return True si contiene caracteres inválidos
-bool contieneInvalid(const vector<char> &valid_chars, const string &inp) {
+bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string titulo) {
   bool invalid = false;
   int k = 0;
 
@@ -22,7 +22,7 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp) {
 
       if (!invalid) {
         if (k == 0) {
-          cout << "<h2 class=\"text-center\">Login</h2>";
+          cout << "<h2 class=\"text-center\">" << titulo << "</h2>";
           cout << "<p class=\"text-center\">";
           k++;
         }

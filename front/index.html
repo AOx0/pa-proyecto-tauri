@@ -31,7 +31,7 @@
 
         function update_body(message, document) {
 
-            place_title_bar(document, message.includes("Ingresa tu número de tarjeta") && message.includes("Log In"));
+            place_title_bar(document, (message.includes("Ingresa tu número de tarjeta") || message.includes("Tarjeta inválida")) && message.includes("Log In"));
 
             document.getElementById('bd-h').innerHTML = `${message}`;
 
@@ -39,12 +39,21 @@
                 document.getElementById("fie").value = "";
             }
 
-            if (message.includes("Log In") && message.includes("id='re'")) {
-                document.getElementById("ttxt").innerHTML = "<div class='mb-3'><input class='form-control' id='fie' placeholder=''></div><p>&nbsp;&nbsp;&nbsp;</p><div class='mb-3'><button id='sub' class='btn btn-primary'>Submit</button></div>";
+            if ((message.includes("Log In") && message.includes("id='re'")) || message.includes("Ingr")) {
+                let cancel_button = "";
+                if (message.includes("Cuenta a Transferir") || message.includes("Super Key") || message.includes("Registrar Cuenta") || message.includes("Eliminar Cuenta")) {
+                    cancel_button = "<p>&nbsp;&nbsp;&nbsp;</p><div class='text-center' class='mb-3'><button id='cancelar' class='btn btn-primary'>Cancelar</button></div>"
+                }
+
+                document.getElementById("ttxt").innerHTML = `<div class='mb-3'><input class='form-control' id='fie' placeholder=''></div><p>&nbsp;&nbsp;&nbsp;</p><div class='mb-3'><button id='sub' class='btn btn-primary'>Submit</button></div>${cancel_button}`;
                 document.getElementById("sub").addEventListener('click', reload);
+
+                if (cancel_button !== "") {
+                    document.getElementById("cancelar").addEventListener('click', clean_close);
+                }
             }
 
-            if (message.includes("id='no")) {
+            if (message.includes("id='no") || message.includes("cancelada") || message.includes("Éxito")) {
                 if (message.includes("no1")) {
                     document.getElementById("ttxt").innerHTML = "";
                 }

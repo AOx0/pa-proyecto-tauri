@@ -108,6 +108,8 @@ bool cuentaExisteOCancela_s(string &cuenta, Banco &banco);
 
 bool esSuperKey_s(string &key, Cuenta &cuenta);
 
+bool esSuperKeyOCancela_s(string &key, Cuenta &cuenta);
+
 vector<Cuenta> cuentas_iniciales();
 
 #endif //PROYECTO_LIBRARY_H
