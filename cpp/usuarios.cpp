@@ -47,7 +47,7 @@ int main() {
       string tarjeta = pedirValor<Banco>(
           banco, "Ingresa tu tarjeta: ",
           &cuentaExiste_o_exit_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Tarjeta inválida</p>",
-          numbers, true
+          "Log In", numbers, true
       );
 
       if (tarjeta == cansal) {
