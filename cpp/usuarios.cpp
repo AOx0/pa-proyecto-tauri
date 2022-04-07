@@ -22,11 +22,12 @@ int menuDepRet(Cuenta &cuenta, Banco &banco);
 // El menú de préstamos. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
-bool pedirSuperKey(Cuenta &cuenta) {
+bool pedirSuperKey(Cuenta &cuenta, char * mensaje = "") {
   printf(
       "<h2 class='text-center'>Super Key</h2>"
+      "%s"
       "<p class='text-center'>La operación requiere Super Key. Ingrésala: </p>"
-      "\n"
+      "\n", mensaje
   );
 
   string key = pedirValor<Cuenta>(
@@ -38,8 +39,6 @@ bool pedirSuperKey(Cuenta &cuenta) {
 }
 
 int main() {
-
-
   {
     Banco banco = Banco(cuentas_iniciales());
 
@@ -76,7 +75,6 @@ int main() {
 }
 
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
-
   printf(
       "<h2 class='text-center'>Súper Linea</h2>:nl:"
       "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
@@ -401,32 +399,49 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
       cuenta.verSaldo();
       break;
     case 2:
-      cantidad = pedirValor("Ingresa la cantidad a depositar: ", 100, 50000,  {','}, "AAAA", numbers, true);
+        printf(
+          "<h2 class='text-center'>Depósito</h2>"
+          "<p class='text-center'>Ingresa la cantidad a depositar</p>"
+          "\n"
+        );
+      cantidad = pedirValor("Ingresa la cantidad a depositar: ", 100, 50000,  {','}, "Depósito", numbers, true);
       cuenta.agregarDinero(cantidad);
-      cout << "Ingresa el dinero en la bandeja.\n";
       continuar();
-      cout << "Éxito. Se depositaron: $" << cantidad << " MXN\n";
+      cout 
+        << "<h2 class='text-center'>Depósito</h2>"
+        << "<p class='text-center'>Éxito. Se depositaron: $" << cantidad << " MXN</p>"
+        << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+        << "\n"
+      ;
       break;
     case 3:
-      cantidad = pedirValor("Ingresa la cantidad a retirar: ", 100, 50000, {','}, "AAAA", numbers, true);
+      printf(
+        "<h2 class='text-center'>Retiro</h2>"
+        "<p class='text-center'>Ingresa la cantidad a retirar</p>"
+        "\n"
+      );
+      cantidad = pedirValor("Ingresa la cantidad a retirar: ", 100, 50000, {','}, "Retiro", numbers, true);
 
-      if (cantidad > 2500) {
-
-        cout << "Una cantidad mayor de 2500 (" << cantidad << ") requiere Super-Key.\n";
-        string key = pedirValor<Cuenta>(
-            cuenta, "Ingresa tu Super-Key: ",
-            &esSuperKey_s, "Super-Key inválida", "AAAA", 3
-        );
-
-      }
+      if (cantidad > 2500) 
+        if (pedirSuperKey(cuenta, "<p class='text-center'>Una cantidad mayor de 2500 requiere Super-Key</p>")) return option;
 
       if (cantidad > cuenta.dinero) {
-        cout << "Error: No hay suficientes fondos\n";
+        printf(
+          "<h2 class='text-center'>Error al retirar</h2>"
+          "<p class='text-center'>Error: No hay suficientes fondos</p>"
+          "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          "\n"
+        );
       } else {
         double restante = cuenta.retirarDinero(cantidad);
-        cout << "Éxito. Se retiraron $" << cantidad << " MXN\n";
-        cout << "Saldo restante: $" << restante << ".00\n";
-        cout << "Recoge el dinero de la bandeja.\n";
+        cout
+          << "<h2 class='text-center'>Éxito al retirar</h2>"
+          << "<p class='text-center'>Éxito. Se retiraron $" << cantidad << " MXN</br>"
+          << "Saldo restante: $" << restante << ".00</br>"
+          << "Recoge el dinero de la bandeja.</p>"
+          << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          << "\n"
+        ;
       }
       break;
     case 4:
@@ -445,9 +460,9 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
       "<h2 class='text-center'>Menu Prestamos</h2>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Pagar deuda</button></div>"
       "</br>"
-      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Solicitar préstamo</button></div>"
+      "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Solicitar préstamo (*)</button></div>"
       "</br>"
-      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Ver saldo (*)</button></div>"
+      "<div class='text-center' class='mb-3'><button id='no3' class='btn btn-primary'>Ver saldo</button></div>"
       "</br>"
       "<div class='text-center' class='mb-3'><button id='back' class='btn btn-primary'>Regresar</button></div>"
       "</br>"
@@ -463,54 +478,89 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
   switch (option) {
     case 1: {
       if (cuenta.deuda == 0) {
-        cout << "No cuentas con una deuda que pagar.\n";
+        printf(
+          "<h2 class='text-center'>Deudas</h2>"
+          "<p class='text-center'>No cuentas con una deuda que pagar</p>"
+          "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          "\n"
+        );
         break;
       }
 
-      string key = pedirValor<Cuenta>(
-          cuenta, "Ingresa tu Super-Key: ",
-          &esSuperKey_s, "Super-Key inválida", "AAAA", 3
-      );
+      if (pedirSuperKey(cuenta)) return option;
 
+      cout
+        << "<h2 class='text-center'>Deudas</h2>"
+        << "<p class='text-center'>Deuda actual: $" << cuenta.deuda << "</br>"
+        << "Ingresa la cantidad a pagar</p>"
+        << "\n"
+      ;
 
-      cout << "Deuda actual: $" << cuenta.deuda << endl;
       double cantidad = pedirValor("Ingresa la cantidad a pagar: ", 1.0, cuenta.deuda, {','}, "AAAA", numbers, true);
 
       if (cantidad > cuenta.dinero) {
-        cout << "Error: No cuentas con los fondos suficientes para pagar la deuda\n";
+        printf(
+          "<h2 class='text-center'>Sin saldo</h2>"
+          "<p class='text-center'>No cuentas con los fondos suficientes para pagar la deuda</p>"
+          "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          "\n"
+        );
       } else {
 
         cuenta.retirarDinero(cantidad);
         cuenta.deuda -= cantidad;
-        cout << "Éxito, resultado de la operación: \n"
-             << "Deuda: " << cuenta.deuda + cantidad << " -> " << cuenta.deuda << endl
-             << "Saldo: " << cuenta.dinero + cantidad << " -> " << cuenta.dinero << endl;
+        cout
+          << "<h2 class='text-center'>Éxito</h2>"
+          << "<p class='text-center'>Resultado de la operación:</br>"
+          << "Deuda: " << cuenta.deuda + cantidad << " -> " << cuenta.deuda << "</br>"
+          << "Saldo: " << cuenta.dinero + cantidad << " -> " << cuenta.dinero << "</br>"
+          << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          << "\n"
+        ;
       }
 
     }
       break;
-    case 20: {
-      string key = pedirValor<Cuenta>(
-          cuenta, "Ingresa tu Super-Key: ",
-          &esSuperKey_s, "Super-Key inválida", "AAAA", 3
-      );
+    case 2: {
 
+      if (pedirSuperKey(cuenta)) return option;
 
-      cout << "Saldo actual: $" << cuenta.dinero << endl;
-      cout << "Deuda actual: $" << cuenta.deuda << endl;
-      double cantidad = pedirValor("Ingresa la cantidad que desea solicitar: ", 1.0, cuenta.dinero * 0.7, {','}, "AAAA", numbers, true);
+      cout
+          << "<h2 class='text-center'>Solicitud Préstamo</h2>"
+          << "<p class='text-center'>Ingresa la cantidad que desea solicitar:</br>"
+          << "Saldo actual: $" << cuenta.dinero << "</br>"
+          << "Deuda actual: $" << cuenta.deuda << "</p>"
+          << "\n"
+        ;
+
+      double cantidad = pedirValor("Ingresa la cantidad que desea solicitar: ", 1.0, cuenta.dinero * 0.7, {','}, "Solicitud Préstamo", numbers, true);
 
       if (cantidad/cuenta.dinero > 0.7) {
-        cout << "No se puede solicitar más del 70% de la cantidad disponible de saldo\n";
+        printf(
+          "<h2 class='text-center'>Préstamo muy alto</h2>"
+          "<p class='text-center'>No se puede solicitar más del 70% de la cantidad disponible de saldo</p>"
+          "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          "\n"
+        );
       } else if (cuenta.deuda/cuenta.dinero > 0.15) {
-        cout << "No puedes solicitar préstamos si tienes ya una gran cantidad de deuda por pagar\n";
+        printf(
+          "<h2 class='text-center'>Pago de préstamo pendiente</h2>"
+          "<p class='text-center'>No puedes solicitar préstamos si tienes ya una gran cantidad de deuda por pagar</p>"
+          "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          "\n"
+        );
       } else {
         cuenta.deuda += cantidad;
         cuenta.dinero += cantidad;
 
-        cout << "Préstamo solicitado con éxito. Resultado de la operación: \n"
-             << "Deuda: " << cuenta.deuda - cantidad << " -> " << cuenta.deuda << endl
-             << "Saldo: " << cuenta.dinero - cantidad << " -> " << cuenta.dinero << endl;
+        cout
+          << "<h2 class='text-center'>Éxito</h2>"
+          << "<p class='text-center'>Préstamo solicitado con éxito. Resultado de la operación:</br>"
+          << "Deuda: " << cuenta.deuda - cantidad << " -> " << cuenta.deuda << "</br>"
+          << "Saldo: " << cuenta.dinero - cantidad << " -> " << cuenta.dinero << "</br>"
+          << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
+          << "\n"
+        ;
       }
     }
       break;
