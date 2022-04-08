@@ -22,14 +22,6 @@ public:
   double deuda;
   string tarjeta;
 
-  /// El constructor de la estructura Cuenta
-  Cuenta(double dinero, string nip, string nombre, time_t fecha_vencimiento, vector<double> gasto_semanal,
-         string super_key, string tarjeta, string key, double deuda, string tel, string apellido,
-         vector<string> tarjetas_registradas)
-      : dinero(dinero), nip(move(nip)), nombre(move(nombre)), fecha_vencimiento(fecha_vencimiento),
-        gasto_semanal(move(gasto_semanal)), super_key(move(super_key)), tarjeta(move(tarjeta)), key(move(key)),
-        deuda(deuda), tel(move(tel)), apellido(move(apellido)), tarjetas_registradas(move(tarjetas_registradas)) {};
-
   /// Suma al saldo de sí mismo la cantidad ingresada
   /// \param cantidad La cantidad a agregar
   void agregarDinero(double cantidad);
@@ -84,10 +76,10 @@ public:
 
 /// Estructura que representa al banco, que contiene un conjunto de cuentas
 struct Banco {
-private:
+public:
   vector<Cuenta> cuentas;
   int contra = 12344321;
-public:
+
   explicit Banco(vector<Cuenta> cuentas) : cuentas(move(cuentas)) {};
 
   /// Método que busca dentro de las cuentas del banco la cuenta dada (tarjeta)
@@ -111,5 +103,7 @@ bool esSuperKey_s(string &key, Cuenta &cuenta);
 bool esSuperKeyOCancela_s(string &key, Cuenta &cuenta);
 
 vector<Cuenta> cuentas_iniciales();
+
+Cuenta cargar_ususario(string & archivo);
 
 #endif //PROYECTO_LIBRARY_H

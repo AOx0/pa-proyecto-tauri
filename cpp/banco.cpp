@@ -4,9 +4,58 @@
 
 // https://stackoverflow.com/questions/997512/string-representation-of-time-t
 #include <ctime>
+#include <fstream>
 
 #define cansal "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
+Cuenta cargar_ususario(string & archivo) {
+  fstream f;
+  f.open(archivo);
+  string nombre, super_key, nip, key, apellido, tel, tarjeta;
+  vector<string> tarjetas_registradas = vector<string>();
+  vector<double> gasto_semanal;
+  double dinero, deuda;
+  time_t fecha_vencimiento;
+  
+  getline(f, key);
+  getline(f, super_key);
+  getline(f, nip);
+  getline(f, nombre);
+  getline(f, apellido);
+  getline(f, tel);
+  getline(f, tarjeta);
+  
+  f >> fecha_vencimiento;
+  f.ignore(numeric_limits<streamsize>::max(), '\n');
+  
+  f >> dinero;
+  f.ignore(numeric_limits<streamsize>::max(), '\n');
+  
+  f >> deuda;
+  f.ignore(numeric_limits<streamsize>::max(), '\n');
+  
+  string tarjeta_r;
+  while(getline(f, tarjeta_r)) {
+    tarjetas_registradas.push_back(move(tarjeta_r));
+  }
+
+  Cuenta cuenta = {
+      key, /* 8 */
+      super_key, /* 4 */
+      nip, /* 3 */
+      nombre,
+      apellido,
+      tel,
+      fecha_vencimiento,
+      tarjetas_registradas,
+      gasto_semanal,
+      dinero,
+      deuda,
+      tarjeta,
+  };
+
+  return cuenta;
+}
 
 /// Suma al saldo de sí mismo la cantidad ingresada
 /// \param cantidad La cantidad a agregar
@@ -214,44 +263,12 @@ bool cuentaExisteOCancela_s(string &cuenta, Banco &banco) {
 
 
 vector<Cuenta> cuentas_iniciales() {
-  return vector<Cuenta>(
-      {
-          Cuenta(
-              550000, "323", "Victor",
-              time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1435", "5281713025041549",
-              "83740285", 0, "5537930472", "López", {"5851295645900890"}
-          ),
-          Cuenta(
-              550000, "323", "Victor",
-              time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "1234", "123456789012345",
-              "1234", 0, "5537930472", "López", {"5851295645900890"}
-          ),
-          Cuenta(
-              79800, "545", "David",
-              time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "2344", "5851295645900890",
-              "55682904", 15000, "5598527366", "Perez", {}
-          ),
-          Cuenta(
-              155000, "646", "Sara",
-              time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "5453", "5369580086986788",
-              "23480418", 3349, "5573638103", "Perez", {}
-          ),
-          Cuenta(
-              345000, "836", "Daniel",
-              time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "9372", "5274560873703343",
-              "12658309", 0, "5512739320", "Osorio", {}
-          ),
-          Cuenta(
-              342455, "948", "Guillermo",
-              time(nullptr), vector<double>({50, 50, 50, 50, 50, 50, 50}),
-              "3789", "5075216458201382",
-              "87906512", 2329, "5574481902", "Ruiz", {}
-          ),
-      }
-  );
+  vector<Cuenta> cuentas_default = vector<Cuenta>();
+  
+  string archivo = string("/Users/alejandro/pa-proyecto-tauri/cpp/test.txt"); 
+  Cuenta cuenta = cargar_ususario(archivo);
+  
+  cuentas_default.push_back(cuenta);
+  
+  return cuentas_default;
 }
