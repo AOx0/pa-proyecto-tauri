@@ -9,6 +9,7 @@ using namespace std;
 /// Estructura que representa la Cuenta de un usuario.
 struct Cuenta {
 public:
+  string fichero;
   string key; /* 8 */
   string super_key; /* 4 */
   string nip; /* 3 */
@@ -21,6 +22,8 @@ public:
   double dinero;
   double deuda;
   string tarjeta;
+
+  void guardar_usuario();
 
   /// Suma al saldo de sí mismo la cantidad ingresada
   /// \param cantidad La cantidad a agregar
@@ -63,7 +66,7 @@ public:
   /// \param t La tarjeta que se desea registrar
   void eliminarCuenta_t(const string &t);
 
-  void transferir(Cuenta &target, double cantidad);
+  void transferir(Cuenta & target, double cantidad);
 };
 
 struct ResB {
@@ -78,9 +81,13 @@ public:
 struct Banco {
 public:
   vector<Cuenta> cuentas;
+  vector<string> ficheros;
+  string fichero_actual;
   int contra = 12344321;
 
-  explicit Banco(vector<Cuenta> cuentas) : cuentas(move(cuentas)) {};
+  vector<Cuenta> cargar_usuarios(vector<string> & archivos);
+
+  explicit Banco(vector<string> cuentas) : cuentas(cargar_usuarios(cuentas)), ficheros(cuentas) {};
 
   /// Método que busca dentro de las cuentas del banco la cuenta dada (tarjeta)
   /// \param cuenta El srting con el número de cuenta (tarjeta) a buscar
@@ -101,8 +108,6 @@ bool cuentaExisteOCancela_s(string &cuenta, Banco &banco);
 bool esSuperKey_s(string &key, Cuenta &cuenta);
 
 bool esSuperKeyOCancela_s(string &key, Cuenta &cuenta);
-
-vector<Cuenta> cuentas_iniciales();
 
 Cuenta cargar_ususario(string & archivo);
 

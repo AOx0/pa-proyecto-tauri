@@ -40,7 +40,13 @@ bool pedirSuperKey(Cuenta &cuenta, char * mensaje = "") {
 
 int main() {
   {
-    Banco banco = Banco(cuentas_iniciales());
+    Banco banco = Banco(
+      {
+        "/Users/alejandro/pa-proyecto-tauri/cpp/test.txt",
+        "/Users/alejandro/pa-proyecto-tauri/cpp/test2.txt",
+        "/Users/alejandro/pa-proyecto-tauri/cpp/test3.txt"
+      }
+    );
 
     while (true) {
       string tarjeta = pedirValor<Banco>(
@@ -238,7 +244,8 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
         if (pedirSuperKey(cuenta)) return option;
       }
 
-      Cuenta &target = (Cuenta &) banco.buscarCuentaRaw(a_transferir).encontrada;
+      Cuenta * tar =  banco.buscarCuentaRaw(a_transferir).encontrada;
+      Cuenta target = cargar_ususario(tar->fichero);
 
       if (cantidad > cuenta.dinero) {
         printf(
@@ -247,6 +254,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
             "\n"
         );
       } else {
+
         cuenta.transferir(target, cantidad);
         double restante = cuenta.dinero;
         cout << "<h2 class='text-center'>Éxito al Transferir</h2>";
@@ -291,6 +299,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       } while (valido != 1);
 
       cuenta.registrarCuenta_t(a_agregar);
+      cuenta.guardar_usuario();
     }
       break;
     case 3: {
@@ -353,6 +362,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
           "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
           "\n"
       );
+      cuenta.guardar_usuario();
     }
       break;
     case 4:
@@ -413,6 +423,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
         << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
         << "\n"
       ;
+      cuenta.guardar_usuario();
       break;
     case 3:
       printf(
@@ -442,6 +453,8 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
           << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
           << "\n"
         ;
+
+        cuenta.guardar_usuario();
       }
       break;
     case 4:
@@ -517,6 +530,8 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
           << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
           << "\n"
         ;
+
+        cuenta.guardar_usuario();
       }
 
     }
@@ -561,6 +576,8 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
           << "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
           << "\n"
         ;
+
+        cuenta.guardar_usuario();
       }
     }
       break;

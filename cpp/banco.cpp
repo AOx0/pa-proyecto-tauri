@@ -8,15 +8,41 @@
 
 #define cansal "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
+void Cuenta::guardar_usuario() {
+  ofstream f;
+  f.open(fichero);
+
+  f << fichero << endl;
+  f << key << endl; /* 8 */
+  f << super_key << endl; /* 4 */
+  f << nip << endl; /* 3 */
+  f << nombre << endl;
+  f << apellido << endl;
+  f << tel << endl;
+  f << tarjeta << endl;
+  f << fecha_vencimiento << endl;
+  f << dinero << endl;
+  f << deuda << endl;
+
+  int i=0;
+  for (string & tar : tarjetas_registradas) {
+    if (i > 0) cout << endl;
+    f << tar;
+  }
+
+  f.close();
+}
+
 Cuenta cargar_ususario(string & archivo) {
   fstream f;
   f.open(archivo);
-  string nombre, super_key, nip, key, apellido, tel, tarjeta;
+  string fichero, nombre, super_key, nip, key, apellido, tel, tarjeta;
   vector<string> tarjetas_registradas = vector<string>();
   vector<double> gasto_semanal;
   double dinero, deuda;
   time_t fecha_vencimiento;
-  
+
+  getline(f, fichero);
   getline(f, key);
   getline(f, super_key);
   getline(f, nip);
@@ -40,6 +66,7 @@ Cuenta cargar_ususario(string & archivo) {
   }
 
   Cuenta cuenta = {
+      fichero,
       key, /* 8 */
       super_key, /* 4 */
       nip, /* 3 */
@@ -54,6 +81,7 @@ Cuenta cargar_ususario(string & archivo) {
       tarjeta,
   };
 
+  f.close();
   return cuenta;
 }
 
@@ -200,14 +228,12 @@ bool Cuenta::cuentaYaRegistrada_t(const string &t) {
   return count(tarjetas_registradas.begin(), tarjetas_registradas.end(), t);
 }
 
-void Cuenta::transferir(Cuenta &target, double cantidad) {
+void Cuenta::transferir(Cuenta & target, double cantidad) {
   dinero -= cantidad;
   target.dinero += cantidad;
 
-  if (0) {
-    cout << "    Tu dinero: " << dinero + cantidad << "->" << dinero << "\n";
-    cout << "    Su dinero: " << target.dinero - cantidad << "->" << target.dinero << "\n";
-  }
+  this->guardar_usuario();
+  target.guardar_usuario();
 }
 
 /// Método que busca dentro de las cuentas del banco la cuenta dada (tarjeta)
@@ -223,6 +249,17 @@ ResB Banco::buscarCuentaRaw(const string &tarjeta) {
     }
   }
   return resultado;
+}
+
+vector<Cuenta> Banco::cargar_usuarios(vector<string> &archivos) {
+  vector<Cuenta> cuentas = vector<Cuenta>();
+
+  for (string & f : archivos) {
+    Cuenta cuenta = cargar_ususario(f);
+    cuentas.push_back(cuenta);
+  }
+
+  return cuentas;
 }
 
 
