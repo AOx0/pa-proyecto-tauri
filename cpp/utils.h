@@ -34,7 +34,7 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string 
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
 template<typename V>
-string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error, const string& titulo,
+string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, const string& titulo,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
   bool valid = false;
@@ -79,7 +79,7 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
 template<typename V>
-string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const string &on_error, const string& titulo, int intentos,
+string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, const string& titulo, int intentos,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
   string inp;
   ofstream file;
@@ -121,7 +121,7 @@ string pedirValor(V dep, const string &msg, bool (*func)(string &, V &), const s
 /// \param max El valor máximo posible a ser ingresado
 /// \return El valor ingresado ya validado
 template<typename T>
-T pedirValor(const string &msg, T min, T max) {
+T pedirValor(T min, T max) {
   T i;
   string inp;
   bool valid = false;
@@ -155,7 +155,7 @@ T pedirValor(const string &msg, T min, T max) {
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado ya validado
 template<typename T>
-T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, const string& titulo, const vector<char> &valid_chars,
+T pedirValor(T min, T max, const vector<char> &quitar_chars, const string& titulo, const vector<char> &valid_chars,
              bool quitar_espacios = false) {
   T i;
   string inp;
@@ -194,7 +194,7 @@ T pedirValor(const string &msg, T min, T max, const vector<char> &quitar_chars, 
 /// \param msg El mensaje mostrado al usuario para pedir el dato
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado
-string pedirValor(const string &msg, bool quitar_espacios = false) {
+string pedirValor(bool quitar_espacios = false) {
   string inp;
 
   // cout << msg;

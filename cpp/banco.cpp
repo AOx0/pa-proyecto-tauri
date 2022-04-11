@@ -13,7 +13,6 @@ void Cuenta::guardar_usuario() {
   ofstream f;
   f.open(fichero);
 
-  f << fichero << endl;
   f << key << endl; /* 8 */
   f << super_key << endl; /* 4 */
   f << nip << endl; /* 3 */
@@ -43,7 +42,6 @@ Cuenta cargar_ususario(string & archivo) {
   double dinero, deuda;
   time_t fecha_vencimiento;
 
-  getline(f, fichero);
   getline(f, key);
   getline(f, super_key);
   getline(f, nip);
@@ -67,7 +65,7 @@ Cuenta cargar_ususario(string & archivo) {
   }
 
   Cuenta cuenta = {
-      fichero,
+      archivo,
       key, /* 8 */
       super_key, /* 4 */
       nip, /* 3 */
@@ -242,10 +240,10 @@ void Cuenta::transferir(Cuenta & target, double cantidad) {
 /// \return Un resultado que contiene el estatus de la búsqueda y en caso de ser exitosa un apuntador a la instancia de Cuenta
 ResB Banco::buscarCuentaRaw(const string &tarjeta) {
   ResB resultado = ResB();
-  for (Cuenta &cuenta: cuentas) {
-    if (tarjeta == cuenta.tarjeta) {
+  for (CuentaRaw & cuenta : cuentas) {
+    if (tarjeta == cuenta.nombre) {
       resultado.fue_exitosa = true;
-      resultado.encontrada = &cuenta;
+      resultado.encontrada = cargar_ususario(cuenta.cuenta);
       return resultado;
     }
   }

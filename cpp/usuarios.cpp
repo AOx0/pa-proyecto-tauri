@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <limits>
 
 #include "banco.h"
 #include "utils.h"
@@ -25,31 +26,17 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
 bool pedirSuperKey(Cuenta &cuenta, string mensaje =  std::string(""));
 
+vector<CuentaRaw> pedir_index();
+
 int main() {
   {
+    string nul;
 
-    #ifdef _WIN32
-      Banco banco = Banco(
-        {
-          "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test.txt",
-          "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test2.txt",
-          "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test3.txt"
-        }
-      );
-    #else
-        Banco banco = Banco(
-          {
-            "/Users/alejandro/pa-proyecto-tauri/cpp/test.txt",
-            "/Users/alejandro/pa-proyecto-tauri/cpp/test1.txt",
-            "/Users/alejandro/pa-proyecto-tauri/cpp/test2.txt"
-          }
-        );
-    #endif
-
+    Banco banco = Banco(pedir_index());
 
     while (true) {
       string tarjeta = pedirValor<Banco>(
-          banco, "Ingresa tu tarjeta: ",
+          banco,
           &cuentaExiste_o_exit_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Tarjeta inválida</p>",
           "Log In", numbers, true
       );
@@ -59,30 +46,59 @@ int main() {
         break;
       }
 
-      Cuenta cuenta = *banco.buscarCuentaRaw(tarjeta).encontrada;
+      Cuenta cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
 
       cout << "<h2 class='text-center'>Log In</h2><p class='text-center'>Ahora ingresa la contraseña</p>\n";
 
       string contra = pedirValor<Cuenta>(
-          cuenta, "Ingresa la contrasenna: ",
+          cuenta,
           &contraEs_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>", "Log In"
       );
 
       while (menuPrincipal(cuenta, banco) != SALIR) {}
 
-      printf(
-          "<h2 id='re' class='text-center'>Log In</h2>"
-          "<p class='text-center'>Ingresa tu número de tarjeta</p>"
-          "\n"
-      );
+      getline(cin, nul);
+      cout << "FILES_PLS" << endl;
+      banco = Banco(pedir_index());
+      cout << "<h2 class='text-center'>Log In</h2><p class='text-center'>Ingresa tu número de tarjeta</p>" << endl;
     }
   }
 }
 
+vector<CuentaRaw> pedir_index() {
+  ofstream out;
+  string nul;
+  out.open("/Users/alejandro/pa-proyecto-tauri/cpp/log.txt");
+
+  out << "CIN FILES_PLS" << endl;
+
+  string files_names_raw, name, path, sub;
+  vector<CuentaRaw> cuentas = vector<CuentaRaw>();
+
+  getline(cin, files_names_raw);
+  out << files_names_raw << endl;
+
+  istringstream in_names(files_names_raw);
+  while(getline(in_names, sub, ';')){
+    istringstream in_data(sub);
+
+    getline(in_data, name, '*');
+    getline(in_data, path, '*');
+
+    out << "    \"" << name << "\"";
+    out << " : \"" << path << "\"" << endl;
+
+    CuentaRaw cuenta_raw = { name, path };
+    cuentas.push_back(cuenta_raw);
+  }
+
+  return cuentas;
+}
+
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
   printf(
-      "<h2 class='text-center'>Súper Linea</h2>:nl:"
-      "<p class='text-center'>Submenús:nl:Opciones con el símbolo * pueden requerir su Super-key</p>"
+      "<h2 class='text-center'>Súper Linea</h2></br>"
+      "<p class='text-center'>Submenús</br>Opciones con el símbolo * pueden requerir su Super-key</p>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver estado</button></div>"
       "</br>"
       "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Transferencias (*)</button></div>"
@@ -95,7 +111,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese un submenú: ", 1, SALIR), val;
+  int option = pedirValor(1, SALIR), val;
 
   switch (option) {
     case 1:
@@ -139,7 +155,7 @@ int menuEstado(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  option = pedirValor("Ingrese una opción: ", 1, SALIR);
+  option = pedirValor(1, SALIR);
 
   switch (option) {
     case 1:
@@ -181,7 +197,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
+  int option = pedirValor(1, SALIR);
   string cont;
 
 
@@ -211,7 +227,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
           );
 
         a_transferir = pedirValor<Banco>(
-            banco, "Ingresa la tarjeta a transferir: ",
+            banco,
             &cuentaExisteOCancela_s, "<h2 class='text-center'>Cuenta a Transferir</h2><p class='text-center'>Tarjeta inválida.</br>Ingresa la tarjeta a transferir: </p><div class='text-center' class='mb-3'>", "Cuenta a Transferir", numbers, true
         );
 
@@ -237,19 +253,21 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
           "\n"
       );
 
-      double cantidad = pedirValor("Ingresa la cantidad a transferir: ", 100.0, 5000000.0, {','}, "Cantidad a Transferir", numbers, true);
+      double cantidad = pedirValor(100.0, 5000000.0, {','}, "Cantidad a Transferir", numbers, true);
 
       if (!count(cuenta.tarjetas_registradas.begin(), cuenta.tarjetas_registradas.end(), a_transferir)) {
         if (pedirSuperKey(cuenta)) return option;
       }
 
-      Cuenta * tar =  banco.buscarCuentaRaw(a_transferir).encontrada;
-      Cuenta target = cargar_ususario(tar->fichero);
+      cout << "FILES_PLS" << endl;
+      banco = Banco(pedir_index());
+      Cuenta target =  banco.buscarCuentaRaw(a_transferir).encontrada;
 
       if (cantidad > cuenta.dinero) {
         printf(
             "<h2 class='text-center'>Error al Transferir</h2>"
             "<p class='text-center'>No hay suficientes fondos para realizar la transferencia</p>"
+            "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
             "\n"
         );
       } else {
@@ -268,6 +286,9 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       string a_agregar;
       int valido = 0;
       do {
+        cout << "FILES_PLS" << endl;
+        banco = Banco(pedir_index());
+
         if (valido == 0)
           printf(
               "<h2 class='text-center'>Registrar Cuenta</h2>"
@@ -282,7 +303,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
           );
 
         a_agregar = pedirValor<Banco>(
-            banco, "Ingresa la tarjeta a registrar: ",
+            banco,
             &cuentaExisteOCancela_s, "<h2 class='text-center'>Registrar Cuenta</h2><p class='text-center'>Tarjeta inválida. No puedes registrarte a ti mismo!</br>Ingresa la tarjeta a registrar</p>" , "Registrar Cuenta", numbers, true
         );
 
@@ -337,7 +358,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
           );
 
         a_borrar = pedirValor<Banco>(
-            banco, "Ingresa la tarjeta a eliminar: ",
+            banco,
             &cuentaExisteOCancela_s, "<h2 class='text-center'>Eliminar Cuenta</h2><p class='text-center'>Tarjeta Inválida</br>Ingresa la tarjeta a eliminar</p>", "Eliminar Cuenta", numbers, true
         );
 
@@ -396,7 +417,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
+  int option = pedirValor(1, SALIR);
   string cont;
 
 
@@ -413,7 +434,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
           "<p class='text-center'>Ingresa la cantidad a depositar</p>"
           "\n"
         );
-      cantidad = pedirValor("Ingresa la cantidad a depositar: ", 100, 50000,  {','}, "Depósito", numbers, true);
+      cantidad = pedirValor(100, 50000,  {','}, "Depósito", numbers, true);
       cuenta.agregarDinero(cantidad);
       continuar();
       cout 
@@ -430,7 +451,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
         "<p class='text-center'>Ingresa la cantidad a retirar</p>"
         "\n"
       );
-      cantidad = pedirValor("Ingresa la cantidad a retirar: ", 100, 50000, {','}, "Retiro", numbers, true);
+      cantidad = pedirValor(100, 50000, {','}, "Retiro", numbers, true);
 
       if (cantidad > 2500) 
         if (pedirSuperKey(cuenta, "<p class='text-center'>Una cantidad mayor de 2500 requiere Super-Key</p>")) return option;
@@ -482,7 +503,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
       "</p>\n"
   );
 
-  int option = pedirValor("Ingrese una opción: ", 1, SALIR);
+  int option = pedirValor(1, SALIR);
   string cont;
 
 
@@ -508,7 +529,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
         << "\n"
       ;
 
-      double cantidad = pedirValor("Ingresa la cantidad a pagar: ", 1.0, cuenta.deuda, {','}, "AAAA", numbers, true);
+      double cantidad = pedirValor(1.0, cuenta.deuda, {','}, "AAAA", numbers, true);
 
       if (cantidad > cuenta.dinero) {
         printf(
@@ -547,7 +568,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
           << "\n"
         ;
 
-      double cantidad = pedirValor("Ingresa la cantidad que desea solicitar: ", 1.0, cuenta.dinero * 0.7, {','}, "Solicitud Préstamo", numbers, true);
+      double cantidad = pedirValor(1.0, cuenta.dinero * 0.7, {','}, "Solicitud Préstamo", numbers, true);
 
       if (cantidad/cuenta.dinero > 0.7) {
         printf(
@@ -602,7 +623,7 @@ bool pedirSuperKey(Cuenta &cuenta, string mensaje) {
   );
 
   string key = pedirValor<Cuenta>(
-      cuenta, "Ingresa tu Super-Key: ",
+      cuenta,
       &esSuperKeyOCancela_s,  "<h2 class='text-center'>Super Key</h2><p class='text-center'>Super Key Inválida. Ingresa tu Super Key: </p>", "Super Key"
   );
 
