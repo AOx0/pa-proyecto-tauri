@@ -16,3 +16,21 @@ log.txt
 log_ususarios.txt
 
 cpp/usuarios
+
+cpp/usuarios.exe
+
+cpp/.cmake/
+
+cpp/Testing/
+
+cpp/.ninja_deps
+
+cpp/.ninja_log
+
+cpp/build.ninja
+
+cpp/cmake_install.cmake
+
+cpp/CMakeCache.txt
+
+src-tauri/usuarios.exe

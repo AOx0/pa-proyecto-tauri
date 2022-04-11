@@ -23,31 +23,29 @@ int menuDepRet(Cuenta &cuenta, Banco &banco);
 // El menú de préstamos. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
-bool pedirSuperKey(Cuenta &cuenta, char * mensaje = "") {
-  printf(
-      "<h2 class='text-center'>Super Key</h2>"
-      "%s"
-      "<p class='text-center'>La operación requiere Super Key. Ingrésala: </p>"
-      "\n", mensaje
-  );
-
-  string key = pedirValor<Cuenta>(
-      cuenta, "Ingresa tu Super-Key: ",
-      &esSuperKeyOCancela_s,  "<h2 class='text-center'>Super Key</h2><p class='text-center'>Super Key Inválida. Ingresa tu Super Key: </p>", "Super Key"
-  );
-
-  return key == cansal;
-}
+bool pedirSuperKey(Cuenta &cuenta, string mensaje =  std::string(""));
 
 int main() {
   {
-    Banco banco = Banco(
-      {
-        "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test.txt",
-        "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test2.txt",
-        "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test3.txt"
-      }
-    );
+
+    #ifdef _WIN32
+      Banco banco = Banco(
+        {
+          "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test.txt",
+          "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test2.txt",
+          "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test3.txt"
+        }
+      );
+    #else
+        Banco banco = Banco(
+          {
+            "/Users/alejandro/pa-proyecto-tauri/cpp/test.txt",
+            "/Users/alejandro/pa-proyecto-tauri/cpp/test1.txt",
+            "/Users/alejandro/pa-proyecto-tauri/cpp/test2.txt"
+          }
+        );
+    #endif
+
 
     while (true) {
       string tarjeta = pedirValor<Banco>(
@@ -554,7 +552,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
       if (cantidad/cuenta.dinero > 0.7) {
         printf(
           "<h2 class='text-center'>Préstamo muy alto</h2>"
-          "<p class='text-center'>No se puede solicitar más del 70% de la cantidad disponible de saldo</p>"
+          "<p class='text-center'>No se puede solicitar más del 70%% de la cantidad disponible de saldo</p>"
           "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Regresar</button></div>"
           "\n"
         );
@@ -595,3 +593,18 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
   return option;
 }
 
+bool pedirSuperKey(Cuenta &cuenta, string mensaje) {
+  printf(
+      "<h2 class='text-center'>Super Key</h2>"
+      "%s"
+      "<p class='text-center'>La operación requiere Super Key. Ingrésala: </p>"
+      "\n", mensaje.c_str()
+  );
+
+  string key = pedirValor<Cuenta>(
+      cuenta, "Ingresa tu Super-Key: ",
+      &esSuperKeyOCancela_s,  "<h2 class='text-center'>Super Key</h2><p class='text-center'>Super Key Inválida. Ingresa tu Super Key: </p>", "Super Key"
+  );
+
+  return key == cansal;
+}
