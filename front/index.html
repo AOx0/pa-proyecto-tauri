@@ -12,6 +12,37 @@
         const invoke = window.__TAURI__.invoke;
         const win = window.__TAURI__.window;
 
+        class Validator {
+
+            static divmod(x, y) {
+                return [ x % y, Math.floor(x / y)]
+            }
+        
+            static list(string, charAction = i => { return i }) {
+                let arr = []
+                Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
+                return arr
+            }
+
+            static luhnCheck(card) {
+                let num = []
+                let num2 = []
+                let num3 = []
+                let sum = 0;
+        
+                num = this.list(card, char => { return Number(char) })
+                num = [].concat(num).reverse()
+        
+                for (var i = 0; i<num.length; i=i+2) { num2.push(num[i]) }
+                for (var i = 1; i<num.length; i=i+2) { num3.push(num[i]) }
+        
+                num3.forEach(d => { const qr = this.divmod(d*2, 10); num2.push(qr[0] + qr[1]); })
+                num2.forEach(digit => { sum += digit })
+        
+                return sum % 10 === 0
+            }
+        }
+
         function update_button_actions(message, document) {
             if (message.includes("no1")) { document.getElementById("no1").addEventListener('click', function() { opcion(1) }); }
             if (message.includes("no2")) { document.getElementById("no2").addEventListener('click', function() { opcion(2) }); }
@@ -88,6 +119,11 @@
         }
 
         function reload() {
+            var inner = document.getElementById('bd-h').innerHTML;
+            if ((inner.includes('Ingresa') || inner.includes('Error') || inner.includes('Intenta')) && inner.includes('tarjeta') && !Validator.luhnCheck(document.getElementById('fie').value)) {
+                document.getElementById('bd-h').getElementsByTagName("p")[0].innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
+                return;
+            } 
             invoke('handle', {msg: `${document.getElementById('fie').value}`}).then((message) => {
                 update_body(message, document);
             })
