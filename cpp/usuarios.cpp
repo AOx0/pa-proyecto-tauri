@@ -65,7 +65,7 @@ int main() {
 
       string contra = pedirValor<Cuenta>(
           cuenta, "Ingresa la contrasenna: ",
-          &contraEs_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>", "Log In", 3, numbers
+          &contraEs_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>", "Log In"
       );
 
       while (menuPrincipal(cuenta, banco) != SALIR) {}
