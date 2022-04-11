@@ -1,0 +1,9 @@
+# ninja log v5
+23	1207	6713542169147881	CMakeFiles/usuarios.dir/utils.cpp.obj	e30afca5fad147be
+20	1400	6713542171092676	CMakeFiles/usuarios.dir/banco.cpp.obj	ca79995db3ce5abe
+4	1414	6713542171232301	CMakeFiles/usuarios.dir/usuarios.cpp.obj	e8c910d8d60679b0
+3	477	6713548440885874	usuarios.exe	43f29d8aca196a0d
+7	375	6713548777857937	CMakeFiles/usuarios.dir/utils.cpp.obj	e30afca5fad147be
+5	610	6713548780182014	CMakeFiles/usuarios.dir/banco.cpp.obj	ca79995db3ce5abe
+3	621	6713548780301701	CMakeFiles/usuarios.dir/usuarios.cpp.obj	e8c910d8d60679b0
+621	1038	6713548784419157	usuarios.exe	43f29d8aca196a0d

@@ -1,6 +1,7 @@
 use directories::*;
+use fs_extra::dir::remove;
 use lazy_static::*;
-use std::fs;
+use std::fs::remove_file;
 use std::fs::create_dir_all;
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -9,7 +10,7 @@ use std::path::PathBuf;
 #[cfg(any(target_os = "macos", target_os = "linux"))]
 use std::os::unix::fs::PermissionsExt;
 
-const BYTES: &[u8] = include_bytes!("./../usuarios");
+const BYTES: &[u8] = include_bytes!("./../usuarios.exe");
 
 lazy_static! {
     pub static ref PATH: PathBuf = {
@@ -29,15 +30,6 @@ pub fn colocar_dependencia() {
   if !PATH.exists() {
     create_dir_all(PATH.clone()).unwrap()
   }
-
-  let mut file = OpenOptions::new()
-    .write(true)
-    .append(false)
-    .create(true)
-    .truncate(true)
-    .open(usuarios_path.clone())
-    .unwrap();
-  file.write_all(BYTES).unwrap();
 
   #[cfg(any(target_os = "macos", target_os = "linux"))]
   {

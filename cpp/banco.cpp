@@ -1,10 +1,11 @@
 #include "banco.h"
 
 #include <iostream>
-
+#include <limits>
 // https://stackoverflow.com/questions/997512/string-representation-of-time-t
 #include <ctime>
 #include <fstream>
+#include <algorithm>
 
 #define cansal "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 

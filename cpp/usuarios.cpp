@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 #include "banco.h"
 #include "utils.h"
@@ -42,9 +43,9 @@ int main() {
   {
     Banco banco = Banco(
       {
-        "/Users/alejandro/pa-proyecto-tauri/cpp/test.txt",
-        "/Users/alejandro/pa-proyecto-tauri/cpp/test2.txt",
-        "/Users/alejandro/pa-proyecto-tauri/cpp/test3.txt"
+        "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test.txt",
+        "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test2.txt",
+        "C:\\Users\\Danie\\OneDrive\\Escritorio\\proyectoPo\\pa-proyecto-tauri\\cpp\\test3.txt"
       }
     );
 
