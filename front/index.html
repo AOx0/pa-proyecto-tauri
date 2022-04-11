@@ -76,19 +76,19 @@
         }
 
         function opcion(evt) {
-            invoke('display_upper_msg', {msg: `${evt.toString()}`}).then((message) => {
+            invoke('handle', {msg: `${evt.toString()}`}).then((message) => {
                 update_body(message, document);
             })
         }
 
         function clean_close(evt) {
-            invoke('display_upper_msg', {msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"}).then((message) => {
+            invoke('handle', {msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"}).then((message) => {
                 update_body(message, document);
             })
         }
 
         function reload() {
-            invoke('display_upper_msg', {msg: `${document.getElementById('fie').value}`}).then((message) => {
+            invoke('handle', {msg: `${document.getElementById('fie').value}`}).then((message) => {
                 update_body(message, document);
             })
         }

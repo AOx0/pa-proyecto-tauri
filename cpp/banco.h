@@ -67,27 +67,41 @@ public:
   void eliminarCuenta_t(const string &t);
 
   void transferir(Cuenta & target, double cantidad);
+
+  static Cuenta empty_cuenta() {
+    Cuenta cuenta = {
+        "","", /* 8 */"", /* 4 */"", /* 3 */"","",
+        "",time(NULL),{},{},
+        0.0,0.0,""
+    };
+
+    return cuenta;
+  }
 };
 
 struct ResB {
 public:
-  Cuenta *encontrada;
+  Cuenta encontrada;
   bool fue_exitosa;
 
-  ResB() : fue_exitosa(false), encontrada(nullptr) {};
+  ResB() : fue_exitosa(false), encontrada(Cuenta::empty_cuenta()) {};
+};
+
+struct CuentaRaw {
+  string nombre;
+  string cuenta;
 };
 
 /// Estructura que representa al banco, que contiene un conjunto de cuentas
 struct Banco {
 public:
-  vector<Cuenta> cuentas;
-  vector<string> ficheros;
+  vector<CuentaRaw> cuentas;
   string fichero_actual;
   int contra = 12344321;
 
   vector<Cuenta> cargar_usuarios(vector<string> & archivos);
 
-  explicit Banco(vector<string> cuentas) : cuentas(cargar_usuarios(cuentas)), ficheros(cuentas) {};
+  explicit Banco(vector<CuentaRaw> cuentas) : cuentas(cuentas) {};
 
   /// Método que busca dentro de las cuentas del banco la cuenta dada (tarjeta)
   /// \param cuenta El srting con el número de cuenta (tarjeta) a buscar
