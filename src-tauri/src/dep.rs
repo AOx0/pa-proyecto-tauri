@@ -2,10 +2,12 @@ use directories::*;
 use include_dir::{include_dir, Dir};
 use lazy_static::*;
 use smartstring::alias::String;
-use std::fs;
 use std::fs::{create_dir, create_dir_all, OpenOptions};
 use std::io::Write;
 use std::path::PathBuf;
+
+#[cfg(any(target_os = "macos", target_os = "linux"))]
+use std::fs;
 
 #[cfg(any(target_os = "macos", target_os = "linux"))]
 use std::os::unix::fs::PermissionsExt;

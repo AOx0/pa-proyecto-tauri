@@ -98,7 +98,7 @@ fn handle(msg: &str) -> String {
 
 fn main() {
     println!("Init...");
-    lazy_static::initialize(&PROC);
+    initialize(&PROC);
     handle("FILES_PLS");
 
     tauri::Builder::default()
