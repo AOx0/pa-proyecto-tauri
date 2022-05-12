@@ -35,9 +35,7 @@ int main() {
     Banco banco = Banco(pedir_index());
 
     while (true) {
-      string tarjeta = pedirValor<Banco>(
-          banco,
-          &cuentaExiste_o_exit_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Tarjeta inválida</p>",
+      string tarjeta = pedirValor( "<h2 class='text-center'>Log In</h2><p class='text-center'>Tarjeta inválida</p>",
           "Log In", numbers, true
       );
 
@@ -46,14 +44,35 @@ int main() {
         break;
       }
 
-      Cuenta cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
-
-      cout << "<h2 class='text-center'>Log In</h2><p class='text-center'>Ahora ingresa la contraseña</p>\n";
-
-      string contra = pedirValor<Cuenta>(
-          cuenta,
-          &contraEs_s, "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>", "Log In"
+      string contra = pedirValor(
+          "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>",
+          "Log In",
+          {},
+          false
       );
+
+
+      Cuenta cuenta;
+      if (tarjeta == cansal || contra == cansal) {
+        cout << "EXIT";
+        break;
+      }
+
+      if (!cuentaExiste_o_exit_s(tarjeta, banco)) {
+        cout << "No existe la cuenta\n";
+        continue;
+      } else {
+        cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
+        if (!contraEs_s(contra, cuenta)) {
+          cout << "Contraseña inválida\n";
+          continue;
+        }
+      }
+
+
+      cout << "change to main";
+
+
 
       while (menuPrincipal(cuenta, banco) != SALIR) {}
 
@@ -66,17 +85,12 @@ int main() {
 }
 
 vector<CuentaRaw> pedir_index() {
-  ofstream out;
   string nul;
-  out.open("/Users/alejandro/pa-proyecto-tauri/cpp/log.txt");
-
-  out << "CIN FILES_PLS" << endl;
 
   string files_names_raw, name, path, sub;
   vector<CuentaRaw> cuentas = vector<CuentaRaw>();
 
   getline(cin, files_names_raw);
-  out << files_names_raw << endl;
 
   istringstream in_names(files_names_raw);
   while(getline(in_names, sub, ';')){
@@ -84,9 +98,6 @@ vector<CuentaRaw> pedir_index() {
 
     getline(in_data, name, '*');
     getline(in_data, path, '*');
-
-    out << "    \"" << name << "\"";
-    out << " : \"" << path << "\"" << endl;
 
     CuentaRaw cuenta_raw = { name, path };
     cuentas.push_back(cuenta_raw);
@@ -98,7 +109,7 @@ vector<CuentaRaw> pedir_index() {
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
   printf(
       "<h2 class='text-center'>Súper Linea</h2></br>"
-      "<p class='text-center'>Submenús</br>Opciones con el símbolo * pueden requerir su Super-key</p>"
+      "<p class='text-center'>Submenus</br>Opciones con el símbolo * pueden requerir su Super-key</p>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver estado</button></div>"
       "</br>"
       "<div class='text-center' class='mb-3'><button id='no2' class='btn btn-primary'>Transferencias (*)</button></div>"

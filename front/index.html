@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Login - Brand</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
@@ -14,130 +15,73 @@
     <script>
         const invoke = window.__TAURI__.invoke;
         const win = window.__TAURI__.window;
-    
+
         class Validator {
-    
+
             static divmod(x, y) {
-                return [ x % y, Math.floor(x / y)]
+                return [x % y, Math.floor(x / y)]
             }
-        
+
             static list(string, charAction = i => { return i }) {
                 let arr = []
                 Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
                 return arr
             }
-    
+
             static luhnCheck(card) {
                 let num = []
                 let num2 = []
                 let num3 = []
                 let sum = 0;
-        
+
                 num = this.list(card, char => { return Number(char) })
                 num = [].concat(num).reverse()
-        
-                for (var i = 0; i<num.length; i=i+2) { num2.push(num[i]) }
-                for (var i = 1; i<num.length; i=i+2) { num3.push(num[i]) }
-        
-                num3.forEach(d => { const qr = this.divmod(d*2, 10); num2.push(qr[0] + qr[1]); })
+
+                for (var i = 0; i < num.length; i = i + 2) { num2.push(num[i]) }
+                for (var i = 1; i < num.length; i = i + 2) { num3.push(num[i]) }
+
+                num3.forEach(d => { const qr = this.divmod(d * 2, 10); num2.push(qr[0] + qr[1]); })
                 num2.forEach(digit => { sum += digit })
-        
+
                 return sum % 10 === 0
             }
         }
-    
-        function update_button_actions(message, document) {
-            if (message.includes("no1")) { document.getElementById("no1").addEventListener('click', function() { opcion(1) }); }
-            if (message.includes("no2")) { document.getElementById("no2").addEventListener('click', function() { opcion(2) }); }
-            if (message.includes("no3")) { document.getElementById("no3").addEventListener('click', function() { opcion(3) }); }
-            if (message.includes("no4")) { document.getElementById("no4").addEventListener('click', function() { opcion(4) }); }
-            if (message.includes("no5")) { document.getElementById("no5").addEventListener('click', function() { opcion(5) }); }
-            if (message.includes("no6")) { document.getElementById("no6").addEventListener('click', function() { opcion(6) }); }
-            if (message.includes("no7")) { document.getElementById("no7").addEventListener('click', function() { opcion(7) }); }
-            if (message.includes("back")) {
-                if (message.includes("Eliminar cuenta (*)")) {
-                    document.getElementById("back").addEventListener('click', function() { opcion(6) });
-                } else {
-                    document.getElementById("back").addEventListener('click', function() { opcion(4) });
-                }
-            }
-        }
-    
+
         function update_body(message, document) {
-    
-            place_title_bar(document, (message.includes("Ingresa tu número de tarjeta") || message.includes("Tarjeta inválida")) && message.includes("Log In"));
-    
-            document.getElementById('bd-h').innerHTML = `${message}`;
-    
-            if (message.includes("Ahora ingresa la")) {
-                document.getElementById("fie").value = "";
-            }
-    
-            if ((message.includes("Log In") && message.includes("id='re'")) || message.includes("Ingr")) {
-                let cancel_button = "";
-                if (message.includes("Cuenta a Transferir") || message.includes("Super Key") || message.includes("Registrar Cuenta") || message.includes("Eliminar Cuenta")) {
-                    cancel_button = "<p>&nbsp;&nbsp;&nbsp;</p><div class='text-center' class='mb-3'><button id='cancelar' class='btn btn-primary'>Cancelar</button></div>"
-                }
-    
-                document.getElementById("ttxt").innerHTML = `<div class='mb-3'><input class='form-control' id='fie' placeholder=''></div><p>&nbsp;&nbsp;&nbsp;</p><div class='mb-3'><button id='sub' class='btn btn-primary'>Submit</button></div>${cancel_button}`;
-                document.getElementById("sub").addEventListener('click', reload);
-    
-                if (cancel_button !== "") {
-                    document.getElementById("cancelar").addEventListener('click', clean_close);
-                }
-            }
-    
-            if (message.includes("id='no") || message.includes("cancelada") || message.includes("Éxito")) {
-                if (message.includes("no1")) {
-                    document.getElementById("ttxt").innerHTML = "";
-                }
-                update_button_actions(message, document);
-            }
-    
+
             if (message.includes("EXIT")) {
+                console.log("Exiting...")
                 invoke('close')
             }
-        }
-    
-        function place_title_bar(document, withClose) {
-            if (withClose) {
-                document.getElementById("title-bar").innerHTML = "<div class='close'><button id='cls'></button></div><div class='close'><button id='min' onClick='win.appWindow.minimize()'></button></div><div class='close'><button id='max' onClick='win.appWindow.maximize()'></button></div>";
-                document.getElementById("cls").addEventListener('click', clean_close);
-            } else {
-                document.getElementById("title-bar").innerHTML = "<div class='close'><button id='dis_cls'></button></div><div class='close'><button id='min' onClick='win.appWindow.minimize()'></button></div><div class='close'><button id='max' onClick='win.appWindow.maximize()'></button></div>";
+
+            if (message.includes("change to main")) {
+                window.location.href = 'main.html';
             }
-    
         }
-    
-        function opcion(evt) {
-            invoke('handle', {msg: `${evt.toString()}`}).then((message) => {
-                update_body(message, document);
-            })
-        }
-    
+
         function clean_cloese(evt) {
-            invoke('handle', {msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"}).then((message) => {
+            invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
                 update_body(message, document);
             })
         }
-    
-        function reload() {
+
+        function reload_double() {
             var inner = document.getElementById('bd-h').innerHTML;
-            if ((inner.includes('Ingresa') || inner.includes('Error') || inner.includes('Intenta')) && inner.includes('tarjeta') && !Validator.luhnCheck(document.getElementById('fie').value)) {
-                document.getElementById('bd-h').getElementsByTagName("p")[0].innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
+            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
+                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
                 return;
-            } 
-            invoke('handle', {msg: `${document.getElementById('fie').value}`}).then((message) => {
+            }
+            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
                 update_body(message, document);
             })
         }
-    
+
         function close() {
             invoke('close')
         }
-    
-        window.onload = function() {
-            document.getElementById("sub").addEventListener('click', reload);
+
+        window.onload = function () {
+            document.getElementById("sub").addEventListener('click', reload_double);
             document.getElementById("cls").addEventListener('click', close);
         }
     </script>
@@ -152,15 +96,15 @@
             height: 100%;
             z-index: -2;
         }
-        
+
         #title-bar {
             height: 40px;
             border-radius: 10px;
             background: #4e73df;
             user-select: none;
             display: flex;
-    
-            
+
+
             justify-content: flex-start;
             position: absolute;
             top: 0;
@@ -168,14 +112,14 @@
             right: 0;
             z-index: 0;
         }
-    
-    
+
+
         .cloese {
             height: 14px;
             width: 14px;
-            margin: 10px 0 10px 10px ;
+            margin: 10px 0 10px 10px;
         }
-    
+
         #cls {
             background: #fb5f57;
             text-decoration: none;
@@ -185,7 +129,7 @@
             border: none;
             border-radius: 20px;
         }
-    
+
         #dis_cls {
             background: rgba(180, 163, 162, 0.18);
             text-decoration: none;
@@ -195,6 +139,7 @@
             border: none;
             border-radius: 20px;
         }
+
         /*  47dc4e */
         #min {
             background: #ffbc3d;
@@ -205,7 +150,7 @@
             border: none;
             border-radius: 20px;
         }
-    
+
         #max {
             background: #47dc4e;
             text-decoration: none;
@@ -215,7 +160,6 @@
             border: none;
             border-radius: 20px;
         }
-    
     </style>
 </head>
 
@@ -223,51 +167,62 @@
     <p id="bd"></p>
     <nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
         <div class="container">
-<div data-tauri-drag-region id="title-bar" >
-    <div class="cloese" >
-        <button id="cls" onclick="clean_cloese()">
-        </button>
-    </div>
-    <div class="cloese" >
-        <button id="min" onclick="
+            <div data-tauri-drag-region id="title-bar">
+                <div class="cloese">
+                    <button id="cls" onclick="clean_cloese()">
+                    </button>
+                </div>
+                <div class="cloese">
+                    <button id="min" onclick="
                 win.appWindow.minimize()
               ">
-        </button>
-    </div>
+                    </button>
+                </div>
 
-    <div class="cloese" >
-        <button id="max" onclick="
+                <div class="cloese">
+                    <button id="max" onclick="
                 win.appWindow.maximize()
                 ">
-        </button>
-    </div>
+                    </button>
+                </div>
 
-</div></div>
+            </div>
+        </div>
     </nav>
-    <div class="container">
+    <div class="container" id="bd-h">
         <div class="row justify-content-center">
             <div class="col-md-9 col-lg-12 col-xl-10">
                 <div class="card shadow-lg o-hidden border-0 my-5">
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-flex">
-                                <div class="flex-grow-1 bg-login-image" style="background: url(&quot;assets/img/Bank.jpeg&quot;) center / cover;"></div>
+                                <div class="flex-grow-1 bg-login-image"
+                                    style="background: url(&quot;assets/img/Bank.jpeg&quot;) center / cover;"></div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Bienvenido de vuelta!</h4>
+                                        <p id="error_p" class="text-dark mb-4"></p>
                                     </div>
-                                    <form class="user">
-                                        <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Ingresa tu tarjeta" name="email" autocomplete="on" inputmode="numeric" minlength="16" maxlength="16" required=""></div>
-                                        <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Contraseña" name="password"></div>
+                                    <div class="user">
+                                        <div class="mb-3"><input class="form-control form-control-user"
+                                                id="exampleTarjeta" aria-describedby="emailHelp"
+                                                placeholder="Ingresa tu tarjeta" name="email" autocomplete="on"
+                                                inputmode="numeric" minlength="16" maxlength="16" required=""></div>
+                                        <div class="mb-3"><input class="form-control form-control-user"
+                                                id="exampleInputPassword" placeholder="Contraseña" name="password">
+                                        </div>
                                         <div class="mb-3">
                                             <div class="custom-control custom-checkbox small"></div>
-                                        </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Login</button>
+                                        </div><button class="btn btn-primary d-block btn-user w-100"
+                                            id="sub">Login</button>
                                         <hr>
-                                    </form>
-                                    <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                                    <div class="text-center"><a class="small" href="register.html">Create an Account!</a></div>
+                                    </div>
+                                    <div class="text-center"><a class="small" href="forgot-password.html">Forgot
+                                            Password?</a></div>
+                                    <div class="text-center"><a class="small" href="register.html">Create an
+                                            Account!</a></div>
                                 </div>
                             </div>
                         </div>

@@ -113,6 +113,44 @@ string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, co
   exit(0);
 }
 
+/// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
+/// Función que pide un valor, pensado para strings solamente. La función se ejecuta indefinidamente hasta que
+/// la función verificadora que se pasa como argumento devuelva true. Se pide un valor hasta intentos veces,
+/// terminando el programa si se agotan los intentos
+/// \tparam V El tipo de dep
+/// \param dep La variable de la que depende que la función verificadora funcione. Pensado para instancias de Banco y Cuenta
+/// \param msg El mensaje mostrado al usuario para pedir el dato
+/// \param func Un apuntador a una función que devuelva true/false
+/// \param on_error El mensaje a mostrar cuando ocurra algún error
+/// \param intentos El número de intentos permitidos para ingresar un valor válido
+/// \param validos El arreglo de caracteres válidos que pueden estar contenidos en el msg
+/// \param quitar_espacios Si la función debería ignorar los espacios o no
+/// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
+string pedirValor(const string &on_error, const string& titulo, const vector<char> &validos = {}, bool quitar_espacios = false) {
+  string inp;
+  ofstream file;
+
+  while (true) {
+    // cout << msg;
+
+    cin >> inp;
+
+    if (quitar(inp, ' ').empty()) continue;
+
+    if (quitar_espacios) inp = quitar(inp, ' ');
+
+    if (!validos.empty())
+      if (contieneInvalid(validos, inp, titulo)) continue;
+
+    file.open("log_ususarios.txt", std::ios::app);
+    file << "Verificando...\n";
+    file.close();
+
+    return inp;
+  }
+}
+
+
 /// Función que pide un valor que será almacenado en una variable de tipo T, pensado exclusivamente para tipos numéricos.
 /// El número ingresado debe estar en el rango: min..=max
 /// \tparam T El tipo de dato NUMÉRICO donde se almacenará el input de usuario
