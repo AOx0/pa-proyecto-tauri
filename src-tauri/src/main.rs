@@ -52,25 +52,40 @@ lazy_static! {
 }
 
 fn write_to_stdin(msg: &str, read: bool) -> Option<std::io::Result<std::string::String>> {
+    println!("Sending {}...", msg);
+    print!("    Locking Popen...");
     let p = PROC.lock().unwrap();
+    print!(" Done!\n");
 
     let lines = if read {
+        print!("    Instancing buffer...");
         Some(BufReader::new(p.stdout.as_ref().unwrap()).lines())
     } else {
+        print!("    Skipping buffer...");
         None
     };
+    print!(" Done!\n");
 
+    print!("    Writing to Popen...");
     p.stdin
         .as_ref()
         .unwrap()
         .write_all(format!("{}\n", msg).as_bytes())
         .unwrap();
+    print!(" Done!\n");
 
-    if read {
+    let r = if read {
+        print!("    Reading buffer...");
         lines.unwrap().next()
     } else {
+        print!("    Skipping buffer read...");
         None
-    }
+    };
+    print!(" Done!\n");
+
+    println!("Everything is Done!");
+
+    r
 }
 
 lazy_static! {
@@ -82,12 +97,15 @@ fn handle(msg: &str) -> String {
     println!("Received: \"{}\". Sending to usuarios...", msg);
 
     if msg.contains("FILES_PLS") {
+        println!("FILES_PLS mmsg. Handling...");
         write_to_stdin(&dep::obtener_usuarios(), false);
         return String::new();
     }
 
     if let Some(Ok(s)) = write_to_stdin(msg, true) {
         let s: String = s.into();
+
+        println!("FILES_PLS mmsg. Handling...");
 
         if s.contains("FILES_PLS") {
             handle(&dep::obtener_usuarios())
@@ -105,15 +123,22 @@ fn handle_multiple(msgs: Vec<&str>) -> String {
     println!("Received: \"{:?}\". Sending to usuarios...", msgs);
 
     for msg in msgs.iter().enumerate() {
+        println!("{:?}", msg);
         let msg: (usize, &&str) = msg;
         if let Some(Ok(s)) = write_to_stdin(msg.1, msg.0 == msgs.len() - 1) {
             let s: String = s.into();
-            println!("Received: \"{}\". Sending to front...", s);
+            println!("Received: \"{}\".", s);
             if msg.0 == msgs.len() - 1 {
+                println!("Last received. Sending to front...");
                 return s;
+            } else {
+                println!("Not last received. Skipping...");
             }
-        } else {
+        } else if msg.0 == msgs.len() - 1 {
+            println!("Last received. Sending to front...");
             return ERROR.clone();
+        } else {
+            println!("Error. Skipping...");
         }
     }
 

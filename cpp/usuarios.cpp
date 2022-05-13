@@ -70,7 +70,7 @@ int main() {
       }
 
 
-      cout << "change to main";
+      cout << "change to main" << endl;
 
 
 
@@ -107,7 +107,7 @@ vector<CuentaRaw> pedir_index() {
 }
 
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
-  printf(
+  /*printf(
       "<h2 class='text-center'>Súper Linea</h2></br>"
       "<p class='text-center'>Submenus</br>Opciones con el símbolo * pueden requerir su Super-key</p>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver estado</button></div>"
@@ -120,7 +120,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       "</br>"
       "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
       "</p>\n"
-  );
+  );*/
 
   int option = pedirValor(1, SALIR), val;
 
