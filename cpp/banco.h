@@ -7,7 +7,7 @@
 using namespace std;
 
 /// Estructura que representa la Cuenta de un usuario.
-struct Cuenta {
+class Cuenta {
 public:
   string fichero;
   string key; /* 8 */
@@ -79,7 +79,7 @@ public:
   }
 };
 
-struct ResB {
+class ResB {
 public:
   Cuenta encontrada;
   bool fue_exitosa;
@@ -93,7 +93,7 @@ struct CuentaRaw {
 };
 
 /// Estructura que representa al banco, que contiene un conjunto de cuentas
-struct Banco {
+class Banco {
 public:
   vector<CuentaRaw> cuentas;
   string fichero_actual;
