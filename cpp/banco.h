@@ -87,7 +87,8 @@ public:
   ResB() : fue_exitosa(false), encontrada(Cuenta::empty_cuenta()) {};
 };
 
-struct CuentaRaw {
+class CuentaRaw {
+public:
   string nombre;
   string cuenta;
 };
