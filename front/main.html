@@ -16,19 +16,23 @@
         const invoke = window.__TAURI__.invoke;
         const win = window.__TAURI__.window;
 
-        class Validator {
+        class Validator
+        {
 
-            static divmod(x, y) {
+            static divmod(x, y)
+            {
                 return [x % y, Math.floor(x / y)]
             }
 
-            static list(string, charAction = i => { return i }) {
+            static list(string, charAction = i => { return i })
+            {
                 let arr = []
                 Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
                 return arr
             }
 
-            static luhnCheck(card) {
+            static luhnCheck(card)
+            {
                 let num = []
                 let num2 = []
                 let num3 = []
@@ -47,7 +51,8 @@
             }
         }
 
-        function update_body(message, document) {
+        function update_body(message, document)
+        {
 
             if (message.includes("EXIT")) {
                 console.log("Exiting...")
@@ -59,13 +64,15 @@
             }
         }
 
-        function clean_cloese(evt) {
+        function clean_cloese(evt)
+        {
             invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
                 update_body(message, document);
             })
         }
 
-        function reload_double() {
+        function reload_double()
+        {
             var inner = document.getElementById('bd-h').innerHTML;
             if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
@@ -76,14 +83,21 @@
             })
         }
 
-        function close() {
+        function close()
+        {
             invoke('close')
         }
-
-        window.onload = function () {
-            document.getElementById("sub").addEventListener('click', reload_double);
-            document.getElementById("cls").addEventListener('click', close);
+        //intento 1
+        window.onload = function ()
+        {
+            invoke('handle',{msg: "Pidiendo_Nombre"}).then((message) => {document.getElementById("Nombre").innerHTML=`${message}`;})
+            invoke('handle',{msg: "Pidiendo_Tarjeta"}).then ((message) =>{document.getElementById("Dinero").innerHTML=`${message}`;})
+            invoke('handle',{msg: "Pidiendo_Dinero"})
         }
+
+
+
+
     </script>
     <style>
         #bd {
@@ -366,9 +380,9 @@
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
-                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Earnings
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span id = "Nombre">Earnings
                                                     (monthly)</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>$40,000</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id = "Dinero">$40,000</span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
                                     </div>

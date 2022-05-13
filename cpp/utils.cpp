@@ -53,12 +53,13 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string 
 /// \param txt El string a limpiar de un carácter
 /// \param patron El carácter que se desea eliminar
 /// \return Una nueva instancia de string que contiene 'txt' con el carácter 'patron' eliminado
-string quitar(string &txt, char patron) {
+string quitar(string &txt, char patron)
+{
   string result = string("");
-  for (int i = 0; i < txt.length(); i++) {
+  for (int i = 0; i < txt.length(); i++)
+  {
     if (patron != txt[i])
       result += txt[i];
   }
-
   return result;
 }

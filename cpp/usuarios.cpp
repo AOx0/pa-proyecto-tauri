@@ -26,20 +26,23 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
 bool pedirSuperKey(Cuenta &cuenta, string mensaje =  std::string(""));
 
+
+
 vector<CuentaRaw> pedir_index();
 
 int main() {
   {
     string nul;
+    double basura;
 
     Banco banco = Banco(pedir_index());
 
-    while (true) {
-      string tarjeta = pedirValor( "<h2 class='text-center'>Log In</h2><p class='text-center'>Tarjeta inválida</p>",
-          "Log In", numbers, true
-      );
+    while (true)
+    {
+      string tarjeta = pedirValor( "","Log In", numbers, true);
 
-      if (tarjeta == cansal) {
+      if (tarjeta == cansal)
+      {
         cout << "EXIT";
         break;
       }
@@ -53,33 +56,41 @@ int main() {
 
 
       Cuenta cuenta;
-      if (tarjeta == cansal || contra == cansal) {
+      if (tarjeta == cansal || contra == cansal)
+      {
         cout << "EXIT";
         break;
       }
 
-      if (!cuentaExiste_o_exit_s(tarjeta, banco)) {
+      if (!cuentaExiste_o_exit_s(tarjeta, banco))
+      {
         cout << "No existe la cuenta\n";
         continue;
-      } else {
+      }
+
+      else
+      {
         cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
-        if (!contraEs_s(contra, cuenta)) {
+        if (!contraEs_s(contra, cuenta))
+        {
           cout << "Contraseña inválida\n";
           continue;
         }
       }
-
+      //Intentar que carguen los datos
 
       cout << "change to main" << endl;
+      cin>>nul;
+      string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
+      double dinero = cuenta.dinero;
+      cout<<nombre<<" "<<apellido<<endl;
+      cin>>nul;
+      cout<<dinero<<endl;
+      cin>>basura;
+      cout<<tarjetas<<endl;
+      cin>>nul;
+    //Terminar prueba
 
-
-
-      while (menuPrincipal(cuenta, banco) != SALIR) {}
-
-      getline(cin, nul);
-      cout << "FILES_PLS" << endl;
-      banco = Banco(pedir_index());
-      cout << "<h2 class='text-center'>Log In</h2><p class='text-center'>Ingresa tu número de tarjeta</p>" << endl;
     }
   }
 }
