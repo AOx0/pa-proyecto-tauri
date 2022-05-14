@@ -91,6 +91,7 @@ int main() {
       cin>>nul;
     //Terminar prueba
 
+      cin>>nul;
     }
   }
 }
