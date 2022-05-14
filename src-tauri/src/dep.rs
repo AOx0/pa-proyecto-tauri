@@ -18,7 +18,7 @@ const BYTES: &[u8] = include_bytes!("./../../cpp/usuarios");
 static USERS: Dir<'_> = include_dir!("./users");
 
 #[cfg(any(target_os = "windows"))]
-const BYTES: &[u8] = include_bytes!("./../../cpp/usuarios.exe");
+const BYTES: &[u8] = include_bytes!("./../../cpp/cmake-build-debug/usuarios.exe");
 
 lazy_static! {
   pub static ref PATH: PathBuf = {
