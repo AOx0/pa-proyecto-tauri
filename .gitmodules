@@ -1,0 +1,3 @@
+[submodule "cpp/lcy-lib-c"]
+	path = cpp/lcy-lib-c
+	url = https://github.com/AOx0/lcy-lib-c
