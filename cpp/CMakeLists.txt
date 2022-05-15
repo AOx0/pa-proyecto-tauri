@@ -7,3 +7,4 @@ if (WIN32)
 endif (WIN32)
 
 add_executable(usuarios usuarios.cpp banco.cpp utils.cpp)
+target_link_libraries(usuarios ${CMAKE_SOURCE_DIR}/lcy-lib-c/target/release/liblcy_lib_c.a)

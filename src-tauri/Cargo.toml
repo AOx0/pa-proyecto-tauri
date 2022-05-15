@@ -16,6 +16,7 @@ tauri-build = { version = "1.0.0-rc.8", features = [] }
 
 [dependencies]
 directories = "4.0.1"
+lcy = { git="https://github.com/AOx0/lcy" }
 smartstring = { version = "0.2.10", features = ["serde"] }
 subprocess = "0.2.8"
 lazy_static = "1.4.0"
