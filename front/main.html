@@ -91,8 +91,10 @@
         window.onload = function ()
         {
             invoke('handle',{msg: "Pidiendo_Nombre"}).then((message) => {document.getElementById("Nombre").innerHTML=`${message}`;})
-            invoke('handle',{msg: "Pidiendo_Tarjeta"}).then ((message) =>{document.getElementById("Dinero").innerHTML=`${message}`;})
-            invoke('handle',{msg: "Pidiendo_Dinero"})
+            invoke('handle',{msg: "Pidiendo_Dinero"}).then ((message) =>{document.getElementById("Dinero").innerHTML=`${message}`;})
+            invoke('handle',{msg: "Pidiendo_Tarjeta"}).then((message) =>{document.getElementById("Tarjeta").innerHTML=`${message}`;})
+            invoke('handle',{msg: "Pidiendo_Deuda"}).then((message) =>{document.getElementById("Deuda").innerHTML=`${message}`;})
+
         }
 
 
@@ -369,11 +371,10 @@
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
-                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Earnings
-                                                    (monthly)</span></div>
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Saldo</span></div>
                                             <div class="text-dark fw-bold h5 mb-0"><span id = "Dinero">$40,000</span></div>
                                         </div>
-                                        <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
+                                        <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
                                     </div>
                                 </div>
                             </div>
@@ -383,9 +384,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
-                                            <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Earnings
-                                                    (annual)</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>$215,000</span></div>
+                                            <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Deudas</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id = "Deuda">$215,000</span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
@@ -399,7 +399,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
                                             <div class="text-uppercase text-info fw-bold text-xs mb-1">
-                                                <span>Tasks</span>
+                                                <span>Ratio</span>
                                             </div>
                                             <div class="row g-0 align-items-center">
                                                 <div class="col-auto">
@@ -426,9 +426,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
-                                            <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Pending
-                                                    Requests</span></div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span>18</span></div>
+                                            <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Tarjeta</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id = "Tarjeta">18</span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
                                     </div>

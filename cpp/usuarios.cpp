@@ -80,18 +80,29 @@ int main() {
       //Intentar que carguen los datos
 
       cout << "change to main" << endl;
+      ;
       cin>>nul;
-      string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
-      double dinero = cuenta.dinero;
+      string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta, salida = cansal;
+      double dinero = cuenta.dinero, deuda = cuenta.deuda;
       cout<<nombre<<" "<<apellido<<endl;
       cin>>nul;
-      cout<<dinero<<endl;
-      cin>>basura;
+      cout<<"$"<<dinero<<endl;
+      cin>>nul;
       cout<<tarjetas<<endl;
       cin>>nul;
-    //Terminar prueba
-
+      cout<<"$"<<deuda<<endl;
       cin>>nul;
+
+    //Terminar prueba
+    //Salir del drashboard
+      if (salida == cansal)
+      {
+          cout<<"EXIT";
+          break;
+      }
+      cin>>nul;
+    //termina el bucle
+
     }
   }
 }

@@ -1,3 +1,8 @@
+set shell := ["cmd.exe", "/c"]
+
+c:
+    cd C:\Users\Danie\OneDrive\Escritorio\RepositorioProyecto1\pa-proyecto-tauri\src-tauri && cargo run
+
 build tar="debug" post="run": compilar_cpp
     {{ if tar != "cpp" { "cp cpp/usuarios src-tauri/" } else { "echo Skip" } }}
     {{ if tar != "cpp" { if tar == "debug" { "cd src-tauri && cargo run" } else { "cargo tauri build -d" } } else { "echo Skip" } }}
