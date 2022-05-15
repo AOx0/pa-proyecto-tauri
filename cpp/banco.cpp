@@ -7,7 +7,7 @@
 #include <fstream>
 #include <algorithm>
 
-#define cansal "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
+#define CANCEL_OR_EXIT "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
 void Cuenta::guardar_usuario() {
   ofstream f;
@@ -277,7 +277,7 @@ bool cuentaExiste_o_exit_s(string &cuenta, Banco &banco) {
   bool es_exit = false;
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
-  if (cuenta == cansal) {
+  if (cuenta == CANCEL_OR_EXIT) {
     es_exit = true;
   }
 
@@ -289,13 +289,13 @@ bool esSuperKey_s(string &key, Cuenta &cuenta) {
 }
 
 bool esSuperKeyOCancela_s(string &key, Cuenta &cuenta) {
-  return cuenta.validarSuperContra(key) || key == cansal;
+  return cuenta.validarSuperContra(key) || key == CANCEL_OR_EXIT;
 }
 
 bool cuentaExisteOCancela_s(string &cuenta, Banco &banco) {
   ResB resultado = banco.buscarCuentaRaw(cuenta);
 
-  return resultado.fue_exitosa || cuenta == cansal;
+  return resultado.fue_exitosa || cuenta == CANCEL_OR_EXIT;
 }
 
 

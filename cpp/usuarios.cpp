@@ -3,11 +3,12 @@
 #include <algorithm>
 #include <limits>
 
+#include "com.h"
 #include "banco.h"
 #include "utils.h"
 
 #define SALIR 50
-#define cansal "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
+#define CANCEL_OR_EXIT "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
 // El menú principal. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrincipal(Cuenta &cuenta, Banco &banco);
@@ -24,9 +25,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco);
 // El menú de préstamos. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
-bool pedirSuperKey(Cuenta &cuenta, string mensaje =  std::string(""));
-
-
+bool pedirSuperKey(Cuenta &cuenta, const string& mensaje =  std::string(""));
 
 vector<CuentaRaw> pedir_index();
 
@@ -35,13 +34,29 @@ int main() {
     string nul;
     double basura;
 
+    stringstream f;
+    stringstream g;
+
+    f << "Hola, estoy cifrado";
+
+    Communicator c = Communicator("file");
+
+    c.send(&f);
+
+    c.receive(&g);
+
+    string result;
+    getline(g, result);
+
+    cout << result;
+
     Banco banco = Banco(pedir_index());
 
     while (true)
     {
-      string tarjeta = pedirValor( "","Log In", numbers, true);
+      string tarjeta = pedirValor("", "Log In", NUMBERS, true);
 
-      if (tarjeta == cansal)
+      if (tarjeta == CANCEL_OR_EXIT)
       {
         cout << "EXIT";
         break;
@@ -56,7 +71,7 @@ int main() {
 
 
       Cuenta cuenta;
-      if (tarjeta == cansal || contra == cansal)
+      if (tarjeta == CANCEL_OR_EXIT || contra == CANCEL_OR_EXIT)
       {
         cout << "EXIT";
         break;
@@ -82,7 +97,7 @@ int main() {
       cout << "change to main" << endl;
       ;
       cin>>nul;
-      string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta, salida = cansal;
+      string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta, salida = CANCEL_OR_EXIT;
       double dinero = cuenta.dinero, deuda = cuenta.deuda;
       cout<<nombre<<" "<<apellido<<endl;
       cin>>nul;
@@ -95,7 +110,7 @@ int main() {
 
     //Terminar prueba
     //Salir del drashboard
-      if (salida == cansal)
+      if (salida == CANCEL_OR_EXIT)
       {
           cout<<"EXIT";
           break;
@@ -205,6 +220,7 @@ int menuEstado(Cuenta &cuenta, Banco &banco) {
       return option;
     case 5:
       return SALIR;
+    default: break;
   }
 
   cin >> cont;
@@ -262,10 +278,10 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
         a_transferir = pedirValor<Banco>(
             banco,
-            &cuentaExisteOCancela_s, "<h2 class='text-center'>Cuenta a Transferir</h2><p class='text-center'>Tarjeta inválida.</br>Ingresa la tarjeta a transferir: </p><div class='text-center' class='mb-3'>", "Cuenta a Transferir", numbers, true
+            &cuentaExisteOCancela_s, "<h2 class='text-center'>Cuenta a Transferir</h2><p class='text-center'>Tarjeta inválida.</br>Ingresa la tarjeta a transferir: </p><div class='text-center' class='mb-3'>", "Cuenta a Transferir", NUMBERS, true
         );
 
-        if (a_transferir == cansal) {
+        if (a_transferir == CANCEL_OR_EXIT) {
           cancelado = true;
           break;
         }
@@ -287,7 +303,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
           "\n"
       );
 
-      double cantidad = pedirValor(100.0, 5000000.0, {','}, "Cantidad a Transferir", numbers, true);
+      double cantidad = pedirValor(100.0, 5000000.0, {','}, "Cantidad a Transferir", NUMBERS, true);
 
       if (!count(cuenta.tarjetas_registradas.begin(), cuenta.tarjetas_registradas.end(), a_transferir)) {
         if (pedirSuperKey(cuenta)) return option;
@@ -338,10 +354,10 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
         a_agregar = pedirValor<Banco>(
             banco,
-            &cuentaExisteOCancela_s, "<h2 class='text-center'>Registrar Cuenta</h2><p class='text-center'>Tarjeta inválida. No puedes registrarte a ti mismo!</br>Ingresa la tarjeta a registrar</p>" , "Registrar Cuenta", numbers, true
+            &cuentaExisteOCancela_s, "<h2 class='text-center'>Registrar Cuenta</h2><p class='text-center'>Tarjeta inválida. No puedes registrarte a ti mismo!</br>Ingresa la tarjeta a registrar</p>" , "Registrar Cuenta", NUMBERS, true
         );
 
-        if (a_agregar == cansal) {
+        if (a_agregar == CANCEL_OR_EXIT) {
           return option;
         }
 
@@ -366,7 +382,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
         );
         cin >> cont;
         return option;
-      };
+      }
 
 
       string a_borrar;
@@ -393,10 +409,10 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
 
         a_borrar = pedirValor<Banco>(
             banco,
-            &cuentaExisteOCancela_s, "<h2 class='text-center'>Eliminar Cuenta</h2><p class='text-center'>Tarjeta Inválida</br>Ingresa la tarjeta a eliminar</p>", "Eliminar Cuenta", numbers, true
+            &cuentaExisteOCancela_s, "<h2 class='text-center'>Eliminar Cuenta</h2><p class='text-center'>Tarjeta Inválida</br>Ingresa la tarjeta a eliminar</p>", "Eliminar Cuenta", NUMBERS, true
         );
 
-        if (a_borrar == cansal) {
+        if (a_borrar == CANCEL_OR_EXIT) {
           return option;
         } else {
           if (!std::count(cuenta.tarjetas_registradas.begin(), cuenta.tarjetas_registradas.end(), a_borrar)) {
@@ -429,6 +445,7 @@ int menuTransferencias(Cuenta &cuenta, Banco &banco) {
       return option;
     case 7:
       return SALIR;
+    default: break;
   }
 
   cin >> cont;
@@ -468,7 +485,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
           "<p class='text-center'>Ingresa la cantidad a depositar</p>"
           "\n"
         );
-      cantidad = pedirValor(100, 50000,  {','}, "Depósito", numbers, true);
+      cantidad = pedirValor(100, 50000, {','}, "Depósito", NUMBERS, true);
       cuenta.agregarDinero(cantidad);
       continuar();
       cout 
@@ -485,7 +502,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
         "<p class='text-center'>Ingresa la cantidad a retirar</p>"
         "\n"
       );
-      cantidad = pedirValor(100, 50000, {','}, "Retiro", numbers, true);
+      cantidad = pedirValor(100, 50000, {','}, "Retiro", NUMBERS, true);
 
       if (cantidad > 2500) 
         if (pedirSuperKey(cuenta, "<p class='text-center'>Una cantidad mayor de 2500 requiere Super-Key</p>")) return option;
@@ -515,6 +532,7 @@ int menuDepRet(Cuenta &cuenta, Banco &banco) {
       return option;
     case 5:
       return SALIR;
+    default: break;
   }
 
   cin >> cont;
@@ -563,7 +581,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
         << "\n"
       ;
 
-      double cantidad = pedirValor(1.0, cuenta.deuda, {','}, "AAAA", numbers, true);
+      double cantidad = pedirValor(1.0, cuenta.deuda, {','}, "AAAA", NUMBERS, true);
 
       if (cantidad > cuenta.dinero) {
         printf(
@@ -602,7 +620,7 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
           << "\n"
         ;
 
-      double cantidad = pedirValor(1.0, cuenta.dinero * 0.7, {','}, "Solicitud Préstamo", numbers, true);
+      double cantidad = pedirValor(1.0, cuenta.dinero * 0.7, {','}, "Solicitud Préstamo", NUMBERS, true);
 
       if (cantidad/cuenta.dinero > 0.7) {
         printf(
@@ -642,13 +660,14 @@ int menuPrestamos(Cuenta &cuenta, Banco &banco) {
       return option;
     case 5:
       return SALIR;
+    default: break;
   }
 
   cin >> cont;
   return option;
 }
 
-bool pedirSuperKey(Cuenta &cuenta, string mensaje) {
+bool pedirSuperKey(Cuenta &cuenta, const string& mensaje) {
   printf(
       "<h2 class='text-center'>Super Key</h2>"
       "%s"
@@ -661,5 +680,5 @@ bool pedirSuperKey(Cuenta &cuenta, string mensaje) {
       &esSuperKeyOCancela_s,  "<h2 class='text-center'>Super Key</h2><p class='text-center'>Super Key Inválida. Ingresa tu Super Key: </p>", "Super Key"
   );
 
-  return key == cansal;
+  return key == CANCEL_OR_EXIT;
 }
