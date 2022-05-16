@@ -32,7 +32,7 @@ public:
     string message = msg->str();
 
     std::ofstream ofs;
-    ofs.open(file, std::ofstream::out | std::ofstream::trunc);
+    ofs.open(file, std::ofstream::out | std::ofstream::trunc | std::ofstream::binary );
 
     vector<uint8_t> bytes;
     for (auto c: message) {
