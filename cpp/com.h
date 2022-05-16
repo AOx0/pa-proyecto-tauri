@@ -50,6 +50,8 @@ public:
     ofs.write(&(to_write[0]), to_write.size());
 
     ofs.close();
+
+    cout << "END SEND" << endl;
   }
 
   void receive(stringstream * msg) {
