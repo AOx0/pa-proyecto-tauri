@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "com.h"
+
 using namespace std;
 
 void clear() {}
@@ -14,22 +16,18 @@ void clear() {}
 /// \param valid_chars El vector de caracteres que están permitidos en la entrada
 /// \param inp El string a validar
 /// \return True si contiene caracteres inválidos
-bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string titulo) {
+bool contieneInvalid(Communicator & c, const vector<char> &valid_chars, const string &inp) {
+
+  stringstream sout;
+  stringstream sin;
   bool invalid = false;
-  int k = 0;
 
   for (int j = 0; j < inp.size(); j++) {
     if (!count(valid_chars.begin(), valid_chars.end(), inp[j])) {
-
       if (!invalid) {
-        if (k == 0) {
-          cout << "<h2 class=\"text-center\">" << titulo << "</h2>";
-          cout << "<p class=\"text-center\">";
-          k++;
-        }
-        cout << "Error: encontrado: '" << inp[j] << "'";
+        sout << "Error: encontrado: '" << inp[j] << "'";
       } else {
-        cout << ", '" << inp[j] << "'";
+        sout << ", '" << inp[j] << "'";
       }
       invalid = true;
 
@@ -38,12 +36,10 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string 
   }
 
   if (invalid) {
-    cout << ":nl:El valor ingresado puede contener los caracteres: ";
-    for (char invalid_char: valid_chars) cout << invalid_char;
-    cout << "</p>\n";
+    sout << "El valor ingresado puede contener los caracteres: ";
+    for (char invalid_char: valid_chars) sout << invalid_char;
+    c.send(&sout);
   }
-
-
 
 
   return invalid;

@@ -16,23 +16,19 @@
         const invoke = window.__TAURI__.invoke;
         const win = window.__TAURI__.window;
 
-        class Validator
-        {
+        class Validator {
 
-            static divmod(x, y)
-            {
-                return [ x % y, Math.floor(x / y)]
+            static divmod(x, y) {
+                return [x % y, Math.floor(x / y)]
             }
 
-            static list(string, charAction = i => { return i })
-            {
+            static list(string, charAction = i => { return i }) {
                 let arr = []
                 Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
                 return arr
             }
 
-            static luhnCheck(card)
-            {
+            static luhnCheck(card) {
                 let num = []
                 let num2 = []
                 let num3 = []
@@ -51,47 +47,41 @@
             }
         }
 
-        function update_body(message, document)
-        {
+        function update_body(message, document) {
 
-            if (message.includes("EXIT"))
-            {
+            if (message.includes("EXIT")) {
                 console.log("Exiting...")
                 invoke('close')
             }
 
-            if (message.includes("change to main"))
-            {
+            if (message.includes("change to main")) {
                 window.location.href = 'main.html';
             }
         }
 
-        function clean_cloese(evt)
-        {
+        function clean_cloese(evt) {
             invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
                 update_body(message, document);
             })
         }
 
-        function reload_double()
-        {
+        function reload_double() {
             var inner = document.getElementById('bd-h').innerHTML;
             if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
-                return;
+            } else {
+                invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
+                    update_body(message, document);
+                })
             }
-            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
-                update_body(message, document);
-            })
+
         }
 
-        function close()
-        {
+        function close() {
             invoke('close')
         }
 
-        window.onload = function ()
-        {
+        window.onload = function () {
             document.getElementById("sub").addEventListener('click', reload_double);
             document.getElementById("cls").addEventListener('click', close);
         }

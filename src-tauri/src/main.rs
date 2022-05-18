@@ -6,8 +6,12 @@
 mod dep;
 
 use lazy_static::*;
+use lcy_lib::{cypher_bytes, decipher_bytes};
 use smartstring::alias::String;
-use std::io::{BufRead, BufReader, Write};
+use std::env::set_current_dir;
+use std::fs::OpenOptions;
+use std::io::{BufRead, BufReader, Read, Write};
+use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use subprocess::*;
 
@@ -37,9 +41,14 @@ lazy_static! {
         dep::colocar_dependencia();
         dep::colocar_iniciales();
 
+        set_current_dir(&*dep::PATH.clone()).unwrap();
+
         Arc::new(Mutex::new(
             Popen::create(
-                &[dep::PATH.join("usuarios")],
+                &[
+                    dep::PATH.join("usuarios"),
+                    PathBuf::from(&format!("{}", dep::PATH.join("file").display())),
+                ],
                 PopenConfig {
                     stdout: Redirection::Pipe,
                     stdin: Redirection::Pipe,
@@ -51,94 +60,89 @@ lazy_static! {
     };
 }
 
+fn send(msg: &str) {
+    {
+        let mut file = OpenOptions::new()
+            .read(false)
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(dep::PATH.join("file"))
+            .unwrap();
+
+        let cifrado = cypher_bytes([msg, "\n"].concat().as_bytes().to_vec());
+
+        file.write_all(&cifrado).unwrap();
+    }
+}
+
+fn receive() -> String {
+    let contenidos = std::fs::read(dep::PATH.join("file")).unwrap();
+
+    let descifrado = decipher_bytes(contenidos);
+
+    std::string::String::from_utf8(descifrado).unwrap().into()
+}
+
 fn write_to_stdin(msg: &str, read: bool) -> Option<std::io::Result<std::string::String>> {
-    println!("Sending {}...", msg);
-    print!("    Locking Popen...");
     let p = PROC.lock().unwrap();
-    print!(" Done!\n");
 
     let lines = if read {
-        print!("    Instancing buffer...");
         Some(BufReader::new(p.stdout.as_ref().unwrap()).lines())
     } else {
-        print!("    Skipping buffer...");
         None
     };
-    print!(" Done!\n");
 
-    print!("    Writing to Popen...");
     p.stdin
         .as_ref()
         .unwrap()
         .write_all(format!("{}\n", msg).as_bytes())
         .unwrap();
-    print!(" Done!\n");
 
-    let r = if read {
-        print!("    Reading buffer...");
+    if read {
         lines.unwrap().next()
     } else {
-        print!("    Skipping buffer read...");
         None
-    };
-    print!(" Done!\n");
-
-    println!("Everything is Done!");
-
-    r
-}
-
-lazy_static! {
-    static ref ERROR: String = String::from("<h1>Ups, something went wrong</h1>");
+    }
 }
 
 #[tauri::command]
 fn handle(msg: &str) -> String {
-    println!("Received: \"{}\". Sending to usuarios...", msg);
+    println!("Beginning of NOTIFICATION");
+    println!("\tContents:\n\n\t\t{}\n", msg);
 
-    if msg.contains("FILES_PLS") {
-        println!("FILES_PLS mmsg. Handling...");
-        write_to_stdin(&dep::obtener_usuarios(), false);
-        return String::new();
-    }
+    send(msg);
+    let result = write_to_stdin("NOTIFICATION", msg != dep::obtener_usuarios());
+    println!("\tReceived: {:?}", result);
 
-    if let Some(Ok(s)) = write_to_stdin(msg, true) {
-        let s: String = s.into();
-
-        println!("FILES_PLS mmsg. Handling...");
-
-        if s.contains("FILES_PLS") {
-            handle(&dep::obtener_usuarios())
-        } else {
-            println!("Received: \"{}\". Sending to front...", s);
-            s
-        }
+    if let Some(Ok(_)) = result {
+        let s = receive();
+        println!("\tResponse contents:\n\n\t\t{}\n", s);
+        s
     } else {
-        ERROR.clone()
+        String::from("ERROR")
     }
 }
 
 #[tauri::command]
 fn handle_multiple(msgs: Vec<&str>) -> String {
-    println!("Received: \"{:?}\". Sending to usuarios...", msgs);
-
     for msg in msgs.iter().enumerate() {
-        println!("{:?}", msg);
+        println!("Beginning of NOTIFICATION");
+        println!("\tContents:\n\n\t\t{}\n", msg.1);
+
         let msg: (usize, &&str) = msg;
-        if let Some(Ok(s)) = write_to_stdin(msg.1, msg.0 == msgs.len() - 1) {
-            let s: String = s.into();
-            println!("Received: \"{}\".", s);
+
+        send(msg.1);
+        let result = write_to_stdin("NOTIFICATION", true);
+        println!("\tReceived: {:?}", result);
+        if let Some(Ok(_)) = result {
             if msg.0 == msgs.len() - 1 {
-                println!("Last received. Sending to front...");
+                let s = receive();
+                println!("\ttResponse contents:\n\n\t\t{}\n", s);
                 return s;
-            } else {
-                println!("Not last received. Skipping...");
             }
         } else if msg.0 == msgs.len() - 1 {
-            println!("Last received. Sending to front...");
-            return ERROR.clone();
-        } else {
-            println!("Error. Skipping...");
+            return String::from("ERROR");
         }
     }
 
@@ -148,7 +152,7 @@ fn handle_multiple(msgs: Vec<&str>) -> String {
 fn main() {
     println!("Init...");
     initialize(&PROC);
-    handle("FILES_PLS");
+    handle(&dep::obtener_usuarios());
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![close, handle, handle_multiple])

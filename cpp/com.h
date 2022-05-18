@@ -22,14 +22,26 @@ extern "C" DynArray cypher_bytes(uint8_t* n, uint32_t l);
 extern "C" DynArray decipher_bytes(uint8_t* n, uint32_t l);
 
 class Communicator {
-private:
-  string file;
-
 public:
-  explicit Communicator(string file) : file(move(file)) {}
+  string file;
+  string log_file;
+  explicit Communicator(string file) : file(move(file)), log_file(file + ".log") {
+    ofstream f;
+    f.open("/Users/alejandro/pa-proyecto-tauri/cpp/l", ios::app);
+    f << this->file << endl;
+    f << this->log_file << endl;
+    f.close();
+  
+  }
 
   void send(stringstream * msg) {
+    ofstream f;
+    f.open(log_file, ios::app);
     string message = msg->str();
+
+    f << "Enviado: " << message << endl;
+
+    f.close();
 
     std::ofstream ofs;
     ofs.open(file, std::ofstream::out | std::ofstream::trunc | std::ofstream::binary );
@@ -51,14 +63,25 @@ public:
 
     ofs.close();
 
+    msg->str(std::string()); 
+
     cout << "END SEND" << endl;
   }
 
   void receive(stringstream * msg) {
+    msg->str(std::string()); 
+    string signal;
+
+     ofstream f;
+    f.open(log_file, ios::app );
+    
+    getline(cin, signal);
+
+    f << "Recibido notificación: " << signal << endl;
+
     std::ifstream ifs;
     ifs.open(file, ifstream::binary);
 
-    vector<char> written = vector<char>();
     vector<uint8_t> bytes;
 
     vector<char> data = vector<char>(istreambuf_iterator<char>(ifs),(istreambuf_iterator<char>()));
@@ -69,6 +92,8 @@ public:
       bytes.push_back(charArray[i]);
     }
 
+    f << "Descifrando " << &(bytes[0]) <<"  " << bytes.size() << " (bytes)" << endl;
+
     DynArray descifrado = decipher_bytes(&(bytes[0]), bytes.size());
 
     string recibido;
@@ -76,6 +101,11 @@ public:
     for (int i=0;i <descifrado.length; i++) {
       recibido.push_back((char)descifrado.array[i]);
     }
+
+
+    f << "Recibido: " << recibido << endl;
+
+    f.close();
 
     msg->str(recibido);
   }

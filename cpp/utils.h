@@ -20,7 +20,7 @@ string quitar(string &txt, char patron);
 /// \param valid_chars El vector de caracteres que están permitidos en la entrada
 /// \param inp El string a validar
 /// \return True si contiene caracteres inválidos
-bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string titulo);
+bool contieneInvalid(Communicator & c, const vector<char> &valid_chars, const string &inp);
 
 
 /// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
@@ -35,8 +35,10 @@ bool contieneInvalid(const vector<char> &valid_chars, const string &inp, string 
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
 template<typename V>
-string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, const string& titulo,
+string pedirValor(Communicator & c, V dep, bool (*func)(string &, V &), const string &on_error, const string& titulo,
                   const vector<char> &validos = {}, bool quitar_espacios = false) {
+  stringstream sout;
+  stringstream sin;
   string inp;
   bool valid = false;
 
@@ -44,28 +46,29 @@ string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, co
     // cout << msg;
 
     // De acuerdo a https://programmerclick.com/article/626810031/ hay que usar ambos a la vez
-    cin.clear();
-    cin.sync();
+    sin.clear();
+    sin.sync();
 
-    getline(cin, inp, '\n');
+    c.receive(&sin);
+    getline(sin, inp, '\n');
 
     if (quitar(inp, ' ').empty()) continue;
 
     if (quitar_espacios) inp = quitar(inp, ' ');
 
     if (!validos.empty())
-      if (contieneInvalid(validos, inp, titulo)) continue;
+      if (contieneInvalid(c, validos, inp)) continue;
 
-    if (!func(inp, dep))
-      cout << on_error << endl;
-    else valid = true;
+    if (!func(inp, dep)) {
+        sout << on_error << endl;
+        c.send(&sout);
+    } else valid = true;
 
   } while (!valid);
 
   return inp;
 }
 
-
 /// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
 /// Función que pide un valor, pensado para strings solamente. La función se ejecuta indefinidamente hasta que
 /// la función verificadora que se pasa como argumento devuelva true. Se pide un valor hasta intentos veces,
@@ -79,76 +82,23 @@ string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, co
 /// \param validos El arreglo de caracteres válidos que pueden estar contenidos en el msg
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
-template<typename V>
-string pedirValor(V dep, bool (*func)(string &, V &), const string &on_error, const string& titulo, int intentos,
-                  const vector<char> &validos = {}, bool quitar_espacios = false) {
+string pedirValorX(Communicator & c, const vector<char> &validos = {}, bool quitar_espacios = false) {
+  stringstream sout;
+  stringstream sin;
   string inp;
   ofstream file;
 
-  do {
-    // cout << msg;
+  c.receive(&sin);
+  sin >> inp;
+  sin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    cin >> inp;
+  if (quitar_espacios) inp = quitar(inp, ' ');
 
-    if (quitar(inp, ' ').empty()) continue;
+  if (!validos.empty())
+    if (contieneInvalid(c, validos, inp)) return "";
 
-    if (quitar_espacios) inp = quitar(inp, ' ');
+  return inp;
 
-    if (!validos.empty())
-      if (contieneInvalid(validos, inp, titulo)) continue;
-
-    file.open("log_ususarios.txt", std::ios::app);
-    file << "Verificando...\n";
-    file.close();
-
-    if (!func(inp, dep)) {
-      cout << on_error;
-      if (intentos != 1) { cout << " (" << intentos - 1 << " intentos restantes)"; }
-      cout << "\n";
-    } else return inp;
-
-    intentos--;
-  } while (intentos > 0);
-
-  cout << "Demasiados intentos. Terminando el programa..." << endl;
-  exit(0);
-}
-
-/// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
-/// Función que pide un valor, pensado para strings solamente. La función se ejecuta indefinidamente hasta que
-/// la función verificadora que se pasa como argumento devuelva true. Se pide un valor hasta intentos veces,
-/// terminando el programa si se agotan los intentos
-/// \tparam V El tipo de dep
-/// \param dep La variable de la que depende que la función verificadora funcione. Pensado para instancias de Banco y Cuenta
-/// \param msg El mensaje mostrado al usuario para pedir el dato
-/// \param func Un apuntador a una función que devuelva true/false
-/// \param on_error El mensaje a mostrar cuando ocurra algún error
-/// \param intentos El número de intentos permitidos para ingresar un valor válido
-/// \param validos El arreglo de caracteres válidos que pueden estar contenidos en el msg
-/// \param quitar_espacios Si la función debería ignorar los espacios o no
-/// \return El valor ingresado, ya validado por la función func, que depende de dep de tipo V
-string pedirValor(const string &on_error, const string& titulo, const vector<char> &validos = {}, bool quitar_espacios = false) {
-  string inp;
-  ofstream file;
-
-  while (true) {
-    // cout << msg;
-
-    cin >> inp;
-
-    if (quitar(inp, ' ').empty()) continue;
-
-    if (quitar_espacios) inp = quitar(inp, ' ');
-
-    if (!validos.empty())
-      if (contieneInvalid(validos, inp, titulo)) continue;
-
-    file.open("log_ususarios.txt", std::ios::app);
-    file << "Verificando...\n";
-    file.close();
-
-    return inp;
-  }
 }
 
 
@@ -160,21 +110,26 @@ string pedirValor(const string &on_error, const string& titulo, const vector<cha
 /// \param max El valor máximo posible a ser ingresado
 /// \return El valor ingresado ya validado
 template<typename T>
-T pedirValor(T min, T max) {
+T pedirValor(Communicator & c, T min, T max) {
+
+  stringstream sout;
+  stringstream sin;
   T i;
   string inp;
   bool valid = false;
 
   do {
-    // cout << msg;
-    cin >> inp;
+    c.receive(&sin);
+    sin >> inp;
 
     if (quitar(inp, ' ').empty()) continue;
     istringstream in(inp);
 
     in >> i;
-    if (i < min || i > max)
-      cout << "Error: El valor " << i << " debe estar en el rango " << min << "..=" << max << endl;
+    if (i < min || i > max) {
+      sout << "Error: El valor " << i << " debe estar en el rango " << min << "..=" << max << endl;
+      c.send(&sout);
+    }
     else valid = true;
 
   } while (!valid);
@@ -194,34 +149,36 @@ T pedirValor(T min, T max) {
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado ya validado
 template<typename T>
-T pedirValor(T min, T max, const vector<char> &quitar_chars, const string& titulo, const vector<char> &valid_chars,
+T pedirValor(Communicator & c, T min, T max, const vector<char> &quitar_chars, const string& titulo, const vector<char> &valid_chars,
              bool quitar_espacios = false) {
+  stringstream sout;
+  stringstream sin;
   T i;
   string inp;
   bool valid = false;
 
   do {
-    // cout << msg;
-    cin >> inp;
+    c.receive(&sin);
+    sin >> inp;
 
     if (quitar(inp, ' ').empty()) continue;
 
     if (quitar_espacios) inp = quitar(inp, ' ');
 
     for (int h = 0; h < quitar_chars.size(); h++) {
-      // cout << "Eliminando " << quitar_chars[h] << endl;
       inp = quitar(inp, quitar_chars[h]);
     }
 
-    if (contieneInvalid(valid_chars, inp, titulo)) continue;
+    if (contieneInvalid(c, valid_chars, inp)) continue;
 
     istringstream in(inp);
 
     in >> i;
     if (i < min || i > max) {
-      cout << "<h2 class='text-center'>" << titulo << "r</h2>";
-      cout << "<p class='text-center'>Error: El valor debe estar en el rango " << min << "..=" << max
+      sout << "<h2 class='text-center'>" << titulo << "r</h2>";
+      sout << "<p class='text-center'>Error: El valor debe estar en el rango " << min << "..=" << max
            << "</br>Ingresa la cantidad a transferir:</p>\n";
+      c.send(&sout);
     } else valid = true;
 
   } while (!valid);
@@ -233,11 +190,14 @@ T pedirValor(T min, T max, const vector<char> &quitar_chars, const string& titul
 /// \param msg El mensaje mostrado al usuario para pedir el dato
 /// \param quitar_espacios Si la función debería ignorar los espacios o no
 /// \return El valor ingresado
-string pedirValor(bool quitar_espacios = false) {
+string pedirValor(Communicator & c, bool quitar_espacios = false) {
+
+  stringstream sout;
+  stringstream sin;
   string inp;
 
-  // cout << msg;
-  cin >> inp;
+  c.receive(&sin);
+  sin >> inp;
 
   if (quitar_espacios) inp = quitar(inp, ' ');
 

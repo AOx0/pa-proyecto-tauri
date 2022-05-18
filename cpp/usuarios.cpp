@@ -10,6 +10,7 @@
 #define SALIR 50
 #define CANCEL_OR_EXIT "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
+/*
 // El menú principal. Lo muestra y se encarga de pedir una opción y ejecutarla
 int menuPrincipal(Cuenta &cuenta, Banco &banco);
 
@@ -26,126 +27,152 @@ int menuDepRet(Cuenta &cuenta, Banco &banco);
 int menuPrestamos(Cuenta &cuenta, Banco &banco);
 
 bool pedirSuperKey(Cuenta &cuenta, const string& mensaje =  std::string(""));
+ */
 
-vector<CuentaRaw> pedir_index();
+vector<CuentaRaw> pedir_index(Communicator & c);
 
-int main() {
+int main(int argc, char *argv[]) {
   {
+
     string nul;
     double basura;
 
-    stringstream f;
-    stringstream g;
+    stringstream sout;
+    stringstream sin;
 
-    f << "Hola, estoy cifrado";
+    Communicator c = Communicator(argv[1]);
 
-    Communicator c = Communicator("file");
+    ofstream ou;
+    ou.open(c.log_file);
 
-    c.send(&f);
+    string files_names_raw, name, path, sub;
+    vector<CuentaRaw> cuentas = vector<CuentaRaw>();
+    
+    c.receive(&sin);
+    getline(sin, files_names_raw);
 
-    c.receive(&g);
+    ou << "Archivos: " << files_names_raw << endl;
 
-    string result;
-    getline(g, result);
+    istringstream in_names(files_names_raw);
+    while(getline(in_names, sub, ';')){
+      istringstream in_data(sub);
 
-    cout << result;
+      getline(in_data, name, '*');
+      getline(in_data, path, '*');
 
-    Banco banco = Banco(pedir_index());
+      CuentaRaw cuenta_raw = { name, path };
+      cuentas.push_back(cuenta_raw);
+      ou << cuenta_raw.cuenta << endl;
+    }
+
+    Banco banco = Banco(cuentas);
 
     while (true)
     {
-      string tarjeta = pedirValor("", "Log In", NUMBERS, true);
+      ou << 22 << endl;
+      string tarjeta = pedirValorX(c, NUMBERS, true);
+      cout << 1 << endl;
+      ou << 3 << " : " << tarjeta << endl;
 
       if (tarjeta == CANCEL_OR_EXIT)
       {
-        cout << "EXIT";
+        sout << "EXIT";
+        c.send(&sout);
         break;
       }
 
-      string contra = pedirValor(
-          "<h2 class='text-center'>Log In</h2><p class='text-center'>Contraseña inválida</p>",
-          "Log In",
-          {},
-          false
-      );
+      string contra = pedirValorX(c, {}, false);
+       ou << 4 << " : " << contra << endl;
 
 
+      ou << 5 << endl;
       Cuenta cuenta;
       if (tarjeta == CANCEL_OR_EXIT || contra == CANCEL_OR_EXIT)
       {
-        cout << "EXIT";
+        sout << "EXIT";
+        c.send(&sout);
         break;
       }
 
+
+      ou << 6 << endl;
       if (!cuentaExiste_o_exit_s(tarjeta, banco))
       {
-        cout << "No existe la cuenta\n";
+        sout << "No existe la cuenta\n";
         continue;
       }
-
       else
       {
         cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
         if (!contraEs_s(contra, cuenta))
         {
-          cout << "Contraseña inválida\n";
+          sout << "Contraseña inválida\n";
           continue;
+        } else {
+          sout << "change to main" << endl;
         }
       }
-      //Intentar que carguen los datos
+      c.send(&sout);
+      
+      
+      ou << 7 << endl;
+      c.receive(&sin);
+      sin>>nul;
 
-      cout << "change to main" << endl;
-      ;
-      cin>>nul;
       string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta, salida = CANCEL_OR_EXIT;
       double dinero = cuenta.dinero, deuda = cuenta.deuda;
-      cout<<nombre<<" "<<apellido<<endl;
-      cin>>nul;
-      cout<<"$"<<dinero<<endl;
-      cin>>nul;
-      cout<<tarjetas<<endl;
-      cin>>nul;
-      cout<<"$"<<deuda<<endl;
-      cin>>nul;
+      
+      ou << 10 << endl;
+      sout<<nombre<<" "<<apellido<<endl;
+      c.send(&sout);
+
+      ou << 11 << endl;
+      c.receive(&sin);
+      sin>>nul;
+
+      ou << 12 << endl;
+      sout<<"$"<<dinero<<endl;
+      c.send(&sout);
+
+      ou << 13 << endl;
+      c.receive(&sin);
+      sin>>nul;
+
+      ou << 14 << endl;
+      sout<<tarjetas<<endl;
+      c.send(&sout);
+      
+      ou << 15 << endl;
+      c.receive(&sin);
+      sin>>nul;
+
+      ou << 16 << endl;
+      sout<<"$"<<deuda<<endl;
+      c.send(&sout);
+
+      ou << 17 << endl;
+      c.receive(&sin);
+      sin>>nul;
 
     //Terminar prueba
     //Salir del drashboard
       if (salida == CANCEL_OR_EXIT)
       {
-          cout<<"EXIT";
-          break;
+        sout << "EXIT";
+        c.send(&sout);
+        break;
       }
-      cin>>nul;
+      c.receive(&sin);
+      sin>>nul;
     //termina el bucle
 
     }
   }
 }
 
-vector<CuentaRaw> pedir_index() {
-  string nul;
-
-  string files_names_raw, name, path, sub;
-  vector<CuentaRaw> cuentas = vector<CuentaRaw>();
-
-  getline(cin, files_names_raw);
-
-  istringstream in_names(files_names_raw);
-  while(getline(in_names, sub, ';')){
-    istringstream in_data(sub);
-
-    getline(in_data, name, '*');
-    getline(in_data, path, '*');
-
-    CuentaRaw cuenta_raw = { name, path };
-    cuentas.push_back(cuenta_raw);
-  }
-
-  return cuentas;
-}
-
+/*
 int menuPrincipal(Cuenta &cuenta, Banco &banco) {
-  /*printf(
+  printf(
       "<h2 class='text-center'>Súper Linea</h2></br>"
       "<p class='text-center'>Submenus</br>Opciones con el símbolo * pueden requerir su Super-key</p>"
       "<div class='text-center' class='mb-3'><button id='no1' class='btn btn-primary'>Ver estado</button></div>"
@@ -158,7 +185,7 @@ int menuPrincipal(Cuenta &cuenta, Banco &banco) {
       "</br>"
       "<div class='text-center' class='mb-3'><button id='no5' class='btn btn-primary'>Salir</button></div>"
       "</p>\n"
-  );*/
+  );
 
   int option = pedirValor(1, SALIR), val;
 
@@ -682,3 +709,5 @@ bool pedirSuperKey(Cuenta &cuenta, const string& mensaje) {
 
   return key == CANCEL_OR_EXIT;
 }
+
+*/
