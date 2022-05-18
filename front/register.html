@@ -11,9 +11,110 @@
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <script>
+        const invoke = window.__TAURI__.invoke;
+        const win = window.__TAURI__.window;
+
+        class Validator {
+            static divmod(x, y) {
+                return [x % y, Math.floor(x / y)]
+            }
+
+            static list(string, charAction = i => { return i }) {
+                let arr = []
+                Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
+                return arr
+            }
+
+            static luhnCheck(card) {
+                let num = []
+                let num2 = []
+                let num3 = []
+                let sum = 0;
+
+                num = this.list(card, char => { return Number(char) })
+                num = [].concat(num).reverse()
+
+                for (var i = 0; i < num.length; i = i + 2) { num2.push(num[i]) }
+                for (var i = 1; i < num.length; i = i + 2) { num3.push(num[i]) }
+
+                num3.forEach(d => { const qr = this.divmod(d * 2, 10); num2.push(qr[0] + qr[1]); })
+                num2.forEach(digit => { sum += digit })
+
+                return sum % 10 === 0
+            }
+        }
+
+        function update_body(message, document) {
+
+            if (message.includes("EXIT")) {
+                console.log("Exiting...")
+                invoke('close')
+            }
+
+            if (message.includes("change to main")) {
+                window.location.href = 'main.html';
+            }
+        }
+
+        function clean_cloese(evt) {
+            invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
+                update_body(message, document);
+            })
+        }
+
+        function reload_double() {
+            var inner = document.getElementById('bd-h').innerHTML;
+            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
+                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
+                return;
+            }
+            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
+                update_body(message, document);
+            })
+        }
+
+        function close() {
+            invoke('close')
+        }
+        //intento 1
+        window.onload = function ()
+        {
+        }
+
+
+
+
+    </script>
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-primary" style="background: none; border-radius: 20px;">
+    <p id="bd"></p>
+    <nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
+        <div class="container">
+            <div data-tauri-drag-region id="title-bar">
+                <div class="cloese">
+                    <button id="cls" onclick="clean_cloese()">
+                    </button>
+                </div>
+                <div class="cloese">
+                    <button id="min" onclick="
+                    win.appWindow.minimize()
+                  ">
+                    </button>
+                </div>
+
+                <div class="cloese">
+                    <button id="max" onclick="
+                    win.appWindow.maximize()
+                    ">
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="card shadow-lg o-hidden border-0 my-5">
             <div class="card-body p-0">
@@ -40,7 +141,7 @@
                                 <hr>
                             </form>
                             <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                            <div class="text-center"><a class="small" href="login.html">Already have an account? Login!</a></div>
+                            <div class="text-center"><a class="small" href="index.html">Already have an account? Login!</a></div>
                         </div>
                     </div>
                 </div>
