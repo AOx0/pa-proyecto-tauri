@@ -31,6 +31,8 @@ bool pedirSuperKey(Cuenta &cuenta, const string& mensaje =  std::string(""));
 
 vector<CuentaRaw> pedir_index(Communicator & c);
 
+void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream &sout, stringstream &sin);
+
 int main(int argc, char *argv[]) {
   {
 
@@ -107,7 +109,8 @@ int main(int argc, char *argv[]) {
         }
       }
       c.send(&sout);
-    
+
+      string estado;
       while (true)
       {
         /* code */
@@ -117,38 +120,10 @@ int main(int argc, char *argv[]) {
 
         if (nul == "Change_To_Main")
         {
-          sout << "Changed to main\n";
-          c.send(&sout);
-          string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
-          double dinero = cuenta.dinero, deuda = cuenta.deuda;
-          
-          c.receive(&sin);
-          sin>>nul;
-          
-          sout<<nombre<<" "<<apellido<<endl;
-          c.send(&sout);
-
-          c.receive(&sin);
-          sin>>nul;
-
-          sout<<"$"<<dinero<<endl;
-          c.send(&sout);
-
-          c.receive(&sin);
-          sin>>nul;
-
-          sout<<tarjetas<<endl;
-          c.send(&sout);
-          
-          c.receive(&sin);
-          sin>>nul;
-
-          sout<<"$"<<deuda<<endl;
-          c.send(&sout);
+          load_main(c, cuenta, nul, sout, sin);
+          estado = "main";
         }
-
-      
-
+        
         //Terminar prueba
         //Salir del dashboard
         else if (nul == CANCEL_OR_EXIT)
@@ -162,6 +137,37 @@ int main(int argc, char *argv[]) {
       }
     }
   }
+}
+
+void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream &sout, stringstream &sin) {
+  sout << "Changed to main\n";
+  c.send(&sout);
+  string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
+  double dinero = cuenta.dinero, deuda = cuenta.deuda;
+
+  c.receive(&sin);
+  sin>>nul;
+
+  sout<<nombre<<" "<<apellido<<endl;
+  c.send(&sout);
+
+  c.receive(&sin);
+  sin>>nul;
+
+  sout<<"$"<<dinero<<endl;
+  c.send(&sout);
+
+  c.receive(&sin);
+  sin>>nul;
+
+  sout<<tarjetas<<endl;
+  c.send(&sout);
+
+  c.receive(&sin);
+  sin>>nul;
+
+  sout<<"$"<<deuda<<endl;
+  c.send(&sout);
 }
 
 /*
