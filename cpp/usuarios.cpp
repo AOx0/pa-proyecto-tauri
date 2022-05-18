@@ -107,49 +107,59 @@ int main(int argc, char *argv[]) {
         }
       }
       c.send(&sout);
-      
-      c.receive(&sin);
-      sin>>nul;
-
-      string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta, salida = CANCEL_OR_EXIT;
-      double dinero = cuenta.dinero, deuda = cuenta.deuda;
-      
-      sout<<nombre<<" "<<apellido<<endl;
-      c.send(&sout);
-
-      c.receive(&sin);
-      sin>>nul;
-
-      sout<<"$"<<dinero<<endl;
-      c.send(&sout);
-
-      c.receive(&sin);
-      sin>>nul;
-
-      sout<<tarjetas<<endl;
-      c.send(&sout);
-      
-      c.receive(&sin);
-      sin>>nul;
-
-      sout<<"$"<<deuda<<endl;
-      c.send(&sout);
-
-      c.receive(&sin);
-      sin>>nul;
-
-    //Terminar prueba
-    //Salir del drashboard
-      if (salida == CANCEL_OR_EXIT)
+    
+      while (true)
       {
-        sout << "EXIT";
-        c.send(&sout);
-        break;
-      }
-      c.receive(&sin);
-      sin>>nul;
-    //termina el bucle
+        /* code */
+      
+        c.receive(&sin);
+        sin>>nul;
 
+        if (nul == "Change_To_Main")
+        {
+          sout << "Changed to main\n";
+          c.send(&sout);
+          string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
+          double dinero = cuenta.dinero, deuda = cuenta.deuda;
+          
+          c.receive(&sin);
+          sin>>nul;
+          
+          sout<<nombre<<" "<<apellido<<endl;
+          c.send(&sout);
+
+          c.receive(&sin);
+          sin>>nul;
+
+          sout<<"$"<<dinero<<endl;
+          c.send(&sout);
+
+          c.receive(&sin);
+          sin>>nul;
+
+          sout<<tarjetas<<endl;
+          c.send(&sout);
+          
+          c.receive(&sin);
+          sin>>nul;
+
+          sout<<"$"<<deuda<<endl;
+          c.send(&sout);
+        }
+
+      
+
+        //Terminar prueba
+        //Salir del dashboard
+        else if (nul == CANCEL_OR_EXIT)
+        {
+          sout << "EXIT";
+          c.send(&sout);
+          break;
+        }
+        
+        //termina el bucle
+      }
     }
   }
 }

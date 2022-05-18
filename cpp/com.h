@@ -39,7 +39,7 @@ public:
     f.open(log_file, ios::app);
     string message = msg->str();
 
-    f << "Enviado: " << message << endl;
+    f << "Enviando: " << message << endl;
 
     f.close();
 
@@ -51,6 +51,8 @@ public:
       bytes.push_back((uint8_t)c);
     }
 
+
+    f << "Cifrando mensaje" << endl;
     DynArray cifrado = cypher_bytes(&(bytes[0]), bytes.size());
 
     vector<char> to_write = vector<char>();
@@ -92,7 +94,7 @@ public:
       bytes.push_back(charArray[i]);
     }
 
-    f << "Descifrando " << &(bytes[0]) <<"  " << bytes.size() << " (bytes)" << endl;
+    f << "Descifrando " << bytes.size() << " bytes:" << endl;
 
     DynArray descifrado = decipher_bytes(&(bytes[0]), bytes.size());
 
@@ -103,7 +105,7 @@ public:
     }
 
 
-    f << "Recibido: " << recibido << endl;
+    f << "Contenidos: " << recibido << endl;
 
     f.close();
 
