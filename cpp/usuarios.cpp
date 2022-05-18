@@ -69,23 +69,19 @@ int main(int argc, char *argv[]) {
 
     while (true)
     {
-      ou << 22 << endl;
       string tarjeta = pedirValorX(c, NUMBERS, true);
-      cout << 1 << endl;
-      ou << 3 << " : " << tarjeta << endl;
 
       if (tarjeta == CANCEL_OR_EXIT)
       {
         sout << "EXIT";
         c.send(&sout);
         break;
+      } else {
+        cout << 1 << endl;
       }
 
       string contra = pedirValorX(c, {}, false);
-       ou << 4 << " : " << contra << endl;
 
-
-      ou << 5 << endl;
       Cuenta cuenta;
       if (tarjeta == CANCEL_OR_EXIT || contra == CANCEL_OR_EXIT)
       {
@@ -94,8 +90,6 @@ int main(int argc, char *argv[]) {
         break;
       }
 
-
-      ou << 6 << endl;
       if (!cuentaExiste_o_exit_s(tarjeta, banco))
       {
         sout << "No existe la cuenta\n";
@@ -114,43 +108,33 @@ int main(int argc, char *argv[]) {
       }
       c.send(&sout);
       
-      
-      ou << 7 << endl;
       c.receive(&sin);
       sin>>nul;
 
       string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta, salida = CANCEL_OR_EXIT;
       double dinero = cuenta.dinero, deuda = cuenta.deuda;
       
-      ou << 10 << endl;
       sout<<nombre<<" "<<apellido<<endl;
       c.send(&sout);
 
-      ou << 11 << endl;
       c.receive(&sin);
       sin>>nul;
 
-      ou << 12 << endl;
       sout<<"$"<<dinero<<endl;
       c.send(&sout);
 
-      ou << 13 << endl;
       c.receive(&sin);
       sin>>nul;
 
-      ou << 14 << endl;
       sout<<tarjetas<<endl;
       c.send(&sout);
       
-      ou << 15 << endl;
       c.receive(&sin);
       sin>>nul;
 
-      ou << 16 << endl;
       sout<<"$"<<deuda<<endl;
       c.send(&sout);
 
-      ou << 17 << endl;
       c.receive(&sin);
       sin>>nul;
 
