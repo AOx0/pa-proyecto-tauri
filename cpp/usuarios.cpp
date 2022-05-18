@@ -120,10 +120,19 @@ int main(int argc, char *argv[]) {
 
         if (nul == "Change_To_Main")
         {
+          sout << "Changed to main\n";
+          c.send(&sout);
           load_main(c, cuenta, nul, sout, sin);
           estado = "main";
         }
-        
+
+        if (nul == "Change_To_Table") {
+          sout << "Changed to table\n";
+          c.send(&sout);
+
+          estado = "table";
+        }
+
         //Terminar prueba
         //Salir del dashboard
         else if (nul == CANCEL_OR_EXIT)
@@ -140,8 +149,6 @@ int main(int argc, char *argv[]) {
 }
 
 void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream &sout, stringstream &sin) {
-  sout << "Changed to main\n";
-  c.send(&sout);
   string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
   double dinero = cuenta.dinero, deuda = cuenta.deuda;
 

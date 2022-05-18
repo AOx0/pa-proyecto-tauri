@@ -26,8 +26,7 @@ void Cuenta::guardar_usuario() {
 
   int i=0;
   for (string & tar : tarjetas_registradas) {
-    if (i > 0) cout << endl;
-    f <<endl; // ARREGLO DE BUG EN TEORÍA AL GUARDAR TARJETAS
+    if (i > 0) f << endl;
     f << tar;
   }
 
