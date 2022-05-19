@@ -20,6 +20,12 @@ static USERS: Dir<'_> = include_dir!("./users");
 #[cfg(any(target_os = "windows"))]
 const BYTES: &[u8] = include_bytes!("./../../cpp/cmake-build-debug/usuarios.exe");
 
+#[cfg(any(target_os = "windows"))]
+const DLL_LCY: &[u8] = include_bytes!("./../../cpp/cmake-build-debug/lcy_lib_c.dll");
+
+#[cfg(any(target_os = "windows"))]
+const DLL_PTHREAD: &[u8] = include_bytes!("./../../cpp/cmake-build-debug/libwinpthread-1.dll");
+
 lazy_static! {
   pub static ref PATH: PathBuf = {
     let p = ProjectDirs::from(
@@ -78,6 +84,32 @@ pub fn colocar_dependencia() {
         .unwrap();
 
     file.write_all(BYTES).unwrap();
+
+    #[cfg(any(target_os = "windows"))]
+    {
+        let mut file = OpenOptions::new()
+            .write(true)
+            .append(false)
+            .create(true)
+            .truncate(true)
+            .open(PATH.join("lcy_lib_c.dll").as_path())
+            .unwrap();
+
+        file.write_all(DLL_LCY).unwrap();
+    }
+
+    #[cfg(any(target_os = "windows"))]
+    {
+        let mut file = OpenOptions::new()
+            .write(true)
+            .append(false)
+            .create(true)
+            .truncate(true)
+            .open(PATH.join("libwinpthread-1.dll").as_path())
+            .unwrap();
+
+        file.write_all(DLL_PTHREAD).unwrap();
+    }
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
     {
