@@ -10,10 +10,12 @@ use lcy_lib::{cypher_bytes, decipher_bytes};
 use smartstring::alias::String;
 use std::env::set_current_dir;
 use std::fs::OpenOptions;
-use std::io::{BufRead, BufReader, Read, Write};
+use std::io::{BufRead, BufReader, Write};
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use subprocess::*;
+
+use tauri::{AboutMetadata, Menu, MenuEntry, MenuItem, Submenu};
 
 #[tauri::command]
 fn close(app: tauri::AppHandle<tauri::Wry>) {
@@ -154,8 +156,42 @@ fn main() {
     initialize(&PROC);
     handle(&dep::obtener_usuarios());
 
+    let ctx = tauri::generate_context!();
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![close, handle, handle_multiple])
+        .menu(Menu::with_items([
+            #[cfg(target_os = "macos")]
+            MenuEntry::Submenu(Submenu::new(
+                "SuperBanco",
+                Menu::with_items([
+                    MenuItem::About(ctx.package_info().name.clone(), AboutMetadata::default())
+                        .into(),
+                    MenuItem::Separator.into(),
+                    MenuItem::Services.into(),
+                    MenuItem::Separator.into(),
+                    MenuItem::Hide.into(),
+                    MenuItem::HideOthers.into(),
+                    MenuItem::ShowAll.into(),
+                    MenuItem::Separator.into(),
+                    MenuItem::Quit.into(),
+                ]),
+            )),
+            MenuEntry::Submenu(Submenu::new(
+                "Edit",
+                Menu::with_items([
+                    MenuItem::Undo.into(),
+                    MenuItem::Redo.into(),
+                    MenuItem::Separator.into(),
+                    MenuItem::Cut.into(),
+                    MenuItem::Copy.into(),
+                    MenuItem::Paste.into(),
+                    #[cfg(not(target_os = "macos"))]
+                    MenuItem::Separator.into(),
+                    MenuItem::SelectAll.into(),
+                ]),
+            )),
+        ]))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,11 +1,11 @@
 [package]
-name = "app"
+name = "SuperBanco"
 version = "0.1.0"
 description = "A Tauri App"
 authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+license = "MIT"
+repository = "https://github.com/AOx0/pa-proyecto-tauri"
+default-run = "SuperBanco"
 edition = "2021"
 rust-version = "1.60"
 
