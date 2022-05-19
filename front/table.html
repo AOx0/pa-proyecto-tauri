@@ -81,6 +81,7 @@
         window.onload = function ()
         {
             invoke('handle',{msg: "Change_To_Table"}).then((_) => {})
+            invoke('handle',{msg: "Pidiendo_Tarjetas"}).then((message) => {document.getElementById("tabla-tarjetas").innerHTML=`${message}`;})
         }
 
 
@@ -153,11 +154,7 @@
                                 <th>Cuenta</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>Sara</td>
-                                <td>$162,700</td>
-                            </tr>
+                            <tbody id="tabla-tarjetas">
                             </tbody>
 
                         </table>

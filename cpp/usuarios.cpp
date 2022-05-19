@@ -131,6 +131,21 @@ int main(int argc, char *argv[]) {
           c.send(&sout);
 
           estado = "table";
+
+          c.receive(&sin);
+
+          for (auto & t: cuenta.tarjetas_registradas) {
+            Cuenta cuenta_registrada = banco.buscarCuentaRaw(t).encontrada;
+            sout << "<tr><td>" << cuenta_registrada.nombre << " " << cuenta_registrada.apellido << "</td><td>" << cuenta_registrada.tarjeta << "</td></tr>\n";
+          }
+
+          if (cuenta.tarjetas_registradas.size() == 0) {
+            sout << "<tr><td>No hay cuentas registradas</td><td></td></tr>\n";
+          } else {
+            sout << endl;
+          }
+
+          c.send(&sout);
         }
 
         //Terminar prueba
@@ -153,25 +168,21 @@ void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream 
   double dinero = cuenta.dinero, deuda = cuenta.deuda;
 
   c.receive(&sin);
-  sin>>nul;
 
   sout<<nombre<<" "<<apellido<<endl;
   c.send(&sout);
 
   c.receive(&sin);
-  sin>>nul;
 
   sout<<"$"<<dinero<<endl;
   c.send(&sout);
 
   c.receive(&sin);
-  sin>>nul;
 
   sout<<tarjetas<<endl;
   c.send(&sout);
 
   c.receive(&sin);
-  sin>>nul;
 
   sout<<"$"<<deuda<<endl;
   c.send(&sout);
