@@ -156,42 +156,54 @@ fn main() {
     initialize(&PROC);
     handle(&dep::obtener_usuarios());
 
-    let ctx = tauri::generate_context!();
+    #[cfg(target_os = "macos")]
+    {
+        let ctx = tauri::generate_context!();
 
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![close, handle, handle_multiple])
-        .menu(Menu::with_items([
-            #[cfg(target_os = "macos")]
-            MenuEntry::Submenu(Submenu::new(
-                "SuperBanco",
-                Menu::with_items([
-                    MenuItem::About(ctx.package_info().name.clone(), AboutMetadata::default())
-                        .into(),
-                    MenuItem::Separator.into(),
-                    MenuItem::Services.into(),
-                    MenuItem::Separator.into(),
-                    MenuItem::Hide.into(),
-                    MenuItem::HideOthers.into(),
-                    MenuItem::ShowAll.into(),
-                    MenuItem::Separator.into(),
-                    MenuItem::Quit.into(),
-                ]),
-            )),
-            MenuEntry::Submenu(Submenu::new(
-                "Edit",
-                Menu::with_items([
-                    MenuItem::Undo.into(),
-                    MenuItem::Redo.into(),
-                    MenuItem::Separator.into(),
-                    MenuItem::Cut.into(),
-                    MenuItem::Copy.into(),
-                    MenuItem::Paste.into(),
-                    #[cfg(not(target_os = "macos"))]
-                    MenuItem::Separator.into(),
-                    MenuItem::SelectAll.into(),
-                ]),
-            )),
-        ]))
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        tauri::Builder::default()
+            .invoke_handler(tauri::generate_handler![close, handle, handle_multiple])
+            .menu(Menu::with_items([
+                #[cfg(target_os = "macos")]
+                MenuEntry::Submenu(Submenu::new(
+                    "SuperBanco",
+                    Menu::with_items([
+                        MenuItem::About(ctx.package_info().name.clone(), AboutMetadata::default())
+                            .into(),
+                        MenuItem::Separator.into(),
+                        MenuItem::Services.into(),
+                        MenuItem::Separator.into(),
+                        MenuItem::Hide.into(),
+                        MenuItem::HideOthers.into(),
+                        MenuItem::ShowAll.into(),
+                        MenuItem::Separator.into(),
+                        MenuItem::Quit.into(),
+                    ]),
+                )),
+                MenuEntry::Submenu(Submenu::new(
+                    "Edit",
+                    Menu::with_items([
+                        MenuItem::Undo.into(),
+                        MenuItem::Redo.into(),
+                        MenuItem::Separator.into(),
+                        MenuItem::Cut.into(),
+                        MenuItem::Copy.into(),
+                        MenuItem::Paste.into(),
+                        #[cfg(not(target_os = "macos"))]
+                        MenuItem::Separator.into(),
+                        MenuItem::SelectAll.into(),
+                    ]),
+                )),
+            ]))
+            .run(tauri::generate_context!())
+            .expect("error while running tauri application");
+    }
+
+    // No menú on windows
+    #[cfg(not(target_os = "macos"))]
+    {
+        tauri::Builder::default()
+            .invoke_handler(tauri::generate_handler![close, handle, handle_multiple])
+            .run(tauri::generate_context!())
+            .expect("error while running tauri application");
+    }
 }
