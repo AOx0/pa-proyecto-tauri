@@ -85,6 +85,8 @@
         window.onload = function () {
             document.getElementById("sub").addEventListener('click', reload_double);
             document.getElementById("cls").addEventListener('click', close);
+
+            invoke('handle', { msg: "Change_To_Login" }).then((_) => { })
         }
     </script>
 </head>

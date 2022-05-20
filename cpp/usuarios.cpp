@@ -68,215 +68,187 @@ int main(int argc, char *argv[]) {
     }
 
     Banco banco = Banco(cuentas);
+    Cuenta cuenta;
 
+    string estado;
     while (true)
     {
-      string tarjeta = pedirValorX(c, NUMBERS, true);
+      /* code */
+    
+      c.receive(&sin);
+      sin>>nul;
 
-      if (tarjeta == CANCEL_OR_EXIT)
-      {
-        sout << "EXIT";
+      if (nul == "Change_To_Login") {
+        sout << "Changed to login!";
         c.send(&sout);
-        break;
-      } else {
-        cout << 1 << endl;
-      }
 
-      string contra = pedirValorX(c, {}, false);
+        string tarjeta = pedirValorX(c, NUMBERS, true);
 
-      Cuenta cuenta;
-      if (tarjeta == CANCEL_OR_EXIT || contra == CANCEL_OR_EXIT)
-      {
-        sout << "EXIT";
-        c.send(&sout);
-        break;
-      }
-
-      if (!cuentaExiste_o_exit_s(tarjeta, banco))
-      {
-        sout << "No existe la cuenta\n";
-        continue;
-      }
-      else
-      {
-        cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
-        if (!contraEs_s(contra, cuenta))
+        if (tarjeta == CANCEL_OR_EXIT)
         {
-          sout << "Contraseña inválida\n";
-          continue;
+          sout << "EXIT";
+          c.send(&sout);
+          break;
         } else {
-          sout << "change to main" << endl;
+          cout << 1 << endl;
         }
-      }
-      c.send(&sout);
 
-      string estado;
-      while (true)
-      {
-        /* code */
-      
-        c.receive(&sin);
-        sin>>nul;
-
-        if (nul == "Change_To_Main")
+        string contra = pedirValorX(c, {}, false);
+        if (tarjeta == CANCEL_OR_EXIT || contra == CANCEL_OR_EXIT)
         {
-          sout << "Changed to main\n";
+          sout << "EXIT";
           c.send(&sout);
-          load_main(c, cuenta, nul, sout, sin);
-          estado = "main";
+          break;
         }
 
-        if (estado == "table" && nul == "pre_transferir_a_cuenta") {
-          sout << cuenta.dinero;
-          c.send(&sout);
-
-          c.receive(&sin);
-          sin >> nul;
-
-          double cantidad_a_transferir;
-          sout << (cuenta.cuentaYaRegistrada_t(nul) ? "true" : "false");
-          c.send(&sout);
-
-          c.receive(&sin);
-          sin >> cantidad_a_transferir;
-
-          sout << cuenta.tarjeta;
-          c.send(&sout);
-
-          string decision;
-          c.receive(&sin);
-          sin >> decision;
-
-          if (decision == "transfiere_ya") {
-            Cuenta a_transferir = banco.buscarCuentaRaw(nul).encontrada;
-            cuenta.transferir(a_transferir, cantidad_a_transferir);
-
-            sout << "Transferencia hecha";
-          } else {
-            sout << "Transferencia no hecha";
-          }
-
-          c.send(&sout);
-
-          
-          
-
-          /*
-          string cuenta_a_transferir;
-          double cantidad;
-          c.receive(&sin); // Pedimos la cuenta
-          sin >> cuenta_a_transferir;
-
-          cout << cuenta.dinero;
-          c.send(&sout);
-
-          c.receive(&sin); // Pedimos la cantidad
-          sin >> cantidad;
-
-          
-          c.send(&sout);
-
-          c.receive(&sin); // Pedimos la cuenta
-          sin >> nul;
-
-          if (nul == "Continuar") {
-            Cuenta b = banco.buscarCuentaRaw(cuenta_a_transferir).encontrada;
-            cuenta.transferir(b, cantidad);
-          }
-
-          c.send(&sout);
-          */
+        if (!cuentaExiste_o_exit_s(tarjeta, banco))
+        {
+          sout << "No existe la cuenta\n";
+          continue;
         }
-
-        if (estado == "table" && nul == "eliminar_cuenta") {
-          sout << "Eliminar cuenta\n";
-          c.send(&sout);
-
-          ou << "Pidiendo cuenta a eliminar..." << endl;
-
-
-          c.receive(&sin); // Pedimos la cuenta
-          sin >> nul;
-
-          ou << "Cuenta a eliminar: " << nul << endl;
-
-          bool success = cuenta.eliminarCuenta_t(nul);
-
-          if (success) {
-            sout << "Cuenta eliminada\n";
-          } else {
-            sout << "No se pudo eliminar la cuenta\n";
-          }
-
-          cuenta.guardar_usuario();
-         
-          c.send(&sout);
-        }
-
-        if (nul == "Change_To_Table") {
-          sout << "Changed to table\n";
-          c.send(&sout);
-
-          estado = "table";
-
-          c.receive(&sin);
-
-          for (auto & t: cuenta.tarjetas_registradas) {
-            Cuenta cuenta_registrada = banco.buscarCuentaRaw(t).encontrada;
-            sout << "<tr><td>" << cuenta_registrada.nombre << " " << cuenta_registrada.apellido << "</td><td>" << cuenta_registrada.tarjeta << "</td>"
-            << "<td><button id='botón_agregar_cuenta' class='btn btn-primary btn-sm' onclick=\"document.getElementById('tarjeta_transferir').value = '" << cuenta_registrada.tarjeta << "'\">Transferir</button>&#x09;&#x09;"
-            << "<button id='botón_agregar_cuenta' class='btn btn-primary btn-sm' onclick=\"eliminar_cuenta('" << cuenta_registrada.tarjeta << "')\">Eliminar</button></td></tr>"
-            << endl;
-          }
-
-          if (cuenta.tarjetas_registradas.size() == 0) {
-            sout << "<tr><td>No hay cuentas registradas</td><td></td></tr>\n";
-          } else {
-            sout << endl;
-          }
-
-
-
-          c.send(&sout);
-        }
-          if (nul == "Change_To_profile")
+        else
+        {
+          cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
+          if (!contraEs_s(contra, cuenta))
           {
-              sout << "Changed to profile\n";
-              c.send(&sout);
-              c.receive(&sin);
-              estado = "profile";
-
-              sout<<cuenta.nombre<<" "<<cuenta.apellido;
-              c.send(&sout);
-              c.receive(&sin);
-
-              sout<<cuenta.nombre;
-              c.send(&sout);
-              c.receive(&sin);
-
-              sout<<cuenta.apellido;
-              c.send(&sout);
-              c.receive(&sin);
-
-              sout<<cuenta.tel;
-              c.send(&sout);
-              c.receive(&sin);
-
-              sout<<cuenta.key;
-              c.send(&sout);
-
-
+            sout << "Contraseña inválida\n";
+            continue;
+          } else {
+            sout << "change to main" << endl;
           }
-        //Terminar prueba
-        //Salir del dashboard
-          else if (nul == CANCEL_OR_EXIT)
-          {
-              sout << "EXIT";
-              c.send(&sout);
-              break;
-           }
-        //termina el bucle
+        }
+        c.send(&sout);
       }
+
+      if (nul == "Change_To_Main")
+      {
+        sout << "Changed to main\n";
+        c.send(&sout);
+        load_main(c, cuenta, nul, sout, sin);
+        estado = "main";
+      }
+
+      if (estado == "table" && nul == "pre_transferir_a_cuenta") {
+        sout << cuenta.dinero;
+        c.send(&sout);
+
+        c.receive(&sin);
+        sin >> nul;
+
+        double cantidad_a_transferir;
+        sout << (cuenta.cuentaYaRegistrada_t(nul) ? "true" : "false");
+        c.send(&sout);
+
+        c.receive(&sin);
+        sin >> cantidad_a_transferir;
+
+        sout << cuenta.tarjeta;
+        c.send(&sout);
+
+        string decision;
+        c.receive(&sin);
+        sin >> decision;
+
+        if (decision == "transfiere_ya") {
+          Cuenta a_transferir = banco.buscarCuentaRaw(nul).encontrada;
+          cuenta.transferir(a_transferir, cantidad_a_transferir);
+
+          sout << "Transferencia hecha";
+        } else {
+          sout << "Transferencia no hecha";
+        }
+
+        c.send(&sout);
+      }
+
+      if (estado == "table" && nul == "eliminar_cuenta") {
+        sout << "Eliminar cuenta\n";
+        c.send(&sout);
+
+        ou << "Pidiendo cuenta a eliminar..." << endl;
+
+
+        c.receive(&sin); // Pedimos la cuenta
+        sin >> nul;
+
+        ou << "Cuenta a eliminar: " << nul << endl;
+
+        bool success = cuenta.eliminarCuenta_t(nul);
+
+        if (success) {
+          sout << "Cuenta eliminada\n";
+        } else {
+          sout << "No se pudo eliminar la cuenta\n";
+        }
+
+        cuenta.guardar_usuario();
+        
+        c.send(&sout);
+      }
+
+      if (nul == "Change_To_Table") {
+        sout << "Changed to table\n";
+        c.send(&sout);
+
+        estado = "table";
+
+        c.receive(&sin);
+
+        for (auto & t: cuenta.tarjetas_registradas) {
+          Cuenta cuenta_registrada = banco.buscarCuentaRaw(t).encontrada;
+          sout << "<tr><td>" << cuenta_registrada.nombre << " " << cuenta_registrada.apellido << "</td><td>" << cuenta_registrada.tarjeta << "</td>"
+          << "<td><button id='botón_agregar_cuenta' class='btn btn-primary btn-sm' onclick=\"document.getElementById('tarjeta_transferir').value = '" << cuenta_registrada.tarjeta << "'\">Transferir</button>&#x09;&#x09;"
+          << "<button id='botón_agregar_cuenta' class='btn btn-primary btn-sm' onclick=\"eliminar_cuenta('" << cuenta_registrada.tarjeta << "')\">Eliminar</button></td></tr>"
+          << endl;
+        }
+
+        if (cuenta.tarjetas_registradas.size() == 0) {
+          sout << "<tr><td>No hay cuentas registradas</td><td></td></tr>\n";
+        } else {
+          sout << endl;
+        }
+
+
+
+        c.send(&sout);
+      }
+        if (nul == "Change_To_profile")
+        {
+            sout << "Changed to profile\n";
+            c.send(&sout);
+            c.receive(&sin);
+            estado = "profile";
+
+            sout<<cuenta.nombre<<" "<<cuenta.apellido;
+            c.send(&sout);
+            c.receive(&sin);
+
+            sout<<cuenta.nombre;
+            c.send(&sout);
+            c.receive(&sin);
+
+            sout<<cuenta.apellido;
+            c.send(&sout);
+            c.receive(&sin);
+
+            sout<<cuenta.tel;
+            c.send(&sout);
+            c.receive(&sin);
+
+            sout<<cuenta.key;
+            c.send(&sout);
+
+
+        }
+      //Terminar prueba
+      //Salir del dashboard
+        else if (nul == CANCEL_OR_EXIT)
+        {
+            sout << "EXIT";
+            c.send(&sout);
+            break;
+          }
+      //termina el bucle
     }
   }
 }

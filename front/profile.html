@@ -81,21 +81,21 @@
 
         //intento 1
         window.onload = function () {
-            invoke('handle', {msg: "Change_To_profile"}).then((_) => {
+            invoke('handle', { msg: "Change_To_profile" }).then((_) => {
             })
-            invoke('handle', {msg: "Pidiendo_Nombre"}).then((message) => {
+            invoke('handle', { msg: "Pidiendo_Nombre" }).then((message) => {
                 document.getElementById("Nombre").innerHTML = `${message}`;
             })
-            invoke('handle', {msg: "Pidiendo_Nombre_Cambio"}).then((message) => {
+            invoke('handle', { msg: "Pidiendo_Nombre_Cambio" }).then((message) => {
                 document.getElementById("Nombre_cambio").innerHTML = `${message}`;
             })
-            invoke('handle', {msg: "Pidiendo_Apellido"}).then((message) => {
+            invoke('handle', { msg: "Pidiendo_Apellido" }).then((message) => {
                 document.getElementById("Apellido_Cambio").innerHTML = `${message}`;
             })
-            invoke('handle', {msg: "Pidiendo_Numero"}).then((message) => {
+            invoke('handle', { msg: "Pidiendo_Numero" }).then((message) => {
                 document.getElementById("Numero_Cambio").innerHTML = `${message}`;
             })
-            invoke('handle', {msg: "Pidiendo_Contraseña"}).then((message) => {
+            invoke('handle', { msg: "Pidiendo_Contraseña" }).then((message) => {
                 document.getElementById("Contraseña_Cambio").innerHTML = `${message}`;
             })
         }
@@ -108,148 +108,170 @@
 </head>
 
 <body id="page-top" style="background: none; border-radius: 20px;">
-<p id="bd"></p>
-<nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
-    <div class="container">
-        <div data-tauri-drag-region="" id="title-bar">
-            <div class="cloese">
-                <button id="cls" onclick="clean_cloese()">
-                </button>
-            </div>
-            <div class="cloese">
-                <button id="min" onclick="
+    <p id="bd"></p>
+    <nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
+        <div class="container">
+            <div data-tauri-drag-region="" id="title-bar">
+                <div class="cloese">
+                    <button id="cls" onclick="clean_cloese()">
+                    </button>
+                </div>
+                <div class="cloese">
+                    <button id="min" onclick="
                 win.appWindow.minimize()
               ">
-                </button>
-            </div>
+                    </button>
+                </div>
 
-            <div class="cloese">
-                <button id="max" onclick="
+                <div class="cloese">
+                    <button id="max" onclick="
                 win.appWindow.maximize()
                 ">
-                </button>
+                    </button>
+                </div>
+
             </div>
-
-        </div>
-    </div>
-</nav>
-<div id="wrapper">
-    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-        <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-            <div class="sidebar-brand-text mx-3"><span>Super Banco</span></div>
-        </a>
-            <hr class="sidebar-divider my-0">
-            <ul class="navbar-nav text-light" id="accordionSidebar">
-                <li class="nav-item"><a class="nav-link" href="main.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                <li class="nav-item"><a class="nav-link active" href="profile.html"><i class="fas fa-user"></i><span>Perfil</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-table"></i><span>Table</span></a></li>
-
-
-            </ul>
-
         </div>
     </nav>
-    <div class="d-flex flex-column" id="content-wrapper">
-        <div id="content">
-            <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"></nav>
-            <div class="container-fluid">
-                <h3 class="text-dark mb-4" id="Nombre">Perfil</h3>
-                <div class="row mb-3">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0"><a
+                    class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="sidebar-brand-text mx-3"><span>Super Banco</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="main.html"><i
+                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="profile.html"><i
+                                class="fas fa-user"></i><span>Perfil</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="table.html"><i
+                                class="fas fa-table"></i><span>Table</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i
+                                class="fas fa-user-circle"></i><span>Salir</span></a></li>
+                </ul>
 
-                    <div class="col-lg-8">
-                        <div class="row mb-3 d-none">
-                            <div class="col">
-                                <div class="card textwhite bg-primary text-white shadow">
-                                    <div class="card-body">
-                                        <div class="row mb-2">
-                                            <div class="col">
-                                                <p class="m-0">Peformance</p>
-                                                <p class="m-0"><strong>65.2%</strong></p>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"></nav>
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4" id="Nombre">Perfil</h3>
+                    <div class="row mb-3">
+
+                        <div class="col-lg-8">
+                            <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card textwhite bg-primary text-white shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
                                             </div>
-                                            <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5%
+                                                since last month</p>
                                         </div>
-                                        <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5%
-                                            since last month</p>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card textwhite bg-success text-white shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5%
+                                                since last month</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="card textwhite bg-success text-white shadow">
-                                    <div class="card-body">
-                                        <div class="row mb-2">
-                                            <div class="col">
-                                                <p class="m-0">Peformance</p>
-                                                <p class="m-0"><strong>65.2%</strong></p>
-                                            </div>
-                                            <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Actualización de Datos</p>
                                         </div>
-                                        <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5%
-                                            since last month</p>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"
+                                                                id="Nombre_cambio"><strong>Username</strong></label><input
+                                                                class="form-control" type="text" name="username"
+                                                                placeholder="Cambiar Nombre"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"
+                                                                id="Apellido_Cambio"><strong>Email
+                                                                    Address</strong></label><input class="form-control"
+                                                                type="text" placeholder="Cambiar Apellido"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"
+                                                                id="Numero_Cambio"><strong>First
+                                                                    Name</strong></label><input class="form-control"
+                                                                type="text" placeholder="Cambiar Número"
+                                                                name="first_name"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label"
+                                                                id="Contraseña_Cambio"><strong>Last
+                                                                    Name</strong></label><input class="form-control"
+                                                                type="password" placeholder="Cambio de Contraseña"
+                                                                name="last_name"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm"
+                                                        type="submit">Save Settings</button></div>
+                                            </form>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="card shadow mb-3">
-                                    <div class="card-header py-3">
-                                        <p class="text-primary m-0 fw-bold">Actualización de Datos</p>
-                                    </div>
-                                    <div class="card-body">
-                                        <form>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="mb-3"><label class="form-label" id="Nombre_cambio"><strong>Username</strong></label><input class="form-control" type="text" name="username" placeholder="Cambiar Nombre"></div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="mb-3"><label class="form-label" id="Apellido_Cambio"><strong>Email Address</strong></label><input class="form-control" type="text" placeholder="Cambiar Apellido"></div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="mb-3"><label class="form-label" id="Numero_Cambio"><strong>First
-                                                        Name</strong></label><input class="form-control" type="text" placeholder="Cambiar Número" name="first_name"></div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="mb-3"><label class="form-label" id="Contraseña_Cambio"><strong>Last Name</strong></label><input class="form-control" type="password" placeholder="Cambio de Contraseña" name="last_name"></div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                                        </form>
-                                    </div>
-                                </div>
-
-                            </div>
+                    </div>
+                    <div class="card shadow mb-5">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Sugerencias y Errores</p>
                         </div>
-                    </div>
-                </div>
-                <div class="card shadow mb-5">
-                    <div class="card-header py-3">
-                        <p class="text-primary m-0 fw-bold">Sugerencias y Errores</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <form>
-                                    <div class="mb-3"><label class="form-label" for="signature"><strong>Comentario</strong><br></label><textarea class="form-control" id="signature" rows="4" name="signature"></textarea></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form>
+                                        <div class="mb-3"><label class="form-label"
+                                                for="signature"><strong>Comentario</strong><br></label><textarea
+                                                class="form-control" id="signature" rows="4"
+                                                name="signature"></textarea></div>
 
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save
-                                        Settings</button></div>
-                                </form>
+                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save
+                                                Settings</button></div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <footer class="bg-white sticky-footer">
-            <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span>Copyright © Super Banco 2022</span></div>
-            </div>
-        </footer>
-    </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: block;"><i class="fas fa-angle-up"></i></a>
-</div>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/bs-init.js"></script>
-<script src="assets/js/theme.js"></script>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Super Banco 2022</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: block;"><i
+                class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>

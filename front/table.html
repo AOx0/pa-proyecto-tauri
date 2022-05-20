@@ -71,7 +71,7 @@
                     document.getElementById('error_p2').innerHTML = "Error: Ingresa una cantidad válida.";
                     result = 1;
                 } else {
-                    if (parseFloat(message) < parseFloat(document.getElementById("cantidad_transferir").value)) {
+                    if (parseFloat(message) <= parseFloat(document.getElementById("cantidad_transferir").value)) {
                         document.getElementById('error_p2').innerHTML = "Error: No tienes suficiente dinero en tu cuenta para transferir esa cantidad.";
                         result = 1;
                     }
@@ -99,14 +99,6 @@
                     })
                 })
             })
-
-
-
-
-
-
-
-
         }
 
         function eliminar_cuenta(cuenta) {
@@ -218,8 +210,8 @@
                                 class="fas fa-user"></i><span>Perfil</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="table.html"><i
                                 class="fas fa-table"></i><span>Table</span></a></li>
-
-
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i
+                                class="fas fa-user-circle"></i><span>Salir</span></a></li>
                 </ul>
 
             </div>
