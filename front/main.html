@@ -92,7 +92,15 @@
             invoke('handle', { msg: "Pidiendo_Dinero" }).then((message) => { document.getElementById("Dinero").innerHTML = `${formatter.format(parseFloat(message))}`; })
             invoke('handle', { msg: "Pidiendo_Tarjeta" }).then((message) => { document.getElementById("Tarjeta").innerHTML = `${message}`; })
             invoke('handle', { msg: "Pidiendo_Deuda" }).then((message) => { document.getElementById("Deuda").innerHTML = `${formatter.format(parseFloat(message))}`; })
+            invoke('handle', { msg: "Pidiendo gráfica"}).then((message) => {
+                document.getElementById("graph").innerHTML = message
 
+                var charts = document.querySelectorAll('[data-bss-chart]');
+
+                for (var chart of charts) {
+                    chart.chart = new Chart(chart, JSON.parse(chart.dataset.bssChart));
+                }
+            })
         }
 
 
@@ -266,10 +274,7 @@
                                             <div class="chartjs-size-monitor-shrink">
                                                 <div class=""></div>
                                             </div>
-                                        </div><canvas
-                                            data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;fontStyle&quot;:&quot;normal&quot;,&quot;padding&quot;:20}}]}}}"
-                                            style="display: block; width: 1029px; height: 320px;"
-                                            class="chartjs-render-monitor" width="1029" height="320"></canvas>
+                                        </div><div id="graph"></div>
                                     </div>
                                 </div>
                             </div>

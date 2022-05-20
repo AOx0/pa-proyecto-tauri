@@ -6,6 +6,7 @@
 #include <ctime>
 #include <fstream>
 #include <algorithm>
+#include <sstream>
 
 #define CANCEL_OR_EXIT "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
@@ -30,6 +31,13 @@ void Cuenta::guardar_usuario() {
     f << tar;
   }
 
+  f << "\nHISTORY";
+
+  for (double & estado: gasto_semanal) {
+    f << endl;
+    f << estado;
+  }
+
   f.close();
 }
 
@@ -38,7 +46,7 @@ Cuenta cargar_ususario(string & archivo) {
   f.open(archivo);
   string fichero, nombre, super_key, nip, key, apellido, tel, tarjeta;
   vector<string> tarjetas_registradas = vector<string>();
-  vector<double> gasto_semanal;
+  vector<double> gasto_semanal = {0,0,0,0,0,0,0};
   double dinero, deuda;
   time_t fecha_vencimiento;
 
@@ -60,9 +68,22 @@ Cuenta cargar_ususario(string & archivo) {
   f.ignore(numeric_limits<streamsize>::max(), '\n');
   
   string tarjeta_r;
+  string estado_r;
+  double estado;
   while(getline(f, tarjeta_r)) {
-    tarjetas_registradas.push_back(move(tarjeta_r));
+      if (tarjeta_r == "HISTORY") break;
+      tarjetas_registradas.push_back(move(tarjeta_r));
   }
+
+  int i = 6;
+  while(getline(f, estado_r)) {
+    stringstream estado_s;
+    estado_s.str(estado_r);
+    estado_s >> estado;
+    gasto_semanal[i] = estado;
+    i--;
+  }
+  gasto_semanal.push_back(dinero);
 
   Cuenta cuenta = {
       archivo,
