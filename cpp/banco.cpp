@@ -10,6 +10,13 @@
 
 #define CANCEL_OR_EXIT "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434"
 
+void Cuenta::agregar_a_historial(double valor) {
+  for (int i=1; i<8; i++) {
+    gasto_semanal[i] = gasto_semanal[i-1];
+  }
+  gasto_semanal[7] = valor;
+}
+
 void Cuenta::guardar_usuario() {
   ofstream f;
   f.open(fichero);
@@ -46,7 +53,7 @@ Cuenta cargar_ususario(string & archivo) {
   f.open(archivo);
   string fichero, nombre, super_key, nip, key, apellido, tel, tarjeta;
   vector<string> tarjetas_registradas = vector<string>();
-  vector<double> gasto_semanal = {0,0,0,0,0,0,0};
+  vector<double> gasto_semanal = {0,0,0,0,0,0,0,0};
   double dinero, deuda;
   time_t fecha_vencimiento;
 
@@ -75,15 +82,15 @@ Cuenta cargar_ususario(string & archivo) {
       tarjetas_registradas.push_back(move(tarjeta_r));
   }
 
-  int i = 6;
+  int i = 0;
   while(getline(f, estado_r)) {
     stringstream estado_s;
     estado_s.str(estado_r);
     estado_s >> estado;
     gasto_semanal[i] = estado;
-    i--;
+    i++;
   }
-  gasto_semanal.push_back(dinero);
+  gasto_semanal[7] = dinero;
 
   Cuenta cuenta = {
       archivo,

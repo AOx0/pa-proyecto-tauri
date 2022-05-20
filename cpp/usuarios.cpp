@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 
         c.receive(&sin);
 
-        sout << "<canvas\n data-bss-chart='{\"type\":\"line\",\"data\":{\"labels\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"Now\"],\"datasets\":[{\"label\":\"\",\"fill\":true,\"data\":";
+        sout << "<canvas\n data-bss-chart='{\"type\":\"line\",\"data\":{\"labels\":[\"Now\",\".\",\".\",\".\",\".\",\".\",\".\",\".\"],\"datasets\":[{\"label\":\"\",\"fill\":true,\"data\":";
         sout << "[\""<< cuenta.gasto_semanal[0] <<"\",\"" << cuenta.gasto_semanal[1] << "\",\""<< cuenta.gasto_semanal[2] <<"\",\""<< cuenta.gasto_semanal[3] <<"\",\""<< cuenta.gasto_semanal[4] <<"\",\""<< cuenta.gasto_semanal[5] <<"\",\""<< cuenta.gasto_semanal[6] <<"\",\""<< cuenta.gasto_semanal[7] <<"\"]";
         sout << ",\"backgroundColor\":\"rgba(78, 115, 223, 0.05)\",\"borderColor\":\"rgba(78, 115, 223, 1)\"}]},\"options\":{\"maintainAspectRatio\":false,\"legend\":{\"display\":false,\"labels\":{\"fontStyle\":\"normal\"}},\"title\":{\"fontStyle\":\"normal\"},\"scales\":{\"xAxes\":[{\"gridLines\":{\"color\":\"rgb(234, 236, 244)\",\"zeroLineColor\":\"rgb(234, 236, 244)\",\"drawBorder\":false,\"drawTicks\":false,\"borderDash\":[\"2\"],\"zeroLineBorderDash\":[\"2\"],\"drawOnChartArea\":false},\"ticks\":{\"fontColor\":\"#858796\",\"fontStyle\":\"normal\",\"padding\":20}}],\"yAxes\":[{\"gridLines\":{\"color\":\"rgb(234, 236, 244)\",\"zeroLineColor\":\"rgb(234, 236, 244)\",\"drawBorder\":false,\"drawTicks\":false,\"borderDash\":[\"2\"],\"zeroLineBorderDash\":[\"2\"]},\"ticks\":{\"fontColor\":\"#858796\",\"fontStyle\":\"normal\",\"padding\":20}}]}}}";
         sout << "'\nstyle=\"display: block; width: 1029px; height: 320px;\"\nclass=\"chartjs-render-monitor\" width=\"1029\" height=\"320\"></canvas>";
@@ -205,6 +205,8 @@ int main(int argc, char *argv[]) {
 
         if (decision == "transfiere_ya") {
           Cuenta a_transferir = banco.buscarCuentaRaw(nul).encontrada;
+          cuenta.agregar_a_historial( cuenta.dinero - cantidad_a_transferir);
+          a_transferir.agregar_a_historial( a_transferir.dinero - cantidad_a_transferir);
           cuenta.transferir(a_transferir, cantidad_a_transferir);
 
           sout << "Transferencia hecha";
@@ -293,6 +295,7 @@ int main(int argc, char *argv[]) {
         } else if (cuenta.deuda/cuenta.dinero > 0.15) {
             sout << "Error: No puedes solicitar préstamos si tienes ya una gran cantidad de deuda por pagar" ;
         } else {
+          cuenta.agregar_a_historial( cuenta.dinero + cantidad);
           cuenta.deuda += cantidad;
           cuenta.dinero += cantidad;
 
@@ -321,6 +324,7 @@ int main(int argc, char *argv[]) {
           sout << "Error: No puedes pagar una cantidad mayor a la deuda";
         } else {
 
+          cuenta.agregar_a_historial( cuenta.dinero - cantidad);
           cuenta.retirarDinero(cantidad);
           cuenta.deuda -= cantidad;
           sout << "Éxito al pagar la deuda";

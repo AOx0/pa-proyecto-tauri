@@ -92,7 +92,7 @@
             invoke('handle', { msg: "Pidiendo_Dinero" }).then((message) => { document.getElementById("Dinero").innerHTML = `${formatter.format(parseFloat(message))}`; })
             invoke('handle', { msg: "Pidiendo_Tarjeta" }).then((message) => { document.getElementById("Tarjeta").innerHTML = `${message}`; })
             invoke('handle', { msg: "Pidiendo_Deuda" }).then((message) => { document.getElementById("Deuda").innerHTML = `${formatter.format(parseFloat(message))}`; })
-            invoke('handle', { msg: "Pidiendo gráfica"}).then((message) => {
+            invoke('handle', { msg: "Pidiendo gráfica" }).then((message) => {
                 document.getElementById("graph").innerHTML = message
 
                 var charts = document.querySelectorAll('[data-bss-chart]');
@@ -105,6 +105,53 @@
 
 
     </script>
+    <style type="text/css">
+        /* Chart.js */
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: .99
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            animation: chartjs-render-animation 1ms
+        }
+
+        .chartjs-size-monitor,
+        .chartjs-size-monitor-expand,
+        .chartjs-size-monitor-shrink {
+            position: absolute;
+            direction: ltr;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            visibility: hidden;
+            z-index: -1
+        }
+
+        .chartjs-size-monitor-expand>div {
+            position: absolute;
+            width: 1000000px;
+            height: 1000000px;
+            left: 0;
+            top: 0
+        }
+
+        .chartjs-size-monitor-shrink>div {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            left: 0;
+            top: 0
+        }
+    </style>
 </head>
 
 <body id="page-top" style="background: none; border-radius: 20px;">
@@ -274,58 +321,13 @@
                                             <div class="chartjs-size-monitor-shrink">
                                                 <div class=""></div>
                                             </div>
-                                        </div><div id="graph"></div>
+                                        </div>
+                                        <div id="graph"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-5 col-xl-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary fw-bold m-0">Gastos Semanales</h6>
-                                    <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
-                                            aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
-                                                class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                        <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                            <p class="text-center dropdown-header">dropdown header:</p><a
-                                                class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item"
-                                                href="#">&nbsp;Another action</a>
-                                            <div class="dropdown-divider"></div><a class="dropdown-item"
-                                                href="#">&nbsp;Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <div class="chartjs-size-monitor">
-                                            <div class="chartjs-size-monitor-expand">
-                                                <div class=""></div>
-                                            </div>
-                                            <div class="chartjs-size-monitor-shrink">
-                                                <div class=""></div>
-                                            </div>
-                                        </div>
-                                        <div class="chartjs-size-monitor">
-                                            <div class="chartjs-size-monitor-expand">
-                                                <div class=""></div>
-                                            </div>
-                                            <div class="chartjs-size-monitor-shrink">
-                                                <div class=""></div>
-                                            </div>
-                                        </div><canvas
-                                            data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}}"
-                                            style="display: block; width: 486px; height: 320px;"
-                                            class="chartjs-render-monitor" width="486" height="320"></canvas>
-                                    </div>
-                                    <div class="text-center small mt-4"><span class="me-2"><i
-                                                class="fas fa-circle text-primary"></i>&nbsp;Direct</span><span
-                                            class="me-2"><i
-                                                class="fas fa-circle text-success"></i>&nbsp;Social</span><span
-                                            class="me-2"><i class="fas fa-circle text-info"></i>&nbsp;Refferal</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
@@ -342,3 +344,6 @@
     <script src="assets/js/chart.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+</body>
+
+</html>

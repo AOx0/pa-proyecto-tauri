@@ -23,6 +23,8 @@ public:
   double deuda;
   string tarjeta;
 
+  void agregar_a_historial(double valor);
+
   void guardar_usuario();
 
   /// Suma al saldo de sí mismo la cantidad ingresada
