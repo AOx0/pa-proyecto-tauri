@@ -126,6 +126,68 @@ int main(int argc, char *argv[]) {
           estado = "main";
         }
 
+        if (estado == "table" && nul == "pre_transferir_a_cuenta") {
+          sout << cuenta.dinero;
+          c.send(&sout);
+
+          c.receive(&sin);
+          sin >> nul;
+
+          double cantidad_a_transferir;
+          sout << (cuenta.cuentaYaRegistrada_t(nul) ? "true" : "false");
+          c.send(&sout);
+
+          c.receive(&sin);
+          sin >> cantidad_a_transferir;
+
+          sout << cuenta.tarjeta;
+          c.send(&sout);
+
+          string decision;
+          c.receive(&sin);
+          sin >> decision;
+
+          if (decision == "transfiere_ya") {
+            Cuenta a_transferir = banco.buscarCuentaRaw(nul).encontrada;
+            cuenta.transferir(a_transferir, cantidad_a_transferir);
+
+            sout << "Transferencia hecha";
+          } else {
+            sout << "Transferencia no hecha";
+          }
+
+          c.send(&sout);
+
+          
+          
+
+          /*
+          string cuenta_a_transferir;
+          double cantidad;
+          c.receive(&sin); // Pedimos la cuenta
+          sin >> cuenta_a_transferir;
+
+          cout << cuenta.dinero;
+          c.send(&sout);
+
+          c.receive(&sin); // Pedimos la cantidad
+          sin >> cantidad;
+
+          
+          c.send(&sout);
+
+          c.receive(&sin); // Pedimos la cuenta
+          sin >> nul;
+
+          if (nul == "Continuar") {
+            Cuenta b = banco.buscarCuentaRaw(cuenta_a_transferir).encontrada;
+            cuenta.transferir(b, cantidad);
+          }
+
+          c.send(&sout);
+          */
+        }
+
         if (estado == "table" && nul == "eliminar_cuenta") {
           sout << "Eliminar cuenta\n";
           c.send(&sout);
