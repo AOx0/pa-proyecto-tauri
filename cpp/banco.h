@@ -1,11 +1,8 @@
 #ifndef PROYECTO_LIBRARY_H //si no está definida la librería la definimos
 #define PROYECTO_LIBRARY_H //Se evita que se vuelva a redefinir
-
 #include <iostream>
 #include <vector>
-
 using namespace std;
-
 /// Estructura que representa la Cuenta de un usuario.
 class Cuenta {
 public:
