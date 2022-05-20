@@ -118,6 +118,14 @@ int main(int argc, char *argv[]) {
         estado = "main";
       }
 
+      if (nul == "Change_To_Deudas")
+      {
+        sout << "Changed to deuda\n";
+        c.send(&sout);
+        load_main(c, cuenta, nul, sout, sin);
+        estado = "deudas";
+      }
+
       if (estado == "table" && nul == "agregar_cuenta") {
         sout << "Agregar cuenta\n";
         c.send(&sout);
@@ -302,7 +310,7 @@ void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream 
 
   c.receive(&sin);
 
-  sout<<"$"<<dinero<<endl;
+  sout<<dinero<<endl;
   c.send(&sout);
 
   c.receive(&sin);
@@ -312,7 +320,7 @@ void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream 
 
   c.receive(&sin);
 
-  sout<<"$"<<deuda<<endl;
+  sout<<deuda<<endl;
   c.send(&sout);
 }
 

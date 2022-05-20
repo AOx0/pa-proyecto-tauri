@@ -81,11 +81,17 @@
         }
         //intento 1
         window.onload = function () {
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            })
+
             invoke('handle', { msg: "Change_To_Main" }).then((_) => { })
             invoke('handle', { msg: "Pidiendo_Nombre" }).then((message) => { document.getElementById("Nombre").innerHTML = `${message}`; })
-            invoke('handle', { msg: "Pidiendo_Dinero" }).then((message) => { document.getElementById("Dinero").innerHTML = `${message}`; })
+            invoke('handle', { msg: "Pidiendo_Dinero" }).then((message) => { document.getElementById("Dinero").innerHTML = `${formatter.format(parseFloat(message))}`; })
             invoke('handle', { msg: "Pidiendo_Tarjeta" }).then((message) => { document.getElementById("Tarjeta").innerHTML = `${message}`; })
-            invoke('handle', { msg: "Pidiendo_Deuda" }).then((message) => { document.getElementById("Deuda").innerHTML = `${message}`; })
+            invoke('handle', { msg: "Pidiendo_Deuda" }).then((message) => { document.getElementById("Deuda").innerHTML = `${formatter.format(parseFloat(message))}`; })
 
         }
 

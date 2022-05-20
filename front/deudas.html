@@ -81,11 +81,24 @@
         }
         //intento 1
         window.onload = function () {
-            invoke('handle', { msg: "Change_To_Main" }).then((_) => { })
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            })
+
+            invoke('handle', { msg: "Change_To_Deudas" }).then((_) => { })
             invoke('handle', { msg: "Pidiendo_Nombre" }).then((message) => { document.getElementById("Nombre").innerHTML = `${message}`; })
-            invoke('handle', { msg: "Pidiendo_Dinero" }).then((message) => { document.getElementById("Dinero").innerHTML = `${message}`; })
+            invoke('handle', { msg: "Pidiendo_Dinero" }).then((message) => {
+                document.getElementById("Dinero").innerHTML = `${formatter.format(parseFloat(message))}`;
+                document.getElementById("Dinero-real").innerHTML = `${message}`;
+
+            })
             invoke('handle', { msg: "Pidiendo_Tarjeta" }).then((message) => { document.getElementById("Tarjeta").innerHTML = `${message}`; })
-            invoke('handle', { msg: "Pidiendo_Deuda" }).then((message) => { document.getElementById("Deuda").innerHTML = `${message}`; })
+            invoke('handle', { msg: "Pidiendo_Deuda" }).then((message) => {
+                document.getElementById("Deuda").innerHTML = `${formatter.format(parseFloat(message))}`;
+                document.getElementById("Dinero-real").innerHTML = `${formatter.format(parseFloat(document.getElementById("Dinero-real").innerHTML) - parseFloat(message))}`;
+            })
 
         }
 
@@ -376,7 +389,7 @@
                                             <div class="text-uppercase text-primary fw-bold text-xs mb-1">
                                                 <span>Saldo Real</span>
                                             </div>
-                                            <div class="text-dark fw-bold h5 mb-0"><span id="Dinero"></span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id="Dinero-real"></span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
