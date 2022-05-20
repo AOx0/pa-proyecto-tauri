@@ -183,8 +183,26 @@ int main(int argc, char *argv[]) {
               c.send(&sout);
               c.receive(&sin);
               estado = "profile";
+
               sout<<cuenta.nombre<<" "<<cuenta.apellido;
               c.send(&sout);
+              c.receive(&sin);
+
+              sout<<cuenta.nombre;
+              c.send(&sout);
+              c.receive(&sin);
+
+              sout<<cuenta.apellido;
+              c.send(&sout);
+              c.receive(&sin);
+
+              sout<<cuenta.tel;
+              c.send(&sout);
+              c.receive(&sin);
+
+              sout<<cuenta.key;
+              c.send(&sout);
+
 
           }
         //Terminar prueba
