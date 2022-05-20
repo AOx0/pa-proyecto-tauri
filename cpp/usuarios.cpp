@@ -39,8 +39,8 @@ int main(int argc, char *argv[]) {
     string nul;
     double basura;
 
-    stringstream sout;
-    stringstream sin;
+    stringstream sout; //Es como un cout pero no recibe valores de la consola
+    stringstream sin; //Lo envian al archuivo cifrado
 
     Communicator c = Communicator(argv[1]);
 
@@ -156,14 +156,14 @@ int main(int argc, char *argv[]) {
           c.send(&sout);
           break;
         }
-        
         //termina el bucle
       }
     }
   }
 }
 
-void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream &sout, stringstream &sin) {
+void load_main(Communicator &c, const Cuenta &cuenta, string &nul, stringstream &sout, stringstream &sin)
+{
   string nombre = cuenta.nombre, apellido = cuenta.apellido, tarjetas = cuenta.tarjeta;
   double dinero = cuenta.dinero, deuda = cuenta.deuda;
 

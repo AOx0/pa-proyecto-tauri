@@ -22,7 +22,6 @@ string quitar(string &txt, char patron);
 /// \return True si contiene caracteres inválidos
 bool contieneInvalid(Communicator & c, const vector<char> &valid_chars, const string &inp);
 
-
 /// Realizado con ayuda de https://www.geeksforgeeks.org/passing-a-function-as-a-parameter-in-cpp/.
 /// Función que pide un valor, pensado para strings solamente. La función se ejecuta indefinidamente hasta que
 /// la función verificadora que se pasa como argumento devuelva true.

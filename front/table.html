@@ -1,94 +1,5 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Table - Super Banco</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
-    <script>
-        const invoke = window.__TAURI__.invoke;
-        const win = window.__TAURI__.window;
 
-        class Validator {
-            static divmod(x, y) {
-                return [x % y, Math.floor(x / y)]
-            }
-
-            static list(string, charAction = i => { return i }) {
-                let arr = []
-                Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
-                return arr
-            }
-
-            static luhnCheck(card) {
-                let num = []
-                let num2 = []
-                let num3 = []
-                let sum = 0;
-
-                num = this.list(card, char => { return Number(char) })
-                num = [].concat(num).reverse()
-
-                for (var i = 0; i < num.length; i = i + 2) { num2.push(num[i]) }
-                for (var i = 1; i < num.length; i = i + 2) { num3.push(num[i]) }
-
-                num3.forEach(d => { const qr = this.divmod(d * 2, 10); num2.push(qr[0] + qr[1]); })
-                num2.forEach(digit => { sum += digit })
-
-                return sum % 10 === 0
-            }
-        }
-
-        function update_body(message, document) {
-
-            if (message.includes("EXIT")) {
-                console.log("Exiting...")
-                invoke('close')
-            }
-
-            if (message.includes("change to main")) {
-                window.location.href = 'main.html';
-            }
-        }
-
-        function clean_cloese(evt) {
-            invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
-                update_body(message, document);
-            })
-        }
-
-        function reload_double() {
-            var inner = document.getElementById('bd-h').innerHTML;
-            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
-                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
-                return;
-            }
-            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
-                update_body(message, document);
-            })
-        }
-
-        function close() {
-            invoke('close')
-        }
-        //intento 1
-        window.onload = function ()
-        {
-            invoke('handle',{msg: "Change_To_Table"}).then((_) => {})
-            invoke('handle',{msg: "Pidiendo_Tarjetas"}).then((message) => {document.getElementById("tabla-tarjetas").innerHTML=`${message}`;})
-        }
-
-
-
-
-    </script>
-</head>
 
 <html><head>
     <meta charset="utf-8">
@@ -106,17 +17,20 @@
         const win = window.__TAURI__.window;
 
         class Validator {
-            static divmod(x, y) {
+            static divmod(x, y)
+            {
                 return [x % y, Math.floor(x / y)]
             }
 
-            static list(string, charAction = i => { return i }) {
+            static list(string, charAction = i => { return i })
+            {
                 let arr = []
                 Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
                 return arr
             }
 
-            static luhnCheck(card) {
+            static luhnCheck(card)
+            {
                 let num = []
                 let num2 = []
                 let num3 = []
@@ -135,7 +49,8 @@
             }
         }
 
-        function update_body(message, document) {
+        function update_body(message, document)
+        {
 
             if (message.includes("EXIT")) {
                 console.log("Exiting...")
@@ -147,15 +62,16 @@
             }
         }
 
-        function clean_cloese(evt) {
+        function clean_cloese(evt)
+        {
             invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
                 update_body(message, document);
             })
         }
 
-        function reload_double() {
-            var inner = document.getElementById('bd-h').innerHTML;
-            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
+        function reload_double()
+        {
+            if (!Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
                 return;
             }
@@ -172,6 +88,19 @@
         {
             invoke('handle',{msg: "Change_To_Table"}).then((_) => {})
             invoke('handle',{msg: "Pidiendo_Tarjetas"}).then((message) => {document.getElementById("tabla-tarjetas").innerHTML=`${message}`;})
+        }
+        function validation_card()
+        {
+            document.getElementById("tarjeta_agregar").value
+            if (!Validator.luhnCheck(document.getElementById("tarjeta_agregar").value)) {
+                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
+                return;
+            }
+            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
+                update_body(message, document);
+            })
+
+
         }
 
 
@@ -217,8 +146,8 @@
                 <li class="nav-item"><a class="nav-link" href="main.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Perfil</span></a></li>
                 <li class="nav-item"><a class="nav-link active" href="table.html"><i class="fas fa-table"></i><span>Table</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="index.html"><i class="far fa-user-circle"></i><span>Login</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="register.html"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
+
+
             </ul>
 
         </div>
@@ -255,27 +184,29 @@
                 <div style="height:20pt;"></div><div class="card shadow">
                 <div class="card-header py-3">
                     <p class="text-primary m-0 fw-bold">Agregar cuenta</p>
+                    <p id="error_p"></p>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <div>
 
                         <div class="row">
                             <div class="col">
-                                <div class="mb-3"><label class="form-label"><strong>Tarjeta</strong></label><input class="form-control" type="text" placeholder="Ingrese la tarjeta"></div>
+                                <div class="mb-3"><label class="form-label"><strong>Tarjeta</strong></label><input id="tarjeta_agregar" class="form-control" type="text" placeholder="Ingrese la tarjeta"></div>
                             </div>
                             <div class="col">
-                                <div class="mb-3"><label class="form-label"><strong>key</strong></label><input class="form-control" type="text" placeholder="Ingrese su super clave" i=""></div>
+                                <div class="mb-3"><label class="form-label"><strong>key</strong></label><input id="super_clave" class="form-control" type="password" placeholder="Ingrese su super clave" i=""></div>
                             </div>
                         </div>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button></div>
-                    </form>
+                        <div class="mb-3"><button id="botón_agregar_cuenta" class="btn btn-primary btn-sm">Enviar</button></div>
+                    </div>
                 </div>
             </div><div class="card shadow">
                 <div class="card-header py-3">
-                    <p class="text-primary m-0 fw-bold">Tranferencias</p>
+                    <p class="text-primary m-0 fw-bold">Transferencias</p>
+                    <p id="error_p2"></p>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <div>
 
                         <div class="row">
                             <div class="col">
@@ -285,8 +216,8 @@
                                 <div class="mb-3"><label class="form-label"><strong>Cantidad</strong></label><input class="form-control" type="text" placeholder="Ingrese la cantidad" i=""></div>
                             </div>
                         </div>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button></div>
-                    </form>
+                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enviar</button></div>
+                    </div>
                 </div>
             </div></div>
 
@@ -297,13 +228,11 @@
                 <div class="text-center my-auto copyright"><span>Copyright © Super Banco 2022</span></div>
             </div>
         </footer>
-    </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: none;"><i class="fas fa-angle-up"></i></a>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: block;"><i class="fas fa-angle-up"></i></a>
 </div>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/bs-init.js"></script>
 <script src="assets/js/theme.js"></script>
-
-
 
 
 
@@ -347,76 +276,6 @@
             }
         };
     })();
-</script><script>
-    (function() {
-        var ws = new WebSocket('ws://' + window.location.host +
-            '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
-            'referrer=' + encodeURIComponent(window.location.pathname));
-        ws.onmessage = function (msg) {
-            if (msg.data === 'reload') {
-                window.location.reload();
-            }
-            if (msg.data.startsWith('update-css ')) {
-                var messageId = msg.data.substring(11);
-                var links = document.getElementsByTagName('link');
-                for (var i = 0; i < links.length; i++) {
-                    var link = links[i];
-                    if (link.rel !== 'stylesheet') continue;
-                    var clonedLink = link.cloneNode(true);
-                    var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
-                    if (newHref !== link.href) {
-                        clonedLink.href = newHref;
-                    }
-                    else {
-                        var indexOfQuest = newHref.indexOf('?');
-                        if (indexOfQuest >= 0) {
-                            // to support ?foo#hash
-                            clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
-                                newHref.substring(indexOfQuest + 1);
-                        }
-                        else {
-                            clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
-                        }
-                    }
-                    link.replaceWith(clonedLink);
-                }
-            }
-        };
-    })();
-</script><script>
-    (function() {
-        var ws = new WebSocket('ws://' + window.location.host +
-            '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
-            'referrer=' + encodeURIComponent(window.location.pathname));
-        ws.onmessage = function (msg) {
-            if (msg.data === 'reload') {
-                window.location.reload();
-            }
-            if (msg.data.startsWith('update-css ')) {
-                var messageId = msg.data.substring(11);
-                var links = document.getElementsByTagName('link');
-                for (var i = 0; i < links.length; i++) {
-                    var link = links[i];
-                    if (link.rel !== 'stylesheet') continue;
-                    var clonedLink = link.cloneNode(true);
-                    var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
-                    if (newHref !== link.href) {
-                        clonedLink.href = newHref;
-                    }
-                    else {
-                        var indexOfQuest = newHref.indexOf('?');
-                        if (indexOfQuest >= 0) {
-                            // to support ?foo#hash
-                            clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
-                                newHref.substring(indexOfQuest + 1);
-                        }
-                        else {
-                            clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
-                        }
-                    }
-                    link.replaceWith(clonedLink);
-                }
-            }
-        };
-    })();
-</script></body></html>
+</script>
+
+</body></html>

@@ -1,5 +1,5 @@
-#ifndef PROYECTO_LIBRARY_H
-#define PROYECTO_LIBRARY_H
+#ifndef PROYECTO_LIBRARY_H //si no está definida la librería la definimos
+#define PROYECTO_LIBRARY_H //Se evita que se vuelva a redefinir
 
 #include <iostream>
 #include <vector>
