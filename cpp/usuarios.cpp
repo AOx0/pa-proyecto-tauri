@@ -231,6 +231,46 @@ int main(int argc, char *argv[]) {
         c.send(&sout);
       }
 
+      if (estado == "profile" && nul == "update_data") {
+        sout << "Update data";
+        c.send(&sout);
+
+        string nombre, apellido, num, pass;
+        c.receive(&sin);
+        sin >> nombre;
+
+        sout << " " << endl;
+        c.send(&sout);
+
+        c.receive(&sin);
+        sin >> apellido;
+
+        sout << " " << endl;
+        c.send(&sout);
+
+
+        c.receive(&sin);
+        sin >> num;
+
+        sout << " " << endl;
+        c.send(&sout);
+
+
+        c.receive(&sin);
+        sin >> pass;
+
+        if (pass == cuenta.key) {
+          cuenta.nombre = nombre;
+          cuenta.apellido = apellido;
+          cuenta.tel = num;
+          cuenta.guardar_usuario();
+          sout << "Actualizando datos";
+        } else {
+          sout << "Error: Contraseña incorrecta";
+        }
+        c.send(&sout);
+      }
+
       if (estado == "deudas" && nul == "solicitar_deuda") {
         sout << "Solicitar deuda";
         c.send(&sout);
@@ -328,10 +368,6 @@ int main(int argc, char *argv[]) {
             c.receive(&sin);
 
             sout<<cuenta.tel;
-            c.send(&sout);
-            c.receive(&sin);
-
-            sout<<cuenta.key;
             c.send(&sout);
 
 

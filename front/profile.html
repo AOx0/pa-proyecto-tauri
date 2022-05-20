@@ -17,34 +17,10 @@
         const invoke = window.__TAURI__.invoke;
         const win = window.__TAURI__.window;
 
-        class Validator {
-            static divmod(x, y) {
-                return [x % y, Math.floor(x / y)]
-            }
-
-            static list(string, charAction = i => { return i }) {
-                let arr = []
-                Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
-                return arr
-            }
-
-            static luhnCheck(card) {
-                let num = []
-                let num2 = []
-                let num3 = []
-                let sum = 0;
-
-                num = this.list(card, char => { return Number(char) })
-                num = [].concat(num).reverse()
-
-                for (var i = 0; i < num.length; i = i + 2) { num2.push(num[i]) }
-                for (var i = 1; i < num.length; i = i + 2) { num3.push(num[i]) }
-
-                num3.forEach(d => { const qr = this.divmod(d * 2, 10); num2.push(qr[0] + qr[1]); })
-                num2.forEach(digit => { sum += digit })
-
-                return sum % 10 === 0
-            }
+        function clean_cloese(evt) {
+            invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
+                update_body(message, document);
+            })
         }
 
         function update_body(message, document) {
@@ -53,28 +29,32 @@
                 console.log("Exiting...")
                 invoke('close')
             }
+        }
 
-            if (message.includes("change to main")) {
-                window.location.href = 'main.html';
+        function update_data() {
+            let nombre = document.getElementById("Nombre_cambio").value
+            let apellido = document.getElementById("Apellido_Cambio").value
+            let numero = document.getElementById("Numero_Cambio").value
+            let pass = document.getElementById("Contraseña_Cambio").value
+
+            if (nombre == "" && apellido == "" && numero == "" && pass == "") {
+                return
+            } else if (nombre == "" || apellido == "" || numero == "" || pass == "") {
+                document.getElementById("p_error").innerHTML = "Error: Todos los campos deben tener un valor"
+                return
+            } else {
+                invoke('handle', { msg: "update_data" }).then((_) => { })
+                invoke('handle_multiple', { msgs: [`${nombre}`, `${apellido}`, `${numero}`, `${pass}`] }).then((message) => {
+                    if (message.includes("Error: ")) {
+                        document.getElementById("p_error").innerHTML = message
+                    } else {
+                        window.location.href = window.location.href
+                    }
+                })
             }
         }
 
-        function clean_cloese(evt) {
-            invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
-                update_body(message, document);
-            })
-        }
 
-        function reload_double() {
-            var inner = document.getElementById('bd-h').innerHTML;
-            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
-                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
-                return;
-            }
-            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
-                update_body(message, document);
-            })
-        }
         function close() {
             invoke('close')
         }
@@ -84,20 +64,19 @@
             invoke('handle', { msg: "Change_To_profile" }).then((_) => {
             })
             invoke('handle', { msg: "Pidiendo_Nombre" }).then((message) => {
-                document.getElementById("Nombre").innerHTML = `${message}`;
+                document.getElementById("Nombre").value = `${message}`;
             })
             invoke('handle', { msg: "Pidiendo_Nombre_Cambio" }).then((message) => {
-                document.getElementById("Nombre_cambio").innerHTML = `${message}`;
+                document.getElementById("Nombre_cambio").value = `${message}`;
             })
             invoke('handle', { msg: "Pidiendo_Apellido" }).then((message) => {
-                document.getElementById("Apellido_Cambio").innerHTML = `${message}`;
+                document.getElementById("Apellido_Cambio").value = `${message}`;
             })
             invoke('handle', { msg: "Pidiendo_Numero" }).then((message) => {
-                document.getElementById("Numero_Cambio").innerHTML = `${message}`;
+                document.getElementById("Numero_Cambio").value = `${message}`;
             })
-            invoke('handle', { msg: "Pidiendo_Contraseña" }).then((message) => {
-                document.getElementById("Contraseña_Cambio").innerHTML = `${message}`;
-            })
+
+            document.getElementById("save-all").addEventListener("click", update_data);
         }
 
 
@@ -201,42 +180,43 @@
                                     <div class="card shadow mb-3">
                                         <div class="card-header py-3">
                                             <p class="text-primary m-0 fw-bold">Actualización de Datos</p>
+                                            <p id="p_error"></p>
                                         </div>
                                         <div class="card-body">
-                                            <form>
+                                            <div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label"
-                                                                id="Nombre_cambio"><strong>Username</strong></label><input
+                                                        <div class="mb-3"><label
+                                                                class="form-label"><strong>Nombre</strong></label><input
                                                                 class="form-control" type="text" name="username"
-                                                                placeholder="Cambiar Nombre"></div>
+                                                                placeholder="Cambiar Nombre" id="Nombre_cambio"></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label"
-                                                                id="Apellido_Cambio"><strong>Email
-                                                                    Address</strong></label><input class="form-control"
-                                                                type="text" placeholder="Cambiar Apellido"></div>
+                                                        <div class="mb-3"><label
+                                                                class="form-label"><strong>Apellido</strong></label><input
+                                                                class="form-control" type="text"
+                                                                placeholder="Cambiar Apellido" id="Apellido_Cambio">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label"
-                                                                id="Numero_Cambio"><strong>First
-                                                                    Name</strong></label><input class="form-control"
+                                                        <div class="mb-3"><label class="form-label"><strong>
+                                                                    Teléfono</strong></label><input class="form-control"
                                                                 type="text" placeholder="Cambiar Número"
-                                                                name="first_name"></div>
+                                                                name="first_name" id="Numero_Cambio"></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label"
-                                                                id="Contraseña_Cambio"><strong>Last
-                                                                    Name</strong></label><input class="form-control"
-                                                                type="password" placeholder="Cambio de Contraseña"
-                                                                name="last_name"></div>
+                                                        <div class="mb-3"><label
+                                                                class="form-label"><strong>Contraseña</strong></label><input
+                                                                class="form-control" type="password"
+                                                                placeholder="Ingresa para hacer cambios"
+                                                                name="last_name" id="Contraseña_Cambio"></div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3"><button class="btn btn-primary btn-sm"
-                                                        type="submit">Save Settings</button></div>
-                                            </form>
+                                                        id="save-all">Save Settings</button></div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -251,7 +231,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <form>
+                                    <div>
                                         <div class="mb-3"><label class="form-label"
                                                 for="signature"><strong>Comentario</strong><br></label><textarea
                                                 class="form-control" id="signature" rows="4"
@@ -259,7 +239,7 @@
 
                                         <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save
                                                 Settings</button></div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
