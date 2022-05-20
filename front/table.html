@@ -102,6 +102,8 @@
         }
 
         function eliminar_cuenta(cuenta) {
+            document.getElementById('error_cuentas_tabla').innerHTML = "";
+
             invoke('handle', { msg: "eliminar_cuenta" }).then((_) => { })
             invoke('handle', { msg: `${cuenta}` }).then((msg) => {
                 if (msg == "No se pudo eliminar la cuenta") {
@@ -114,6 +116,16 @@
 
         function agregar_cuenta() {
             let tarjeta = document.getElementById("tarjeta_agregar").value;
+            let contra = document.getElementById("super_clave").value;
+
+            if (tarjeta == "" && contra == "") {
+                return;
+            }
+
+            if (tarjeta == "" || contra == "") {
+                document.getElementById('error_p').innerHTML = "Error: Debe rellenar todos los campos";
+                return;
+            }
 
             if (!Validator.luhnCheck(tarjeta)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";

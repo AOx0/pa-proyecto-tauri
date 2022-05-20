@@ -26,7 +26,7 @@ void Cuenta::guardar_usuario() {
 
   int i=0;
   for (string & tar : tarjetas_registradas) {
-    if (i > 0) f << endl;
+    if (i == 0) i++; else f << endl;
     f << tar;
   }
 

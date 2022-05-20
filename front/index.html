@@ -54,10 +54,6 @@
                 console.log("Exiting...")
                 invoke('close')
             }
-
-            if (message.includes("change to main")) {
-                window.location.href = 'main.html';
-            }
         }
 
         function clean_cloese(evt) {
@@ -66,13 +62,31 @@
             })
         }
 
-        function reload_double() {
-            var inner = document.getElementById('bd-h').innerHTML;
-            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
+        function login() {
+
+            let tarjeta = document.getElementById("exampleTarjeta").value;
+            let contra = document.getElementById("exampleInputPassword").value;
+
+            if (tarjeta == "" && contra == "") {
+                return;
+            }
+
+            if (tarjeta == "" || contra == "") {
+                document.getElementById('error_p').innerHTML = "Error: Debe rellenar todos los campos";
+                return;
+            }
+
+            if (!Validator.luhnCheck(tarjeta)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
+                return;
             } else {
+                invoke('handle', { msg: "login" }).then((_) => { })
                 invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
-                    update_body(message, document);
+                    if (message.includes("change to main")) {
+                        window.location.href = 'main.html';
+                    } else {
+                        document.getElementById('error_p').innerHTML = message;
+                    }
                 })
             }
 
@@ -83,7 +97,7 @@
         }
 
         window.onload = function () {
-            document.getElementById("sub").addEventListener('click', reload_double);
+            document.getElementById("sub").addEventListener('click', login);
             document.getElementById("cls").addEventListener('click', close);
 
             invoke('handle', { msg: "Change_To_Login" }).then((_) => { })

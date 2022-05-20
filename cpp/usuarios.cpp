@@ -81,38 +81,28 @@ int main(int argc, char *argv[]) {
       if (nul == "Change_To_Login") {
         sout << "Changed to login!";
         c.send(&sout);
+      }
+
+      if (nul == "login") {
+        sout << "Login in";
+        c.send(&sout);
 
         string tarjeta = pedirValorX(c, NUMBERS, true);
 
-        if (tarjeta == CANCEL_OR_EXIT)
-        {
-          sout << "EXIT";
-          c.send(&sout);
-          break;
-        } else {
-          cout << 1 << endl;
-        }
+        cout << 1 << endl;
 
         string contra = pedirValorX(c, {}, false);
-        if (tarjeta == CANCEL_OR_EXIT || contra == CANCEL_OR_EXIT)
-        {
-          sout << "EXIT";
-          c.send(&sout);
-          break;
-        }
 
         if (!cuentaExiste_o_exit_s(tarjeta, banco))
         {
-          sout << "No existe la cuenta\n";
-          continue;
+          sout << "Error: No existe la cuenta\n";
         }
         else
         {
           cuenta = banco.buscarCuentaRaw(tarjeta).encontrada;
           if (!contraEs_s(contra, cuenta))
           {
-            sout << "Contraseña inválida\n";
-            continue;
+            sout << "Error: Contraseña inválida\n";
           } else {
             sout << "change to main" << endl;
           }
