@@ -66,6 +66,16 @@
         }
 
         function solicitar_deuda() {
+            if (isNaN(parseFloat(document.getElementById("cantidad_deuda").value))) {
+                document.getElementById("error_p2").innerHTML = "Error: Debes ingresar un valor valido";
+                return
+            }
+
+            if (parseFloat(document.getElementById("cantidad_deuda").value) <= 0) {
+                document.getElementById("error_p2").innerHTML = "Error: Debes ingresar un valor valido";
+                return
+            }
+
             invoke('handle', { msg: "solicitar_deuda" }).then((_) => { })
             invoke('handle', { msg: `${document.getElementById("cantidad_deuda").value}` }).then((message) => {
                 if (message.includes("Error:")) {
@@ -79,6 +89,16 @@
         }
 
         function pagar_deuda() {
+            if (isNaN(parseFloat(document.getElementById("cantidad_pagar").value))) {
+                document.getElementById("error_p").innerHTML = "Error: Debes ingresar un valor valido";
+                return
+            }
+
+            if (parseFloat(document.getElementById("cantidad_pagar").value) <= 0) {
+                document.getElementById("error_p").innerHTML = "Error: Debes ingresar un valor valido";
+                return
+            }
+
             invoke('handle', { msg: "pagar_deuda" }).then((_) => { })
             invoke('handle', { msg: `${document.getElementById("cantidad_pagar").value}` }).then((message) => {
                 if (message.includes("Error:")) {

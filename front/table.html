@@ -71,6 +71,15 @@
                     document.getElementById('error_p2').innerHTML = "Error: Ingresa una cantidad válida.";
                     result = 1;
                 } else {
+                    if (isNaN(parseFloat(document.getElementById("cantidad_transferir").value))) {
+                        document.getElementById("error_p2").innerHTML = "Error: Debes ingresar un valor valido";
+                        result = 1;
+                    }
+
+                    if (parseFloat(document.getElementById("cantidad_transferir").value) <= 0) {
+                        document.getElementById("error_p2").innerHTML = "Error: Debes ingresar un valor valido";
+                        result = 1;
+                    }
                     if (parseFloat(message) <= parseFloat(document.getElementById("cantidad_transferir").value)) {
                         document.getElementById('error_p2').innerHTML = "Error: No tienes suficiente dinero en tu cuenta para transferir esa cantidad.";
                         result = 1;
