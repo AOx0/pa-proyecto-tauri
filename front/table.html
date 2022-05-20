@@ -112,6 +112,30 @@
             })
         }
 
+        function agregar_cuenta() {
+            let tarjeta = document.getElementById("tarjeta_agregar").value;
+
+            if (!Validator.luhnCheck(tarjeta)) {
+                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
+                return;
+            }
+
+            invoke('handle', { msg: "agregar_cuenta" }).then((_) => { })
+            invoke('handle_multiple', { msgs: [`${tarjeta}`, `${document.getElementById("super_clave").value}`] }).then((msg) => {
+                if (msg.includes("Error:")) {
+                    document.getElementById("error_p").innerHTML = msg;
+                } else {
+                    invoke('handle', { msg: " " }).then((msg) => {
+                        if (msg == "Error: No puedes agregar una cuenta ya registrada") {
+                            document.getElementById("error_p").innerHTML = msg;
+                        } else {
+                            window.location.href = window.location.href;
+                        }
+                    })
+                }
+            })
+        }
+
         function update_body(message, document) {
 
             if (message.includes("EXIT")) {
@@ -149,6 +173,7 @@
             invoke('handle', { msg: "Pidiendo_Tarjetas" }).then((message) => { document.getElementById("tabla-tarjetas").innerHTML = `${message}`; })
 
             document.getElementById("cuenta-transferir-boton").addEventListener("click", transferir_a_cuenta);
+            document.getElementById("botón_agregar_cuenta").addEventListener("click", agregar_cuenta);
         }
         function validation_card() {
             document.getElementById("tarjeta_agregar").value
@@ -257,7 +282,6 @@
                         </div>
                         <div class="card-body">
                             <div>
-
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3"><label

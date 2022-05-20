@@ -128,6 +128,53 @@ int main(int argc, char *argv[]) {
         estado = "main";
       }
 
+      if (estado == "table" && nul == "agregar_cuenta") {
+        sout << "Agregar cuenta\n";
+        c.send(&sout);
+
+        c.receive(&sin);
+        sin >> nul;
+
+        sout << "Recibido crack";
+        c.send(&sout);
+
+        string pass;
+        c.receive(&sin);
+        sin >> pass;
+
+        bool existe = banco.buscarCuentaRaw(nul).fue_exitosa;
+        bool acceso = cuenta.validarSuperContra(pass);
+
+        if (!acceso || !existe || cuenta.tarjeta == nul) {
+          sout << "Error: ";
+          if (cuenta.tarjeta == nul) {
+            sout << "No puedes registrarte a ti mismo";
+          } else {
+            if (!existe) sout << "No existe la cuenta";
+            if (!existe && !acceso) sout << " & ";
+            if (!acceso) sout << "La contraseña no es correcta";
+          }
+          
+          c.send(&sout);
+        } else {
+          sout << "Agregando cuenta";
+          c.send(&sout);
+
+          c.receive(&sin);
+          if (acceso && existe) {
+            if (cuenta.cuentaYaRegistrada_t(nul)) {
+              sout << "Error: No puedes agregar una cuenta ya registrada";
+            } else {
+              cuenta.registrarCuenta_t(nul);
+              cuenta.guardar_usuario();
+              sout << "Agregada";
+            }
+            c.send(&sout);
+          }
+        }
+        
+      }
+
       if (estado == "table" && nul == "pre_transferir_a_cuenta") {
         sout << cuenta.dinero;
         c.send(&sout);
