@@ -173,17 +173,28 @@ int main(int argc, char *argv[]) {
             sout << endl;
           }
 
+
+
           c.send(&sout);
         }
+          if (nul == "Change_To_profile")
+          {
+              sout << "Changed to profile\n";
+              c.send(&sout);
+              c.receive(&sin);
+              estado = "profile";
+              sout<<cuenta.nombre<<" "<<cuenta.apellido;
+              c.send(&sout);
 
+          }
         //Terminar prueba
         //Salir del dashboard
-        else if (nul == CANCEL_OR_EXIT)
-        {
-          sout << "EXIT";
-          c.send(&sout);
-          break;
-        }
+          else if (nul == CANCEL_OR_EXIT)
+          {
+              sout << "EXIT";
+              c.send(&sout);
+              break;
+           }
         //termina el bucle
       }
     }
