@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
 
           for (auto & t: cuenta.tarjetas_registradas) {
             Cuenta cuenta_registrada = banco.buscarCuentaRaw(t).encontrada;
-            sout << "<tr><td>" << cuenta_registrada.nombre << " " << cuenta_registrada.apellido << "</td><td>" << cuenta_registrada.tarjeta << "</td></tr>\n";
+            sout << "<tr><td>" << cuenta_registrada.nombre << " " << cuenta_registrada.apellido << "</td><td>" << cuenta_registrada.tarjeta << "</td><td><button id='botón_agregar_cuenta' class='btn btn-primary btn-sm'>Transferir</button>&#x09;&#x09;<button id='botón_agregar_cuenta' class='btn btn-primary btn-sm'>Eliminar</button></td></tr>\n";
           }
 
           if (cuenta.tarjetas_registradas.size() == 0) {
