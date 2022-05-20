@@ -126,6 +126,31 @@ int main(int argc, char *argv[]) {
           estado = "main";
         }
 
+        if (estado == "table" && nul == "eliminar_cuenta") {
+          sout << "Eliminar cuenta\n";
+          c.send(&sout);
+
+          ou << "Pidiendo cuenta a eliminar..." << endl;
+
+
+          c.receive(&sin); // Pedimos la cuenta
+          sin >> nul;
+
+          ou << "Cuenta a eliminar: " << nul << endl;
+
+          bool success = cuenta.eliminarCuenta_t(nul);
+
+          if (success) {
+            sout << "Cuenta eliminada\n";
+          } else {
+            sout << "No se pudo eliminar la cuenta\n";
+          }
+
+          cuenta.guardar_usuario();
+         
+          c.send(&sout);
+        }
+
         if (nul == "Change_To_Table") {
           sout << "Changed to table\n";
           c.send(&sout);
@@ -138,7 +163,7 @@ int main(int argc, char *argv[]) {
             Cuenta cuenta_registrada = banco.buscarCuentaRaw(t).encontrada;
             sout << "<tr><td>" << cuenta_registrada.nombre << " " << cuenta_registrada.apellido << "</td><td>" << cuenta_registrada.tarjeta << "</td>"
             << "<td><button id='botón_agregar_cuenta' class='btn btn-primary btn-sm' onclick=\"document.getElementById('tarjeta_transferir').value = '" << cuenta_registrada.tarjeta << "'\">Transferir</button>&#x09;&#x09;"
-            << "<button id='botón_agregar_cuenta' class='btn btn-primary btn-sm'>Eliminar</button></td></tr>"
+            << "<button id='botón_agregar_cuenta' class='btn btn-primary btn-sm' onclick=\"eliminar_cuenta('" << cuenta_registrada.tarjeta << "')\">Eliminar</button></td></tr>"
             << endl;
           }
 

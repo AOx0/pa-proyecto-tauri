@@ -64,7 +64,7 @@ public:
 
   /// Elimina t del vector de tarjetas registradas
   /// \param t La tarjeta que se desea registrar
-  void eliminarCuenta_t(const string &t);
+  bool eliminarCuenta_t(const string &t);
 
   void transferir(Cuenta & target, double cantidad);
 

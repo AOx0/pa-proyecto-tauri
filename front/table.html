@@ -47,6 +47,17 @@
             }
         }
 
+        function eliminar_cuenta(cuenta) {
+            invoke('handle', { msg: "eliminar_cuenta" }).then((_) => { })
+            invoke('handle', { msg: `${cuenta}` }).then((msg) => {
+                if (msg == "No se pudo eliminar la cuenta") {
+                    document.getElementById("error_cuentas_tabla").innerHTML = msg;
+                } else {
+                    window.location.href = window.location.href;
+                }
+            })
+        }
+
         function update_body(message, document) {
 
             if (message.includes("EXIT")) {
@@ -160,6 +171,7 @@
 
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold">Cuentas Registradas</p>
+                            <p id="error_cuentas_tabla"></p>
                         </div>
                         <div class="card-body">
 
@@ -184,35 +196,7 @@
                     <div style="height:20pt;"></div>
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Agregar cuenta</p>
-                            <p id="error_p"></p>
-                        </div>
-                        <div class="card-body">
-                            <div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3"><label
-                                                class="form-label"><strong>Tarjeta</strong></label><input
-                                                id="tarjeta_agregar" class="form-control" type="text"
-                                                placeholder="Ingrese la tarjeta"></div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="mb-3"><label class="form-label"><strong>key</strong></label><input
-                                                id="super_clave" class="form-control" type="password"
-                                                placeholder="Ingrese su super clave" i=""></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3"><button id="botón_agregar_cuenta"
-                                        class="btn btn-primary btn-sm">Enviar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="height:20pt;"></div>
-                    <div class="card shadow">
-                        <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Transferencias</p>
+                            <p class="text-primary m-0 fw-bold">Transferir</p>
                             <p id="error_p2"></p>
                         </div>
                         <div class="card-body">
@@ -233,6 +217,34 @@
                                     </div>
                                 </div>
                                 <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height:20pt;"></div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Agregar cuenta</p>
+                            <p id="error_p"></p>
+                        </div>
+                        <div class="card-body">
+                            <div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3"><label
+                                                class="form-label"><strong>Tarjeta</strong></label><input
+                                                id="tarjeta_agregar" class="form-control" type="text"
+                                                placeholder="Ingrese la tarjeta"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3"><label class="form-label"><strong>Key</strong></label><input
+                                                id="super_clave" class="form-control" type="password"
+                                                placeholder="Ingrese su super clave" i=""></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3"><button id="botón_agregar_cuenta"
+                                        class="btn btn-primary btn-sm">Enviar</button>
                                 </div>
                             </div>
                         </div>

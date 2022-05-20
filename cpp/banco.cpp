@@ -184,16 +184,16 @@ bool Cuenta::validarSuperContra(const string &contra) const {
 
 /// Elimina t del vector de tarjetas registradas
 /// \param t La tarjeta que se desea registrar
-void Cuenta::eliminarCuenta_t(const string &t) {
+bool Cuenta::eliminarCuenta_t(const string &t) {
   for (int i = 0; i < tarjetas_registradas.size(); i++) {
     if (tarjetas_registradas[i] == t) {
       // https://stackoverflow.com/questions/875103/how-do-i-erase-an-element-from-stdvector-by-index
-      tarjetas_registradas.erase(std::next(tarjetas_registradas.begin(), i - 1));
-      return;
+      tarjetas_registradas.erase(std::next(tarjetas_registradas.begin(), i));
+      return true;
     }
   }
 
-  cout << "La cuenta no existe en el registro\n";
+  return false;
 }
 
 /// Registra t como cuenta de transferencia verificada
