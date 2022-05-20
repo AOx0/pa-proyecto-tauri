@@ -231,6 +231,30 @@ int main(int argc, char *argv[]) {
         c.send(&sout);
       }
 
+      if (estado == "deudas" && nul == "solicitar_deuda") {
+        sout << "Solicitar deuda";
+        c.send(&sout);
+
+        double cantidad;
+        c.receive(&sin);
+        sin >> cantidad;
+
+        if (cantidad/cuenta.dinero > 0.7) {
+          sout << "Error: No se puede solicitar más del 70%% de la cantidad disponible de saldo" ;
+        } else if (cuenta.deuda/cuenta.dinero > 0.15) {
+            sout << "Error: No puedes solicitar préstamos si tienes ya una gran cantidad de deuda por pagar" ;
+        } else {
+          cuenta.deuda += cantidad;
+          cuenta.dinero += cantidad;
+
+          sout << "Éxito! Préstamo solicitado con éxito.";
+
+          cuenta.guardar_usuario();
+        }
+        c.send(&sout);
+
+      }
+
       if (nul == "Change_To_Table") {
         sout << "Changed to table\n";
         c.send(&sout);

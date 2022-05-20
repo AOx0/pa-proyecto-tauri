@@ -65,15 +65,18 @@
             })
         }
 
-        function reload_double() {
-            var inner = document.getElementById('bd-h').innerHTML;
-            if (inner.includes('Bienvenido') && !Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
-                document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
-                return;
-            }
-            invoke('handle_multiple', { msgs: [`${document.getElementById('exampleTarjeta').value}`, `${document.getElementById('exampleInputPassword').value}`] }).then((message) => {
-                update_body(message, document);
+        function solicitar_deuda() {
+            invoke('handle', { msg: "solicitar_deuda" }).then((_) => { })
+            // solicitar-deuda-boton
+            invoke('handle', { msg: `${document.getElementById("cantidad_deuda").value}` }).then((message) => {
+                if (message.includes("Error:")) {
+                    document.getElementById("error_p2").innerHTML = message;
+                } else {
+                    window.location.href = window.location.href
+                }
+
             })
+
         }
 
         function close() {
@@ -100,10 +103,60 @@
                 document.getElementById("Dinero-real").innerHTML = `${formatter.format(parseFloat(document.getElementById("Dinero-real").innerHTML) - parseFloat(message))}`;
             })
 
+
+            document.getElementById("solicitar-deuda-boton").addEventListener("click", solicitar_deuda);
+
         }
 
 
     </script>
+    <style type="text/css">
+        /* Chart.js */
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: .99
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            animation: chartjs-render-animation 1ms
+        }
+
+        .chartjs-size-monitor,
+        .chartjs-size-monitor-expand,
+        .chartjs-size-monitor-shrink {
+            position: absolute;
+            direction: ltr;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            visibility: hidden;
+            z-index: -1
+        }
+
+        .chartjs-size-monitor-expand>div {
+            position: absolute;
+            width: 1000000px;
+            height: 1000000px;
+            left: 0;
+            top: 0
+        }
+
+        .chartjs-size-monitor-shrink>div {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            left: 0;
+            top: 0
+        }
+    </style>
     <style type="text/css">
         /* Chart.js */
         @keyframes chartjs-render-animation {
@@ -419,27 +472,23 @@
                             <div class="card shadow">
                                 <div class="card-header py-3">
                                     <p class="text-primary m-0 fw-bold">Pagar deuda</p>
-                                    <p id="error_p2"></p>
+                                    <p id="error_p"></p>
                                 </div>
                                 <div class="card-body">
                                     <div>
                                         <div class="row">
-                                            <div class="col">
-                                                <div class="mb-3"><label
-                                                        class="form-label"><strong>Tarjeta</strong></label><input
-                                                        id="tarjeta_transferir" class="form-control" type="text"
-                                                        placeholder="Ingrese la tarjeta"></div>
-                                            </div>
+
+
                                             <div class="col">
                                                 <div class="mb-3"><label
                                                         class="form-label"><strong>Cantidad</strong></label><input
-                                                        id="cantidad_transferir" class="form-control" type="text"
-                                                        placeholder="Ingrese la cantidad" i="">
+                                                        id="cantidad_transferir" class="form-control" type="text" i=""
+                                                        placeholder="Ingrese la cantidad a pagar">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mb-3"><button class="btn btn-primary btn-sm"
-                                                id="cuenta-transferir-boton">Transferir</button>
+                                                id="pagar-deuda-boton">Pagar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -454,22 +503,17 @@
                                 <div class="card-body">
                                     <div>
                                         <div class="row">
-                                            <div class="col">
-                                                <div class="mb-3"><label
-                                                        class="form-label"><strong>Tarjeta</strong></label><input
-                                                        id="tarjeta_transferir" class="form-control" type="text"
-                                                        placeholder="Ingrese la tarjeta"></div>
-                                            </div>
+
                                             <div class="col">
                                                 <div class="mb-3"><label
                                                         class="form-label"><strong>Cantidad</strong></label><input
-                                                        id="cantidad_transferir" class="form-control" type="text"
-                                                        placeholder="Ingrese la cantidad" i="">
+                                                        id="cantidad_deuda" class="form-control" type="text" i=""
+                                                        placeholder="Ingrese la cantidad a solicitar">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mb-3"><button class="btn btn-primary btn-sm"
-                                                id="cuenta-transferir-boton">Transferir</button>
+                                                id="solicitar-deuda-boton">Solicitar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -533,10 +577,18 @@
                                             <div class="chartjs-size-monitor-shrink">
                                                 <div class=""></div>
                                             </div>
+                                        </div>
+                                        <div class="chartjs-size-monitor">
+                                            <div class="chartjs-size-monitor-expand">
+                                                <div class=""></div>
+                                            </div>
+                                            <div class="chartjs-size-monitor-shrink">
+                                                <div class=""></div>
+                                            </div>
                                         </div><canvas
                                             data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}}"
-                                            style="display: block; width: 419px; height: 320px;"
-                                            class="chartjs-render-monitor" width="838" height="640"></canvas>
+                                            style="display: block; width: 640px; height: 320px;"
+                                            class="chartjs-render-monitor" width="1280" height="640"></canvas>
                                     </div>
                                     <div class="text-center small mt-4"><span class="me-2"><i
                                                 class="fas fa-circle text-primary"></i>&nbsp;Direct</span><span
@@ -562,6 +614,8 @@
     <script src="assets/js/chart.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+
+
 
 
 
