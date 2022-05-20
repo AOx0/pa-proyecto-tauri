@@ -12,7 +12,7 @@
 
 void Cuenta::agregar_a_historial(double valor) {
   for (int i=1; i<8; i++) {
-    gasto_semanal[i] = gasto_semanal[i-1];
+    gasto_semanal[i] = gasto_semanal[i+1];
   }
   gasto_semanal[7] = valor;
 }
