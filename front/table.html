@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+<html>
 
-
-<html><head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Table - Super Banco</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
@@ -17,20 +18,17 @@
         const win = window.__TAURI__.window;
 
         class Validator {
-            static divmod(x, y)
-            {
+            static divmod(x, y) {
                 return [x % y, Math.floor(x / y)]
             }
 
-            static list(string, charAction = i => { return i })
-            {
+            static list(string, charAction = i => { return i }) {
                 let arr = []
                 Array.prototype.forEach.call(string, char => { arr.push(charAction(char)) })
                 return arr
             }
 
-            static luhnCheck(card)
-            {
+            static luhnCheck(card) {
                 let num = []
                 let num2 = []
                 let num3 = []
@@ -49,8 +47,7 @@
             }
         }
 
-        function update_body(message, document)
-        {
+        function update_body(message, document) {
 
             if (message.includes("EXIT")) {
                 console.log("Exiting...")
@@ -62,15 +59,13 @@
             }
         }
 
-        function clean_cloese(evt)
-        {
+        function clean_cloese(evt) {
             invoke('handle', { msg: "8059834059834082934820948359845834509384549423423454236573645654654623412557567464353528748237498237486472492018309127436423740238434" }).then((message) => {
                 update_body(message, document);
             })
         }
 
-        function reload_double()
-        {
+        function reload_double() {
             if (!Validator.luhnCheck(document.getElementById('exampleTarjeta').value)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
                 return;
@@ -84,13 +79,11 @@
             invoke('close')
         }
         //intento 1
-        window.onload = function ()
-        {
-            invoke('handle',{msg: "Change_To_Table"}).then((_) => {})
-            invoke('handle',{msg: "Pidiendo_Tarjetas"}).then((message) => {document.getElementById("tabla-tarjetas").innerHTML=`${message}`;})
+        window.onload = function () {
+            invoke('handle', { msg: "Change_To_Table" }).then((_) => { })
+            invoke('handle', { msg: "Pidiendo_Tarjetas" }).then((message) => { document.getElementById("tabla-tarjetas").innerHTML = `${message}`; })
         }
-        function validation_card()
-        {
+        function validation_card() {
             document.getElementById("tarjeta_agregar").value
             if (!Validator.luhnCheck(document.getElementById("tarjeta_agregar").value)) {
                 document.getElementById('error_p').innerHTML = "Error: La tarjeta no es valida (Luhn). Intenta de nuevo:";
@@ -110,172 +103,159 @@
 </head>
 
 <body id="page-top" style="background: none; border-radius: 20px;">
-<p id="bd"></p>
-<nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
-    <div class="container">
-        <div data-tauri-drag-region="" id="title-bar">
-            <div class="cloese">
-                <button id="cls" onclick="clean_cloese()">
-                </button>
-            </div>
-            <div class="cloese">
-                <button id="min" onclick="
+    <p id="bd"></p>
+    <nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
+        <div class="container">
+            <div data-tauri-drag-region="" id="title-bar">
+                <div class="cloese">
+                    <button id="cls" onclick="clean_cloese()">
+                    </button>
+                </div>
+                <div class="cloese">
+                    <button id="min" onclick="
                             win.appWindow.minimize()
                           ">
-                </button>
-            </div>
+                    </button>
+                </div>
 
-            <div class="cloese">
-                <button id="max" onclick="
+                <div class="cloese">
+                    <button id="max" onclick="
                             win.appWindow.maximize()
                             ">
-                </button>
+                    </button>
+                </div>
+
             </div>
-
-        </div>
-    </div>
-</nav>
-<div id="wrapper">
-    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-        <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-            <div class="sidebar-brand-text mx-3"><span>Super Banco</span></div>
-        </a>
-            <hr class="sidebar-divider my-0">
-            <ul class="navbar-nav text-light" id="accordionSidebar">
-                <li class="nav-item"><a class="nav-link" href="main.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Perfil</span></a></li>
-                <li class="nav-item"><a class="nav-link active" href="table.html"><i class="fas fa-table"></i><span>Table</span></a></li>
-
-
-            </ul>
-
         </div>
     </nav>
-    <div class="d-flex flex-column" id="content-wrapper">
-        <div id="content">
-            <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"></nav>
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0"><a
+                    class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="sidebar-brand-text mx-3"><span>Super Banco</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="main.html"><i
+                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html"><i
+                                class="fas fa-user"></i><span>Perfil</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="table.html"><i
+                                class="fas fa-table"></i><span>Table</span></a></li>
 
 
-            <div class="container-fluid">
-                <h3 class="text-dark mb-4">Cuentas registradas</h3>
-                <div class="card shadow">
+                </ul>
 
-                    <div class="card-header py-3">
-                        <p class="text-primary m-0 fw-bold">Cuentas Registradas</p>
-                    </div><div class="card-body">
-
-                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                        <table class="table my-0" id="dataTable">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Cuenta</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tabla-tarjetas">
-                            </tbody>
-
-                        </table>
-                    </div>
-
-                </div>
-                </div>
-                <div style="height:20pt;"></div><div class="card shadow">
-                <div class="card-header py-3">
-                    <p class="text-primary m-0 fw-bold">Agregar cuenta</p>
-                    <p id="error_p"></p>
-                </div>
-                <div class="card-body">
-                    <div>
-
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3"><label class="form-label"><strong>Tarjeta</strong></label><input id="tarjeta_agregar" class="form-control" type="text" placeholder="Ingrese la tarjeta"></div>
-                            </div>
-                            <div class="col">
-                                <div class="mb-3"><label class="form-label"><strong>key</strong></label><input id="super_clave" class="form-control" type="password" placeholder="Ingrese su super clave" i=""></div>
-                            </div>
-                        </div>
-                        <div class="mb-3"><button id="botón_agregar_cuenta" class="btn btn-primary btn-sm">Enviar</button></div>
-                    </div>
-                </div>
-            </div><div class="card shadow">
-                <div class="card-header py-3">
-                    <p class="text-primary m-0 fw-bold">Transferencias</p>
-                    <p id="error_p2"></p>
-                </div>
-                <div class="card-body">
-                    <div>
-
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3"><label class="form-label"><strong>Tarjeta</strong></label><input class="form-control" type="text" placeholder="Ingrese la tarjeta"></div>
-                            </div>
-                            <div class="col">
-                                <div class="mb-3"><label class="form-label"><strong>Cantidad</strong></label><input class="form-control" type="text" placeholder="Ingrese la cantidad" i=""></div>
-                            </div>
-                        </div>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enviar</button></div>
-                    </div>
-                </div>
-            </div></div>
-
-
-        </div>
-        <footer class="bg-white sticky-footer">
-            <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span>Copyright © Super Banco 2022</span></div>
             </div>
-        </footer>
-    </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: block;"><i class="fas fa-angle-up"></i></a>
-</div>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/bs-init.js"></script>
-<script src="assets/js/theme.js"></script>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"></nav>
+
+
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Cuentas registradas</h3>
+                    <div class="card shadow">
+
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Cuentas Registradas</p>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                                aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Cuenta</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-tarjetas">
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div style="height:20pt;"></div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Agregar cuenta</p>
+                            <p id="error_p"></p>
+                        </div>
+                        <div class="card-body">
+                            <div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3"><label
+                                                class="form-label"><strong>Tarjeta</strong></label><input
+                                                id="tarjeta_agregar" class="form-control" type="text"
+                                                placeholder="Ingrese la tarjeta"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3"><label class="form-label"><strong>key</strong></label><input
+                                                id="super_clave" class="form-control" type="password"
+                                                placeholder="Ingrese su super clave" i=""></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3"><button id="botón_agregar_cuenta"
+                                        class="btn btn-primary btn-sm">Enviar</button>
+
+
+                                    <button id="botón_agregar_cuenta" class="btn btn-primary btn-sm">Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height:20pt;"></div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Transferencias</p>
+                            <p id="error_p2"></p>
+                        </div>
+                        <div class="card-body">
+                            <div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3"><label
+                                                class="form-label"><strong>Tarjeta</strong></label><input
+                                                class="form-control" type="text" placeholder="Ingrese la tarjeta"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3"><label
+                                                class="form-label"><strong>Cantidad</strong></label><input
+                                                class="form-control" type="text" placeholder="Ingrese la cantidad" i="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Super Banco 2022</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: none;"><i
+                class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
 
 
 
+</body>
 
-
-
-
-<script>
-    (function() {
-        var ws = new WebSocket('ws://' + window.location.host +
-            '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
-            'referrer=' + encodeURIComponent(window.location.pathname));
-        ws.onmessage = function (msg) {
-            if (msg.data === 'reload') {
-                window.location.reload();
-            }
-            if (msg.data.startsWith('update-css ')) {
-                var messageId = msg.data.substring(11);
-                var links = document.getElementsByTagName('link');
-                for (var i = 0; i < links.length; i++) {
-                    var link = links[i];
-                    if (link.rel !== 'stylesheet') continue;
-                    var clonedLink = link.cloneNode(true);
-                    var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
-                    if (newHref !== link.href) {
-                        clonedLink.href = newHref;
-                    }
-                    else {
-                        var indexOfQuest = newHref.indexOf('?');
-                        if (indexOfQuest >= 0) {
-                            // to support ?foo#hash
-                            clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
-                                newHref.substring(indexOfQuest + 1);
-                        }
-                        else {
-                            clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
-                        }
-                    }
-                    link.replaceWith(clonedLink);
-                }
-            }
-        };
-    })();
-</script>
-
-</body></html>
+</html>

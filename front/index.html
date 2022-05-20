@@ -90,54 +90,61 @@
 </head>
 
 <body style="background: none">
-<p id="bd"></p>
-<nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
-    <div class="container">
-        <div data-tauri-drag-region="" id="title-bar">
-            <div class="cloese">
-                <button id="cls" onclick="clean_cloese()">
-                </button>
-            </div>
-            <div class="cloese">
-                <button id="min" onclick="
+    <p id="bd"></p>
+    <nav class="navbar navbar-light navbar-expand-lg navigation-clean" style="max-height: 20px;background: none;">
+        <div class="container">
+            <div data-tauri-drag-region="" id="title-bar">
+                <div class="cloese">
+                    <button id="cls" onclick="clean_cloese()">
+                    </button>
+                </div>
+                <div class="cloese">
+                    <button id="min" onclick="
                 win.appWindow.minimize()
               ">
-                </button>
-            </div>
+                    </button>
+                </div>
 
-            <div class="cloese">
-                <button id="max" onclick="
+                <div class="cloese">
+                    <button id="max" onclick="
                 win.appWindow.maximize()
                 ">
-                </button>
-            </div>
+                    </button>
+                </div>
 
+            </div>
         </div>
-    </div>
-</nav>
-<div class="container" id="bd-h">
-    <div class="row justify-content-center">
-        <div class="col-md-9 col-lg-12 col-xl-10">
-            <div class="card shadow-lg o-hidden border-0 my-5">
-                <div class="card-body p-0">
-                    <div class="row">
-                        <div class="col-lg-6 d-none d-lg-flex">
-                            <div class="flex-grow-1 bg-login-image" style="background: url('assets/img/Bank.jpeg') center / cover;"></div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <h4 class="text-dark mb-4">Bienvenido de vuelta!</h4>
-                                    <p id="error_p" class="text-dark mb-4"></p>
-                                </div>
-                                <div class="user">
-                                    <div class="mb-3"><input class="form-control form-control-user" id="exampleTarjeta" aria-describedby="emailHelp" placeholder="Ingresa tu tarjeta" name="email" autocomplete="on" inputmode="numeric" minlength="16" maxlength="16" required=""></div>
-                                    <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Contraseña" name="password">
+    </nav>
+    <div class="container" id="bd-h">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-12 col-xl-10">
+                <div class="card shadow-lg o-hidden border-0 my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-flex">
+                                <div class="flex-grow-1 bg-login-image"
+                                    style="background: url('assets/img/Bank.jpeg') center / cover;"></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h4 class="text-dark mb-4">Bienvenido de vuelta!</h4>
+                                        <p id="error_p" class="text-dark mb-4"></p>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="custom-control custom-checkbox small"></div>
-                                    </div><button class="btn btn-primary d-block btn-user w-100" id="sub">Login</button>
-                                    <hr>
+                                    <div class="user">
+                                        <div class="mb-3"><input class="form-control form-control-user"
+                                                id="exampleTarjeta" aria-describedby="emailHelp"
+                                                placeholder="Ingresa tu tarjeta" name="email" autocomplete="on"
+                                                inputmode="numeric" minlength="16" maxlength="16" required=""></div>
+                                        <div class="mb-3"><input class="form-control form-control-user" type="password"
+                                                id="exampleInputPassword" placeholder="Contraseña" name="password">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="custom-control custom-checkbox small"></div>
+                                        </div><button class="btn btn-primary d-block btn-user w-100"
+                                            id="sub">Login</button>
+                                        <hr>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -146,11 +153,11 @@
             </div>
         </div>
     </div>
-</div>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/bs-init.js"></script>
-<script src="assets/js/theme.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
 
 
+</body>
 
-<script>
+</html>
