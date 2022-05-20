@@ -67,7 +67,6 @@
 
         function solicitar_deuda() {
             invoke('handle', { msg: "solicitar_deuda" }).then((_) => { })
-            // solicitar-deuda-boton
             invoke('handle', { msg: `${document.getElementById("cantidad_deuda").value}` }).then((message) => {
                 if (message.includes("Error:")) {
                     document.getElementById("error_p2").innerHTML = message;
@@ -78,6 +77,20 @@
             })
 
         }
+
+        function pagar_deuda() {
+            invoke('handle', { msg: "pagar_deuda" }).then((_) => { })
+            invoke('handle', { msg: `${document.getElementById("cantidad_pagar").value}` }).then((message) => {
+                if (message.includes("Error:")) {
+                    document.getElementById("error_p").innerHTML = message;
+                } else {
+                    window.location.href = window.location.href
+                }
+
+            })
+
+        }
+
 
         function close() {
             invoke('close')
@@ -105,6 +118,7 @@
 
 
             document.getElementById("solicitar-deuda-boton").addEventListener("click", solicitar_deuda);
+            document.getElementById("pagar-deuda-boton").addEventListener("click", pagar_deuda);
 
         }
 
@@ -482,7 +496,7 @@
                                             <div class="col">
                                                 <div class="mb-3"><label
                                                         class="form-label"><strong>Cantidad</strong></label><input
-                                                        id="cantidad_transferir" class="form-control" type="text" i=""
+                                                        id="cantidad_pagar" class="form-control" type="text" i=""
                                                         placeholder="Ingrese la cantidad a pagar">
                                                 </div>
                                             </div>

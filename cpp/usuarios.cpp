@@ -255,6 +255,33 @@ int main(int argc, char *argv[]) {
 
       }
 
+      if (estado == "deudas" && nul == "pagar_deuda") {
+        sout << "Pagar deuda";
+        c.send(&sout);
+
+        double cantidad;
+        c.receive(&sin);
+        sin >> cantidad;
+
+
+        if (cantidad > cuenta.dinero) {
+          sout << "Error: No cuentas con los fondos suficientes para pagar la deuda";
+        } else if (cuenta.deuda == 0) {
+          sout << "Error: No cuentas con una deuda por pagar";
+        } else if (cuenta.deuda - cantidad < 0) {
+          sout << "Error: No puedes pagar una cantidad mayor a la deuda";
+        } else {
+
+          cuenta.retirarDinero(cantidad);
+          cuenta.deuda -= cantidad;
+          sout << "Éxito al pagar la deuda";
+
+          cuenta.guardar_usuario();
+        }
+        c.send(&sout);
+
+      }
+
       if (nul == "Change_To_Table") {
         sout << "Changed to table\n";
         c.send(&sout);
