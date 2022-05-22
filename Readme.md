@@ -2,6 +2,8 @@
 
 This uses [AOx0/interactive-subprocess][1] and [AOx0/tauriTest][2] to build an application with web frontend, [tauri-apps/tauri][3] as backend and [hniksic/rust-subprocess][4] as communicator between an external C++ process and the [tauri-apps/tauri][5] backend with [AOx0/lcy-lib-c][6] & [AOx0/lcy][7] to cypher communication pipes.
 
+<img width="674" alt="Screen Shot 2022-05-22 at 2 12 39 a m" src="https://user-images.githubusercontent.com/50227494/169683461-05db445e-b749-4dcf-8fb7-39ca493e2f1b.png">
+
 Result:
 
 <img width="1006" alt="Screen Shot 2022-05-22 at 2 06 17 a m" src="https://user-images.githubusercontent.com/50227494/169683385-3b540300-b34b-443d-a813-d814c6f88ba7.png">
